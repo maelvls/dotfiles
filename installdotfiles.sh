@@ -37,8 +37,9 @@ find . -maxdepth 1 ! -type l ! -type d -iname ".*" | while read dotfile;  do
                 already="$already $dotfile_in_home"
             else
                 echo "No ~/$dotfile. Directly symlinking."
+                ln -s "$dotfile" ~/"$dotfile"
             fi
-            ln -s "$dotfile" "~/$dotfile" 
+             
         fi
     fi
 done
