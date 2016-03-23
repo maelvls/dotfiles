@@ -18,37 +18,44 @@ already=""
 # The command 
 #     find ~ -maxdepth 1 ! -type l ! -type d 
 # lists every normal file (no directories, no symlinks)
-find . -maxdepth 1 ! -type l ! -type d -iname ".*" | while read dotfile;  do 
+while read dotfile;  do 
     dotfile=`basename "$dotfile"`
     if [ "$dotfile" != ".DS_Store" ]; then
         found=0
-        find ~ -maxdepth 1 ! -type l ! -type d -iname ".*" | while read dotfile_in_home; do
+        while read dotfile_in_home; do
             dotfile_in_home=`basename "$dotfile_in_home"`
             if [ "$dotfile" == "$dotfile_in_home" ]; then
                 echo "Moving $dotfile_in_home to old_dotfiles and symlinking instead with $dotfile"
-                mv ~/$dotfile_in_home "./old_dotfiles/"
-                ln -s "$dotfile" "~/$dotfile"
+                mv ~/$dotfile_in_home "old_dotfiles/"
+                ln -s `pwd`/"$dotfile" ~/"$dotfile"
                 found=1
             fi
-        done
+        done <<< $(find ~ -maxdepth 1 ! -type l ! -type d -iname ".*")
         if [ $found -eq 0 ]; then
             # Check if this .file has already a symlink in ~
             if (find ~/$dotfile -maxdepth 1 -type l 2>/dev/null >/dev/null); then
-                already="$already $dotfile_in_home"
+                already=$dotfile $already
+                echo "$dotfile" already has a symlink in home.
             else
                 echo "No ~/$dotfile. Directly symlinking."
-                ln -s "$dotfile" ~/"$dotfile"
+                ln -s `pwd`/"$dotfile" ~/"$dotfile"
             fi
              
         fi
     fi
-done
-if [ "x$already" != "x" ]; then
-    echo $already | while read dotfile; do
-        echo "$dotfile" already has a symlink in home.
-    done
-fi
+done <<< $(find . -maxdepth 1 ! -type l ! -type d -iname ".*")
 
+if [ "$already" -a "$1" == "-f" ]; then
+    while read dotfile; do 
+        rm ~/"$dotfile"
+        ln -s `pwd`/"$dotfile" ~/"$dotfile"
+        echo "Replaced ~/$dotfile symlink."
+    done <<< $(echo "$already")
+else 
+    echo "The following files already exist in home:"
+    echo $already
+    echo $0 -f to force symlink
+fi
 # find . -type t
 # b       block special
 # c       character special
