@@ -181,6 +181,7 @@ set smartcase " ignore la casse si seulement petite lettres
 " TAB vs SPACES: set expandtab ; set noexpandtab pour enlever 
 set tabstop=4
 set shiftwidth=4
+set textwidth=80 " One line cannot exceed 80 characters
 autocmd FileType ml set shiftwidth=2 tabstop=2 expandtab 
 autocmd FileType md set sw=2 ts=2 et
 autocmd FileType asm set shiftwidth=8 tabstop=8
