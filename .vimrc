@@ -232,8 +232,10 @@ silent !mkdir ~/.vim/tmp ~/.vim/tmp/{undo,backup,swap} > /dev/null 2>&1
 "}}}
 
 "" For `o` and `O` without going into INSERT mode
-nmap <S-Enter> O<Esc>j
-nmap <CR> o<Esc>k
+" (new line without going into INSERT mode)
+" cmd+enter and cmd+shift+enter
+nmap <M-S-Enter> O<Esc>j
+nmap <M-CR> o<Esc>k
 
 "" Pour quitter rapidement
 "inoremap <C-q> <esc>:q!<cr>
