@@ -95,3 +95,5 @@ eval `opam config env`
 # https://github.com/zsh-users/zsh-syntax-highlighting
 source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
+# An alias to matlab to be able to use it command-line
+alias matlab="/Applications/MATLAB_R2015a.app/bin/matlab -nodisplay -nodesktop"
