@@ -237,13 +237,6 @@ silent !mkdir ~/.vim/tmp ~/.vim/tmp/{undo,backup,swap} > /dev/null 2>&1
 nmap <M-S-Enter> O<Esc>j
 nmap <M-CR> o<Esc>k
 
-"" Pour quitter rapidement
-"inoremap <C-q> <esc>:q!<cr>
-"nnoremap <C-q> :q!<cr>
-"" Pour la sauvegarde : s comme Save
-"inoremap <C-s> <esc>:w<cr>a
-"nnoremap <C-s> :w<cr>
-
 " Switch between buffers
 " NOTE: I added the shortcuts for Macvim from System Preferences
 "    cmd+alt+up, down
