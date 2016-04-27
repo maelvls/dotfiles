@@ -244,18 +244,14 @@ nmap <M-CR> o<Esc>k
 "inoremap <C-s> <esc>:w<cr>a
 "nnoremap <C-s> :w<cr>
 
-" Switcher entre les buffers
-nnoremap <C-A-n> :bnext<CR>
-nnoremap <C-A-p> :bprevious<CR>
+" Switch between buffers
+" NOTE: I added the shortcuts for Macvim from System Preferences
+"    cmd+alt+up, down
 
 " Switch between tabs
 " NOTE: instead of using :macmenu, I went to the System Preferences
 " and added my own shortcuts for MacVim
 "    cmd+alt+left, right
-" if has("gui_macvim")
-"   macmenu Window.Select\ Next\ Tab key=<M-D-Right>
-"   macmenu Window.Select\ Previous\ Tab key=<M-D-Left>
-" endif
 
 " YCM - YouCompleteMe {{{
 let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
