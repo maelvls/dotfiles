@@ -125,6 +125,7 @@ Plugin 'airblade/vim-gitgutter'
 Plugin 'tpope/vim-fugitive'
 "Plugin 'go.vim'
 Plugin 'jtratner/vim-flavored-markdown'
+Plugin 'MatlabFilesEdition'
 
 " launches merlin, the ocaml completion.
 " I installed it using `opam install merlin`
