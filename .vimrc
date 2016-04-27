@@ -87,6 +87,8 @@
 " 17 janv 2016
 "       - J'ai ajouté `set listchars` pour afficher les retours à la ligne et tabs
 "	Il suffit de faire `set list` pour activer l'affichage
+" 7 avril 2016
+"   - passage à git
 
 
 " Vundle {{{
@@ -241,12 +243,6 @@ nmap <CR> o<Esc>k
 nnoremap <C-A-n> :bnext<CR>
 nnoremap <C-A-p> :bprevious<CR>
 
-" Command-T {{{
-" if has("gui_macvim")
-" 	macmenu &File.New\ Tab key=<nop>
-" endif
-map <C-t> :CommandT<CR>
-" }}}
 
 " YCM - YouCompleteMe {{{
 let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
