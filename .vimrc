@@ -243,6 +243,14 @@ nmap <CR> o<Esc>k
 nnoremap <C-A-n> :bnext<CR>
 nnoremap <C-A-p> :bprevious<CR>
 
+" Switch between tabs
+" NOTE: instead of using :macmenu, I went to the System Preferences
+" and added my own shortcuts for MacVim
+"    cmd+alt+left, right
+" if has("gui_macvim")
+"   macmenu Window.Select\ Next\ Tab key=<M-D-Right>
+"   macmenu Window.Select\ Previous\ Tab key=<M-D-Left>
+" endif
 
 " YCM - YouCompleteMe {{{
 let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
