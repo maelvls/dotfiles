@@ -95,5 +95,10 @@ eval `opam config env`
 # https://github.com/zsh-users/zsh-syntax-highlighting
 source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
+# Line added by iterm2 to enable the shell integration. But it messes with my
+# oh_my_zsh theme (agnoster) so I had to disable it...
+# The issue appears to be the prompt, showing a small ">" instead of " ~ "
+# test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+
 # An alias to matlab to be able to use it command-line
 alias matlab="/Applications/MATLAB_R2015a.app/bin/matlab -nodisplay -nodesktop"
