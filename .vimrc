@@ -155,8 +155,10 @@ if $COLORTERM == 'gnome-terminal'
   set t_Co=256
 endif
 
-" Pour afficher les caractères spéciaux (espace, tab, retour)
-set listchars=tab:▸\ ,eol:¬ " `set list` les affiche
+" Display certain characters somehow unwanted (trailing spaces, tabs)
+" set nolist/set list to turn off/on
+set listchars=tab:▸\ ,trail:◃,nbsp:•
+set list
 
 " Paramètres généraux {{{
 set mouse=a
