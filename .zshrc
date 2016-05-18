@@ -100,5 +100,6 @@ source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 # The issue appears to be the prompt, showing a small ">" instead of " ~ "
 # test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
+export PATH=/Applications/MATLAB_R2015a.app/bin:$PATH
 # An alias to matlab to be able to use it command-line
-alias matlab="/Applications/MATLAB_R2015a.app/bin/matlab -nodisplay -nodesktop"
+alias matlab="matlab -nodisplay -nodesktop"
