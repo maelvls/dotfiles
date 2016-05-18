@@ -103,3 +103,9 @@ source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 export PATH=/Applications/MATLAB_R2015a.app/bin:$PATH
 # An alias to matlab to be able to use it command-line
 alias matlab="matlab -nodisplay -nodesktop"
+
+# Coreutils 5.93 (2005) are COMPLETELY outdated as it was the last version that
+# shipped without the GPL version (or such). So I had to install coreutils
+# using brew.
+export PATH=/usr/local/opt/coreutils/libexec/gnubin:$PATH
+export MANPATH=/usr/local/opt/coreutils/libexec/gnuman:$MANPATH
