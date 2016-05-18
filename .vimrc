@@ -183,6 +183,12 @@ set tabstop=4
 set shiftwidth=4
 set expandtab " Tabs will be turned into spaces
 set textwidth=80 " One line cannot exceed 80 characters
+" Modeline:
+"  - ts, tabstop = the size of tabs in number of spaces
+"  - tw, textwidth = maximum width the a line
+"  - sts, ?
+"  - sw, shiftwidth = indent size in number of spaces
+" vim: set sw=2 ts=2 et:
 autocmd FileType ml set shiftwidth=2 tabstop=2 expandtab
 autocmd FileType md set sw=2 ts=2 et
 autocmd FileType asm set shiftwidth=8 tabstop=8
