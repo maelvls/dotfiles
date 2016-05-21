@@ -50,12 +50,24 @@ ZSH_THEME="agnoster"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git osx)
+plugins=(git)
 
-# User configuration
+#### My configuration ####
 
 export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin:/Library/TeX/texbin"
-# export MANPATH="/usr/local/man:$MANPATH"
+export MANPATH=/usr/local/man:$MANPATH
+
+export PATH=/Applications/MATLAB_R2015a.app/bin:$PATH
+# An alias to matlab to be able to use it command-line
+alias matlab="matlab -nodisplay -nodesktop"
+
+# Coreutils 5.93 (2005) are COMPLETELY outdated as it was the last version that
+# shipped without the GPL version (or such). So I had to install coreutils
+# using brew.
+export PATH=/usr/local/opt/coreutils/libexec/gnubin:$PATH
+export MANPATH=/usr/local/opt/coreutils/libexec/gnuman:$MANPATH
+
+##########################
 
 source $ZSH/oh-my-zsh.sh
 
@@ -100,12 +112,3 @@ source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 # The issue appears to be the prompt, showing a small ">" instead of " ~ "
 # test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
-export PATH=/Applications/MATLAB_R2015a.app/bin:$PATH
-# An alias to matlab to be able to use it command-line
-alias matlab="matlab -nodisplay -nodesktop"
-
-# Coreutils 5.93 (2005) are COMPLETELY outdated as it was the last version that
-# shipped without the GPL version (or such). So I had to install coreutils
-# using brew.
-export PATH=/usr/local/opt/coreutils/libexec/gnubin:$PATH
-export MANPATH=/usr/local/opt/coreutils/libexec/gnuman:$MANPATH
