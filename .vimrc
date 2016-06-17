@@ -47,6 +47,8 @@
 "   `G=gg` (l'opérateur = est responsable de la correction)
 " Retourner à la dernière position :
 "   ``
+" Pour enlever les trailing whitespaces :
+"    :%s/\s\+$//g
 "
 "
 " 23 oct 2014 - Pour faire fonctionner clang (ctrl+p) avec des librairies :
