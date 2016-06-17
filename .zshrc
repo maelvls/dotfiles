@@ -50,7 +50,8 @@ ZSH_THEME="agnoster"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git)
+plugins=(wd)
+# wd = command like cd
 
 #### My configuration ####
 
@@ -67,6 +68,7 @@ alias matlab="matlab -nodisplay -nodesktop"
 export PATH=/usr/local/opt/coreutils/libexec/gnubin:$PATH
 export MANPATH=/usr/local/opt/coreutils/libexec/gnuman:$MANPATH
 
+alias git=hub
 ##########################
 
 source $ZSH/oh-my-zsh.sh
