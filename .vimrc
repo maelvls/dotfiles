@@ -184,7 +184,7 @@ set smartcase " ignore la casse si seulement petite lettres
 set tabstop=4
 set shiftwidth=4
 set expandtab " Tabs will be turned into spaces
-set textwidth=80 " One line cannot exceed 80 characters
+set textwidth=77 " One line cannot exceed 80 characters
 " Modeline:
 "  - ts, tabstop = the size of tabs in number of spaces
 "  - tw, textwidth = maximum width the a line
