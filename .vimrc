@@ -73,8 +73,8 @@
 "     NOTE: s'il y a un `SIGENV`, c'est certainement parce que'une mauvaise
 "     version de ruby ou de python est utilisée
 " 4 avril 2015 - J'ai enlevé le message d'erreur de Command-T suivant :
-"     `warning: Insecure world writable dir /Users/maelv/.vim/bundle
-"     in PATH, mode 040777` en faisant `chmod go-w /Users/maelv/.vim/bundle`.
+"     `warning: Insecure world writable dir /Users/mvalais/.vim/bundle
+"     in PATH, mode 040777` en faisant `chmod go-w /Users/mvalais/.vim/bundle`.
 " 13 avril 2015 - ajout de `Plugin tlib` en `Plugin tomtom/tlib_vim`.
 " 14 janv. 2016 - j'ai essayé de faire fonctionner YouCompleteMe avec mes
 " .c/.cpp. Le souci était en fait que j'avais oublié de faire ./install.py
@@ -184,7 +184,7 @@ set smartcase " ignore la casse si seulement petite lettres
 set tabstop=4
 set shiftwidth=4
 set expandtab " Tabs will be turned into spaces
-set textwidth=77 " One line cannot exceed 80 characters
+"set textwidth=77 " One line cannot exceed 80 characters
 " Modeline:
 "  - ts, tabstop = the size of tabs in number of spaces
 "  - tw, textwidth = maximum width the a line
@@ -195,6 +195,7 @@ autocmd FileType ml set shiftwidth=2 tabstop=2 expandtab
 autocmd FileType md set sw=2 ts=2 et
 autocmd FileType asm set shiftwidth=8 tabstop=8
 autocmd FileType ruby set expandtab softtabstop=2 tabstop=2 shiftwidth=2
+autocmd FileType changelog set shiftwidth=2 tabstop=2 expandtab
 set autoindent
 set smartindent
 set wrap
@@ -353,3 +354,10 @@ endif
 au InsertEnter * exec "inoremap <silent> " . g:UltiSnipsExpandTrigger     . " <C-R>=g:UltiSnips_Complete()<cr>"
 au InsertEnter * exec "inoremap <silent> " .     g:UltiSnipsJumpBackwardTrigger . " <C-R>=g:UltiSnips_Reverse()<cr>"
 " }}}
+
+" Merlin (the OCaml completion system)
+let g:opamshare = substitute(system('opam config var share'),'\n$','','''')
+execute "set rtp+=" . g:opamshare . "/merlin/vim"
+
+" For ocp-indent (Ocaml indent system)
+set rtp^="/Users/mvalais/.opam/4.02.3/share/ocp-indent/vim"
