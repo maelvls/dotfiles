@@ -49,6 +49,8 @@
 "   ``
 " Pour enlever les trailing whitespaces :
 "    :%s/\s\+$//g
+" Pour incrémenter une colonne en visual mode:
+"    ctrl+v   puis    ctrl+a pour incrémenter
 "
 "
 " 23 oct 2014 - Pour faire fonctionner clang (ctrl+p) avec des librairies :
@@ -104,7 +106,7 @@ call vundle#rc() " pour Vundle
 "let mapleader = ","
 Plugin 'VundleVim/Vundle.vim'
 " === Début Plugins (Vundle) ===
-Plugin 'Valloric/YouCompleteMe'
+"Plugin 'Valloric/YouCompleteMe'
 "Plugin 'rdnetto/YCM-Generator'
 Plugin 'ervandew/supertab'
 Plugin 'maelvalais/gmpl.vim'
@@ -129,13 +131,17 @@ Plugin 'airblade/vim-gitgutter'
 Plugin 'tpope/vim-fugitive'
 "Plugin 'go.vim'
 Plugin 'jtratner/vim-flavored-markdown'
-Plugin 'MatlabFilesEdition'
+"Plugin 'MatlabFilesEdition'
+"Plugin 'dpelle/vim-grammalecte'
+Plugin 'visual-increment'
+Plugin 'touist-vim'
 
 " launches merlin, the ocaml completion.
 " I installed it using `opam install merlin`
 let g:opamshare = substitute(system('opam config var share'),'\n$','','''')
 execute "set rtp+=" . g:opamshare . "/merlin/vim"
 
+let g:grammalecte_cli_py='~/prog/grammalecte/cli.py'
 
 Plugin 'vim-scripts/a.vim'
 " a.vim : ":A" pour changer header <-> code
@@ -171,13 +177,16 @@ set wildmenu " Ajoute pour la ligne de commande
 set laststatus=2
 
 set showmatch
-set number
+if has("gui_running")
+    set number
+endif
 set showcmd " SHOWS THE 2-SEC DELAY ON <ESC> TO RETURN IN NORMAL
 set showmode
 set encoding=utf-8
 set incsearch " Pour que la recherche `/recherche` soit incrémentale
 set ignorecase
 set smartcase " ignore la casse si seulement petite lettres
+set backspace=indent,eol,start
 
 " Indentation, wraping, tabulations {{{
 " TAB vs SPACES: set expandtab ; set noexpandtab pour enlever
