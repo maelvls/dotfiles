@@ -39,7 +39,7 @@ fi
 # Coreutils 5.93 (2005) are COMPLETELY outdated as it was the last version that
 # shipped without the GPL version (or such). So I had to install coreutils
 # using brew.
-if /usr/local/opt/coreutils/libexec/gnubin/ls >2 2>/dev/null; then
+if /usr/local/opt/coreutils/libexec/gnubin/ls >/dev/null 2>&1; then
   export PATH=/usr/local/opt/coreutils/libexec/gnubin:$PATH
   export MANPATH=/usr/local/opt/coreutils/libexec/gnuman:$MANPATH
 fi
