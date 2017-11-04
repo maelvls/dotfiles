@@ -28,9 +28,7 @@
     sync = !git pull && git push
 [core]
     excludesfile = /Users/mvalais/.gitignore_global
-    pager = diff-so-fancy 2>/dev/null | less --tabs=4 -RFX
-[interactive]
-    diffFilter = "diff-so-fancy"
+    pager = diff-so-fancy | less --tabs=4 -RFX
 [web]
     browser = safari
 [filter "media"]
