@@ -1,0 +1,87 @@
+[user]
+	name = Maël Valais
+	email = mael.valais@gmail.com
+	signingkey = 27F4C016
+[color]
+	diff = auto
+	status = auto
+	branch = auto
+	ui = true
+[alias]
+    # -C HEAD == --reuse-message of HEAD
+    amend = commit -a --amend
+    recommit = commit -a --amend -C HEAD
+    cp = cherry-pick
+    bs = bisect
+	ci = commit
+	co = checkout
+	st = status
+	br = branch
+    rb = rebase
+    pushtrack = push -u origin HEAD
+    pt = !git pushtrack
+	lg1 = log --graph --abbrev-commit --decorate --date=relative --format=format:'%C(bold blue)%h%C(reset) %C(bold green)(%<(8,trunc)%ar)%C(reset) %C(white)%w()%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)' --all
+	lg2 = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n'' %C(white)%s%C(reset) %C(dim white)- %an%C(reset)' --all
+    lg = !git lg1
+    lg = log --graph --abbrev-commit --abbrev=6 --decorate --format=format:'%C(bold blue)%h%C(reset): %C(white)%s%C(reset)' --all
+	dsf = "!f() { [ -z \"$GIT_PREFIX\" ] || cd \"$GIT_PREFIX\" && git diff --color \"$@\" | diff-so-fancy 2>/dev/null | less --tabs=4 -RFX; }; f"
+	sync = !git pull && git push
+[core]
+	excludesfile = /Users/mvalais/.gitignore_global
+	pager = diff-so-fancy 2>/dev/null | less --tabs=4 -RFX
+[interactive]
+    diffFilter = "diff-so-fancy"
+[web]
+	browser = safari
+[filter "media"]
+	clean = git-media-clean %f
+	smudge = git-media-smudge %f
+[filter "lfs"]
+	clean = git lfs clean %f
+	smudge = git lfs smudge %f
+	required = true
+[difftool.latex]
+    cmd = git-latexdiff \"$LOCAL\" \"$REMOTE\"
+[alias]
+    ldiff = difftool -t latex
+	ignore-io = "!gi() { curl -L -s https://www.gitignore.io/api/$@ ;}; gi"
+[rerere]
+	enabled = true
+	autoupdate = true
+[merge]
+	tool = vimdiff
+	conflictstyle = diff3
+[mergetool]
+	prompt = false
+[diff]
+    tool = default-difftool
+[difftool "default-difftool"]
+    cmd = code --wait --diff $LOCAL $REMOTE
+#[log]
+#	decorate = auto
+#	oneline = true
+#	abbrevCommit = true
+#[format]
+	# pretty = oneline
+[push]
+	default = simple
+[branch]
+	autosetuprebase = always
+[status]
+	showUntrackedFiles = all
+[pull]
+	rebase = preserve
+[gc]
+	autoDetach = false
+[color "diff-highlight"]
+	oldNormal = red bold
+	oldHighlight = red bold 52
+	newNormal = green bold
+	newHighlight = green bold 22
+[rebase]
+	autostash = true
+[commit]
+	verbose = true
+	gpgsign = false
+[gpg]
+	program = gpg
