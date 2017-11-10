@@ -91,7 +91,7 @@ elif which code >/dev/null 2>&1 && [[ -n $VSCODE_PID ]]; then
   export EDITOR='code'
   export GIT_EDITOR='code --wait'
 else
-  export EDITOR='mvim'
+  which mvim >/dev/null 2>&1 && export EDITOR='mvim'
   export GIT_EDITOR='vim'
 fi
 
@@ -128,3 +128,6 @@ export HOMEBREW_AUTO_UPDATE_SECS=$((60*60))
 if [ -d "$HOME/.cargo" ]; then
   export PATH="$HOME/.cargo/bin:$PATH"
 fi
+# For using code-insiders instead of code:
+# ln -sf /usr/local/bin/code-insiders /usr/local/bin/code
+
