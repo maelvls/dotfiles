@@ -2,23 +2,38 @@
 # Maël Valais <mael.valais@gmail.com> 2016
 #
 
-# I'm using omz
-export ZSH=$HOME/.oh-my-zsh
-ZSH_THEME="agnoster"
-export UPDATE_ZSH_DAYS=13
+UPDATE_ZSH_DAYS=13
 ENABLE_CORRECTION="false"
 COMPLETION_WAITING_DOTS="true"
-ZSH_HIGHLIGHT_MAXLENGTH=100
+ZSH_HIGHLIGHT_MAXLENGTH=200
 
-# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
-plugins=() # wd = command like cd
-source $ZSH/oh-my-zsh.sh
+source /usr/local/share/antigen/antigen.zsh
+# Load the oh-my-zsh's library.
+antigen use oh-my-zsh
 
-# To hide the mvalais@mba-mael, I set the DEFAULT_USER var:
+# Bundles from the default repo (robbyrussell's oh-my-zsh).
+#antigen bundle git
+#antigen bundle jsontools
+
+# Syntax highlighting bundle.
+antigen bundle zsh-users/zsh-syntax-highlighting
+antigen bundle zsh-users/zsh-completions
+antigen bundle zsh-users/zsh-autosuggestions
+antigen bundle psprint/zsh-navigation-tools
+#antigen bundle zsh-users/zsh-history-substring-search
+
+# Load the theme (sobol, ....)
+antigen theme agnoster
+
+# Tell Antigen that you're done.
+antigen apply
+
+# (agnoster theme) To hide the mvalais@mba-mael, set DEFAULT_USER=mvalais
 DEFAULT_USER=mvalais
 
 #### Paths (from least important to most important) ####
-export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin:/Library/TeX/texbin"
+export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin"
+export PATH="$PATH:/Library/TeX/texbin"
 if [ -d '/Applications/Ipe.app' ]; then
       export PATH="$PATH:/Applications/Ipe.app/Contents/MacOS"
 fi
@@ -98,22 +113,11 @@ else
   which mvim >/dev/null 2>&1 && export EDITOR='mvim'
 fi
 
-
 # OPAM initialization
 if which opam >/dev/null 2>&1; then
   eval $(opam config env)
   export MANPATH=/usr/local/man:$(opam config var man):$MANPATH
 fi
-
-# I had to put it a the end because of README.md of
-# https://github.com/zsh-users/zsh-syntax-highlighting
-source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh >/dev/null 2>&1
-source /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh >/dev/null 2>&1
-source /usr/local/share/zsh-navigation-tools/zsh-navigation-tools.plugin.zsh >/dev/null 2>&1
-
-# Running zplug (the zsh package manager)
-#export ZPLUG_HOME=/usr/local/opt/zplug
-#source $ZPLUG_HOME/init.zsh
 
 # Line added by iterm2 to enable the shell integration. But it messes with my
 # oh_my_zsh theme (agnoster) so I had to disable it...
@@ -144,3 +148,4 @@ alias to_j="ruby -e \"require 'json';require 'awesome_print';ap JSON.parse(STDIN
 function uri() {
   cat | od -An -tx1 | tr ' ' % | xargs printf "%s"
 }
+
