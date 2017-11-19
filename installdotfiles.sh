@@ -74,3 +74,7 @@ fi
 #     echo "Creating symlink to $file in home directory."
 #     ln -s $dir/$file $HOME/.$file
 # done
+
+if which brew >/dev/null 2>&1; then
+    brew bundle --global
+fi
