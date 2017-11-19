@@ -11,7 +11,7 @@ COMPLETION_WAITING_DOTS="true"
 ZSH_HIGHLIGHT_MAXLENGTH=100
 
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
-plugins=( ) # wd = command like cd
+plugins=() # wd = command like cd
 source $ZSH/oh-my-zsh.sh
 
 # To hide the mvalais@mba-mael, I set the DEFAULT_USER var:
@@ -20,7 +20,7 @@ DEFAULT_USER=mvalais
 #### Paths (from least important to most important) ####
 export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin:/Library/TeX/texbin"
 if [ -d '/Applications/Ipe.app' ]; then
-  export PATH="$PATH:/Applications/Ipe.app/Contents/MacOS"
+      export PATH="$PATH:/Applications/Ipe.app/Contents/MacOS"
 fi
 #export PATH="/usr/local/opt/ghc@8.0/bin:$PATH"
 #export MANPATH="/usr/local/Cellar/ghc@8.0/8.0.2/share/man:$MANPATH"
@@ -85,14 +85,17 @@ alias tlm="tlmgr"
 alias tlmonfly="texliveonfly"
 
 # Preferred editor for local and remote sessions
+export GIT_EDITOR='vim' # by default
 if [[ -n $SSH_CONNECTION ]]; then
   export EDITOR='vim'
-elif which code >/dev/null 2>&1 && [[ -n $VSCODE_PID ]]; then
+elif which code >/dev/null 2>&1; then
   export EDITOR='code'
-  export GIT_EDITOR='code --wait'
+  # If we are inside vscode, git commit will open in vscode
+  if [[ -n $VSCODE_PID ]]; then
+    export GIT_EDITOR='code --wait'
+  fi
 else
   which mvim >/dev/null 2>&1 && export EDITOR='mvim'
-  export GIT_EDITOR='vim'
 fi
 
 
@@ -131,3 +134,13 @@ fi
 # For using code-insiders instead of code:
 # ln -sf /usr/local/bin/code-insiders /usr/local/bin/code
 
+# A small function for pretty-printting a json from stdin
+# From https://stackoverflow.com/questions/352098/how-can-i-pretty-print-json-in-unix-shell-script
+alias to_j="ruby -e \"require 'json';puts JSON.pretty_generate(JSON.parse(STDIN.read))\""
+# with gem install awesome_print
+alias to_j="ruby -e \"require 'json';require 'awesome_print';ap JSON.parse(STDIN.read)\""
+
+# A small fonction to 'uri-fy' any text from stdin
+function uri() {
+  cat | od -An -tx1 | tr ' ' % | xargs printf "%s"
+}
