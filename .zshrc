@@ -54,9 +54,15 @@ fi
 # Coreutils 5.93 (2005) are COMPLETELY outdated as it was the last version that
 # shipped without the GPL version (or such). So I had to install coreutils
 # using brew.
-if /usr/local/opt/coreutils/libexec/gnubin/ls >/dev/null 2>&1; then
+if which /usr/local/opt/coreutils/libexec/gnubin/ls >/dev/null 2>&1; then
   export PATH=/usr/local/opt/coreutils/libexec/gnubin:$PATH
   export MANPATH=/usr/local/opt/coreutils/libexec/gnuman:$MANPATH
+fi
+
+# Gnu-sed (brew install gnu-sed)
+if which /usr/local/opt/gnu-sed/libexec/gnubin/sed >/dev/null 2>&1; then
+  export PATH="/usr/local/opt/gnu-sed/libexec/gnubin:$PATH"
+  export MANPATH="/usr/local/opt/gnu-sed/libexec/gnuman:$MANPATH"
 fi
 
 if [ -d "$HOME/.go" ]; then
