@@ -110,7 +110,7 @@ Plugin 'VundleVim/Vundle.vim'
 "Plugin 'rdnetto/YCM-Generator'
 Plugin 'ervandew/supertab'
 Plugin 'maelvalais/gmpl.vim'
-Plugin 'SirVer/ultisnips'
+"Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
 Plugin 'tomtom/tlib_vim'
 "Plugin 'MarcWeber/vim-addon-mw-utils'
@@ -322,7 +322,6 @@ let g:templates_directory = '~/.vim/templates/'
 "let g:Powerline_stl_path_style = 'full'
 "let g:Powerline_symbols = 'unicode'
 "}}}
-
 " Fix UltiSnips-YouCompleteMe {{{
 " Goal: make ultisnips and ycm work well together
 " This script has been copied from
@@ -360,8 +359,11 @@ if !exists("g:UltiSnipsJumpBackwardTrigger")
   let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
 endif
 
-au InsertEnter * exec "inoremap <silent> " . g:UltiSnipsExpandTrigger     . " <C-R>=g:UltiSnips_Complete()<cr>"
-au InsertEnter * exec "inoremap <silent> " .     g:UltiSnipsJumpBackwardTrigger . " <C-R>=g:UltiSnips_Reverse()<cr>"
+if exists("g:UltiSnipsExpandTrigger")
+    au InsertEnter * exec "inoremap <silent> " . g:UltiSnipsExpandTrigger     . " <C-R>=g:UltiSnips_Complete()<cr>"
+    au InsertEnter * exec "inoremap <silent> " . g:UltiSnipsExpandTrigger     . " <C-R>=g:UltiSnips_Complete()<cr>"
+    au InsertEnter * exec "inoremap <silent> " .     g:UltiSnipsJumpBackwardTrigger . " <C-R>=g:UltiSnips_Reverse()<cr>"
+endif
 " }}}
 
 " Merlin (the OCaml completion system)
