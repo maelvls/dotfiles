@@ -7,7 +7,11 @@ ENABLE_CORRECTION="false"
 COMPLETION_WAITING_DOTS="true"
 ZSH_HIGHLIGHT_MAXLENGTH=200
 
-source /usr/local/share/antigen/antigen.zsh
+# On linux, add brew to path
+[ ! -d "$HOME/.linuxbrew" ] || export PATH="$HOME/.linuxbrew/bin:$PATH"
+[ ! -d "/home/linuxbrew/.linuxbrew" ] || export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
+
+source $(brew --prefix)/share/antigen/antigen.zsh
 # Load the oh-my-zsh's library.
 antigen use oh-my-zsh
 
@@ -32,7 +36,7 @@ antigen apply
 DEFAULT_USER=mvalais
 
 #### Paths (from least important to most important) ####
-export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin"
+#export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin"
 export PATH="$PATH:/Library/TeX/texbin"
 if [ -d '/Applications/Ipe.app' ]; then
       export PATH="$PATH:/Applications/Ipe.app/Contents/MacOS"
