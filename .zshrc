@@ -84,6 +84,7 @@ alias sasssh="ssh -Y vlm9212a@sasssh.univ-tlse3.fr" # -Y = fake X11 auth
 alias ups=sasssh
 alias sash="ssh -Y mvalais@sash.irit.fr"
 alias bali="ssh -Y mvalais@bali.irit.fr"
+alias osirim="ssh -Y mvalais@osirim-slurm.irit.fr"
 alias c7ni="ssh -Y mvalais@c7ni.irit.fr"
 alias irit=sash
 alias polatouche="ssh -Y mvalais@polatouche"
