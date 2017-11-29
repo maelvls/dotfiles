@@ -134,7 +134,7 @@ Plugin 'jtratner/vim-flavored-markdown'
 "Plugin 'MatlabFilesEdition'
 "Plugin 'dpelle/vim-grammalecte'
 Plugin 'visual-increment'
-Plugin 'touist-vim'
+Plugin 'touist/touist-vim'
 
 " launches merlin, the ocaml completion.
 " I installed it using `opam install merlin`
