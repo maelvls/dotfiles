@@ -78,3 +78,7 @@ fi
 if which brew >/dev/null 2>&1; then
     brew bundle --global
 fi
+
+
+# Install Vundle for Vim
+[ -f "$HOME/.vim/bundle/Vundle.vim" ] || git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim
