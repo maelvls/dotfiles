@@ -81,4 +81,4 @@ fi
 
 
 # Install Vundle for Vim
-[ -f "$HOME/.vim/bundle/Vundle.vim" ] || git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+[ -d "$HOME/.vim/bundle/Vundle.vim" ] || git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim
