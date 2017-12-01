@@ -75,10 +75,24 @@ fi
 #     ln -s $dir/$file $HOME/.$file
 # done
 
-if which brew >/dev/null 2>&1; then
-    brew bundle --global
-fi
 
 
 # Install Vundle for Vim
-[ -d "$HOME/.vim/bundle/Vundle.vim" ] || git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+[ -d "~/.vim/bundle/Vundle.vim" ] || git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+
+# Install tpm, the tmux package manager
+[ -d "~/.tmux/plugins/tpm" ] || git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+
+# Install brew if not installed
+if ! [ -d /usr/local/Cellar -o -d "$HOME/.linuxbrew" -o -d "/home/linuxbrew/.linuxbrew" ]; then
+    if [ "$(uname -s)" = Darwin ]; then
+        /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+    else
+        sh -c "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)"
+    fi
+fi
+
+# Install the brew packages
+if which brew >/dev/null 2>&1; then
+    brew bundle --global
+fi
