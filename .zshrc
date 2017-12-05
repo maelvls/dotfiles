@@ -5,7 +5,7 @@
 UPDATE_ZSH_DAYS=13
 ENABLE_CORRECTION="false"
 COMPLETION_WAITING_DOTS="true"
-ZSH_HIGHLIGHT_MAXLENGTH=200
+ZSH_HIGHLIGHT_MAXLENGTH=300
 
 # On linux, add brew to path
 [ ! -d "$HOME/.linuxbrew" ] || export PATH="$HOME/.linuxbrew/bin:$PATH"
@@ -41,9 +41,7 @@ export PATH="$PATH:/Library/TeX/texbin"
 if [ -d '/Applications/Ipe.app' ]; then
       export PATH="$PATH:/Applications/Ipe.app/Contents/MacOS"
 fi
-#export PATH="/usr/local/opt/ghc@8.0/bin:$PATH"
-#export MANPATH="/usr/local/Cellar/ghc@8.0/8.0.2/share/man:$MANPATH"
-#export PATH="$HOME/Library/Haskell/bin:$PATH"
+
 if [ -d "$HOME/.local/bin" ]; then
   export PATH="$HOME/.local/bin:$PATH" # for 'stack'
 fi
@@ -55,18 +53,26 @@ fi
 # An alias to matlab to be able to use it command-line
 #alias matlab="matlab -nodisplay -nodesktop"
 
+# Reminder for later: MANPATH should not be set manually as it
+# will be deduced from the */bin directories in the PATH as well
+# as the /etc/man.conf file.
+# Warkaround: we first ask man to tell us the MANPATH when no
+# MANPATH is set, and then (in the rest of this .zshrc) we can
+# append others.
+export MANPATH="$(man -w)"
+
 # Coreutils 5.93 (2005) are COMPLETELY outdated as it was the last version that
 # shipped without the GPL version (or such). So I had to install coreutils
 # using brew.
 if which /usr/local/opt/coreutils/libexec/gnubin/ls >/dev/null 2>&1; then
-  export PATH=/usr/local/opt/coreutils/libexec/gnubin:$PATH
-  export MANPATH=/usr/local/opt/coreutils/libexec/gnuman:$MANPATH
+  export PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
+  #export MANPATH="/usr/local/opt/coreutils/libexec/gnuman:$MANPATH"
 fi
 
 # Gnu-sed (brew install gnu-sed)
 if which /usr/local/opt/gnu-sed/libexec/gnubin/sed >/dev/null 2>&1; then
   export PATH="/usr/local/opt/gnu-sed/libexec/gnubin:$PATH"
-  export MANPATH="/usr/local/opt/gnu-sed/libexec/gnuman:$MANPATH"
+  #export MANPATH="/usr/local/opt/gnu-sed/libexec/gnuman:$MANPATH"
 fi
 
 if [ -d "$HOME/.go" ]; then
@@ -127,7 +133,6 @@ fi
 # OPAM initialization
 if which opam >/dev/null 2>&1; then
   eval $(opam config env)
-  export MANPATH=/usr/local/man:$(opam config var man):$MANPATH
 fi
 
 # Line added by iterm2 to enable the shell integration. But it messes with my
@@ -160,3 +165,7 @@ function uri() {
   cat | od -An -tx1 | tr ' ' % | xargs printf "%s"
 }
 
+# From 10.2, MANPATH should not be set; if it is, 'man' will skip
+# a big part of the man search (example with man -d man).
+# See http://hints.macworld.com/article.php?story=20031014053111192
+unset MANPATH
