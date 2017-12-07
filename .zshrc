@@ -50,7 +50,7 @@ if [ -d "$HOME/.local/bin" ]; then
   export PATH="$HOME/.local/bin:$PATH" # for 'stack'
 fi
 if [ -d "$HOME/bin" ]; then
-  export PATH="$PATH:$HOME/bin"
+  export PATH="$HOME/bin:$PATH"
 fi
 
 #export PATH=/Applications/MATLAB_R2016a.app/bin:$PATH
