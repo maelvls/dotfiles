@@ -11,7 +11,11 @@ ZSH_HIGHLIGHT_MAXLENGTH=300
 [ ! -d "$HOME/.linuxbrew" ] || export PATH="$HOME/.linuxbrew/bin:$PATH"
 [ ! -d "/home/linuxbrew/.linuxbrew" ] || export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
 
-source $(brew --prefix)/share/antigen/antigen.zsh
+if which brew >/dev/null 2>&1; then
+    source $(brew --prefix)/share/antigen/antigen.zsh
+elif [ -f /usr/share/zsh/share/antigen/antigen.zsh ]; then
+    source /usr/share/zsh/share/antigen/antigen.zsh
+fi
 # Load the oh-my-zsh's library.
 antigen use oh-my-zsh
 
@@ -100,6 +104,10 @@ alias irit=sash
 alias polatouche="ssh -Y mvalais@polatouche"
 
 alias plm="ssh -Y mvalais@ssh.math.cnrs.fr"
+
+alias slurm-gui="ssh -Y mvalais@osirim-slurm.irit.fr sview"
+
+alias kumo="ssh -Y mvalais@kumo.irit.fr"
 
 if which hub >/dev/null 2>&1; then
   alias git=hub
