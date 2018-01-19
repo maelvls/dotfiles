@@ -41,7 +41,6 @@ DEFAULT_USER=mvalais
 
 #### Paths (from least important to most important) ####
 #export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin"
-export PATH="$PATH:/Library/TeX/texbin"
 if [ -d '/Applications/Ipe.app' ]; then
       export PATH="$PATH:/Applications/Ipe.app/Contents/MacOS"
 fi
@@ -126,6 +125,7 @@ alias tlmonfly="texliveonfly"
 
 # Preferred editor for local and remote sessions
 export GIT_EDITOR='vim' # by default
+export HGEDITOR='vim'
 if [[ -n $SSH_CONNECTION ]]; then
   export EDITOR='vim'
 elif which code >/dev/null 2>&1; then
@@ -133,6 +133,7 @@ elif which code >/dev/null 2>&1; then
   # If we are inside vscode, git commit will open in vscode
   if [[ -n $VSCODE_PID ]]; then
     export GIT_EDITOR='code --wait'
+    export HGEDITOR='code --wait'
   fi
 else
   which mvim >/dev/null 2>&1 && export EDITOR='mvim'
@@ -177,3 +178,5 @@ function uri() {
 # a big part of the man search (example with man -d man).
 # See http://hints.macworld.com/article.php?story=20031014053111192
 unset MANPATH
+
+alias hg=chg
