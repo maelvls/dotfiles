@@ -1,6 +1,6 @@
 [user]
-    name = Maël Valais
-    email = mael.valais@gmail.com
+	name = Maël Valais
+	email = mael.valais@gmail.com
     signingkey = 27F4C016
 [color]
     diff = auto
@@ -8,6 +8,10 @@
     branch = auto
     ui = true
 [alias]
+    f = !git branch -vv --color=always | fzf --ansi |  sed 's:^[\\* ]*::' | cut -d' ' -f1 | xargs git checkout
+    hg = hg-helper
+    fixup = "!f() { TARGET=$(git rev-parse "$1"); git commit --fixup=$TARGET ${@:2} && EDITOR=true git rebase -i --autostash --autosquash $TARGET^; }; f"
+    edit = !vim $(git root)/.git/config
     # -C HEAD == --reuse-message of HEAD
     amend = commit -a --amend
     recommit = commit -a --amend -C HEAD
@@ -18,8 +22,8 @@
     st = status
     br = branch
     rb = rebase
+    rs = reset
     pushtrack = push -u origin HEAD
-    pt = !git pushtrack
     lg1 = log --graph --abbrev-commit --decorate --date=relative --format=format:'%C(bold blue)%h%C(reset) %C(bold green)(%<(8,trunc)%ar)%C(reset) %C(white)%w()%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)' --all
     lg2 = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n'' %C(white)%s%C(reset) %C(dim white)- %an%C(reset)' --all
     lg = !git lg1
@@ -27,8 +31,8 @@
     dsf = "!f() { [ -z \"$GIT_PREFIX\" ] || cd \"$GIT_PREFIX\" && git diff --color \"$@\" | diff-so-fancy 2>/dev/null | less --tabs=4 -RFX; }; f"
     sync = !git pull && git push
 [core]
-    excludesfile = /Users/mvalais/.gitignore_global
-    pager = diff-so-fancy | less --tabs=4 -RFX
+	excludesfile = /Users/mvalais/.gitignore_global
+    pager = /usr/local/bin/diff-so-fancy | less --tabs=4 -RFX
 [web]
     browser = safari
 [filter "media"]
@@ -43,6 +47,7 @@
 [alias]
     ldiff = difftool -t latex
     ignore-io = "!gi() { curl -L -s https://www.gitignore.io/api/$@ ;}; gi"
+	lg3 = log --graph --pretty=format:'%Cred%h%Creset -%Cblue%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative
 [rerere]
     enabled = true
     autoupdate = true
@@ -78,8 +83,16 @@
     newHighlight = green bold 22
 [rebase]
     autostash = true
+    abbreviateCommands = true
 [commit]
     verbose = true
     gpgsign = false
+    # template = /Users/mvalais/.stCommitMsg
 [gpg]
     program = gpg
+[difftool "sourcetree"]
+	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+	path = 
+[mergetool "sourcetree"]
+	cmd = /Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	trustExitCode = true

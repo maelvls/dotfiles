@@ -1,6 +1,10 @@
 # My zsh config for non-interactive shells
 # Maël Valais <mael.valais@gmail.com> 2016
 #
+# Shortcuts:
+#   ctrl+G for 'z-jump' + fzf
+#   ctrl+R for reverse-i-search history (fzf)
+#   ctrl+T for fuzzy finder (fzf)
 
 UPDATE_ZSH_DAYS=13
 ENABLE_CORRECTION="false"
@@ -11,30 +15,59 @@ ZSH_HIGHLIGHT_MAXLENGTH=300
 [ ! -d "$HOME/.linuxbrew" ] || export PATH="$HOME/.linuxbrew/bin:$PATH"
 [ ! -d "/home/linuxbrew/.linuxbrew" ] || export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
 
+
+# For 'cargo install --git https://github.com/xcambar/purs'
+#function zle-line-init zle-keymap-select {
+#  PROMPT=`purs prompt -k "$KEYMAP" -r "$?"`
+#  zle reset-prompt
+#}
+#zle -N zle-line-init
+#zle -N zle-keymap-select
+#autoload -Uz add-zsh-hook
+#function _prompt_purs_precmd() {
+#  purs precmd --git-detailed
+#}
+#add-zsh-hook precmd _prompt_purs_precmd
+
+# make search up and down work, so partially type and hit up/down to find relevant stuff
+#bindkey '^[[A' up-line-or-search; bindkey '^[[B' down-line-or-search
+
+
+
+
+# Search antigen
 if which brew >/dev/null 2>&1; then
     source $(brew --prefix)/share/antigen/antigen.zsh
 elif [ -f /usr/share/zsh/share/antigen/antigen.zsh ]; then
     source /usr/share/zsh/share/antigen/antigen.zsh
+else
+    echo -e "\033[93mantigen:\033[0m antigen.zsh not installed?"
 fi
-# Load the oh-my-zsh's library.
+
 antigen use oh-my-zsh
 
-# Bundles from the default repo (robbyrussell's oh-my-zsh).
+antigen bundle gitfast
 #antigen bundle git
 #antigen bundle jsontools
-
-# Syntax highlighting bundle.
 antigen bundle zsh-users/zsh-syntax-highlighting
 antigen bundle zsh-users/zsh-completions
 antigen bundle zsh-users/zsh-autosuggestions
 antigen bundle psprint/zsh-navigation-tools
 #antigen bundle zsh-users/zsh-history-substring-search
 
-# Load the theme (sobol, ....)
-antigen theme agnoster
+# Z and fzf
+antigen bundle rupa/z
+antigen bundle andrewferrier/fzf-z
 
-# Tell Antigen that you're done.
+#antigen theme agnoster/agnoster-zsh-theme agnoster.zsh-theme
+#antigen theme prikhi/molokai-powerline-zsh molokai-powerline-zsh
+antigen theme agnoster
+#antigen bundle mafredri/zsh-async
+#antigen bundle sindresorhus/pure
+
 antigen apply
+
+
 
 # (agnoster theme) To hide the mvalais@mba-mael, set DEFAULT_USER=mvalais
 DEFAULT_USER=mvalais
@@ -100,7 +133,7 @@ alias bali="ssh -Y mvalais@bali.irit.fr"
 alias osirim="ssh -Y mvalais@osirim-slurm.irit.fr"
 alias c7ni="ssh -Y mvalais@c7ni.irit.fr"
 alias irit=sash
-alias polatouche="ssh -Y mvalais@polatouche"
+alias polatouche="ssh -Y mvalais@polatouche.irit.fr"
 
 alias plm="ssh -Y mvalais@ssh.math.cnrs.fr"
 
@@ -112,16 +145,20 @@ if which hub >/dev/null 2>&1; then
   alias git=hub
 fi
 
-if ls --version | grep coreutils >/dev/null 2>&1; then
+if which exa >/dev/null 2>&1; then
+  alias ls="exa"
+elif ls --version | grep coreutils >/dev/null 2>&1; then
   # If (GNU coreutils) ls is available
-  alias ls="ls --color=auto"
+  alias ls='ls --color=auto'
 elif ls -G >/dev/null 2>&1; then
   # If FreeBSD (=mac) ls is available
   alias ls="ls -G"
 fi
 
-alias tlm="tlmgr"
 alias tlmonfly="texliveonfly"
+
+alias f=fzf
+function lw() { exa -l $(which -a $1 | awk '/: (aliased to|shell built-in)/ {print > "/dev/stderr"; next} {print; next}') }
 
 # Preferred editor for local and remote sessions
 export GIT_EDITOR='vim' # by default
@@ -141,7 +178,7 @@ fi
 
 # OPAM initialization
 if which opam >/dev/null 2>&1; then
-  eval $(opam config env)
+  eval $(opam env)
 fi
 
 # Line added by iterm2 to enable the shell integration. But it messes with my
@@ -149,13 +186,11 @@ fi
 # The issue appears to be the prompt, showing a small ">" instead of " ~ "
 # test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
-alias ls='ls --color=auto'
 
 alias mlre="pbpaste | refmt --parse ml --print re --interface false | pbcopy"
 alias reml="pbpaste | refmt --parse re --print ml --interface false | pbcopy"
 
 export VAGRANT_HOME=/Volumes/Stockage/vagrant.d
-export HOMEBREW_AUTO_UPDATE_SECS=$((60*60))
 
 if [ -d "$HOME/.cargo" ]; then
   export PATH="$HOME/.cargo/bin:$PATH"
@@ -180,3 +215,97 @@ function uri() {
 unset MANPATH
 
 alias hg=chg
+
+# ZSH / BASH users
+# Add this to your .env, .bashrc, .zshrc, or whatever file you're using for environment
+# Note from Mael: this is exactly what
+#    antigen bundle colored-man-pages
+# does. But for some reason 'colored-man-pages' doesn't work on macos.
+man() {
+  env \
+    LESS_TERMCAP_mb=$(printf "\e[1;31m") \
+    LESS_TERMCAP_md=$(printf "\e[1;31m") \
+    LESS_TERMCAP_me=$(printf "\e[0m") \
+    LESS_TERMCAP_se=$(printf "\e[0m") \
+    LESS_TERMCAP_so=$(printf "\e[1;44;33m") \
+    LESS_TERMCAP_ue=$(printf "\e[0m") \
+    LESS_TERMCAP_us=$(printf "\e[1;32m") \
+    man "$@"
+}
+
+eval "$(perl -I$HOME/perl5/lib/perl5 -Mlocal::lib=$HOME/perl5)"
+export PERL5LIB=$HOME/perl5/lib/perl5
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+
+# From: https://gist.github.com/junegunn/8b572b8d4b5eddd8b85e5f4d40f17236
+# GIT heart FZF
+# --------------
+
+is_in_git_repo() {
+  git rev-parse HEAD > /dev/null 2>&1
+}
+
+fzf-down() {
+  fzf --height 50% "$@" --border
+}
+
+unalias gf gb gr
+gf() {
+  is_in_git_repo || return
+  git -c color.status=always status --short |
+  fzf-down -m --ansi --nth 2..,.. \
+    --preview '(git diff --color=always -- {-1} | sed 1,4d; cat {-1}) | head -500' |
+  cut -c4- | sed 's/.* -> //'
+}
+
+gb() {
+  is_in_git_repo || return
+  git branch -a --color=always | grep -v '/HEAD\s' | sort |
+  fzf-down --ansi --multi --tac --preview-window right:70% \
+    --preview 'git log --oneline --graph --date=short --pretty="format:%C(auto)%cd %h%d %s" $(sed s/^..// <<< {} | cut -d" " -f1) | head -'$LINES |
+  sed 's/^..//' | cut -d' ' -f1 |
+  sed 's#^remotes/##'
+}
+
+gt() {
+  is_in_git_repo || return
+  git tag --sort -version:refname |
+  fzf-down --multi --preview-window right:70% \
+    --preview 'git show --color=always {} | head -'$LINES
+}
+
+gh() {
+  is_in_git_repo || return
+  git log --date=short --format="%C(green)%C(bold)%cd %C(auto)%h%d %s (%an)" --graph --color=always |
+  fzf-down --ansi --no-sort --reverse --multi --bind 'ctrl-s:toggle-sort' \
+    --header 'Press CTRL-S to toggle sort' \
+    --preview 'grep -o "[a-f0-9]\{7,\}" <<< {} | xargs git show --color=always | head -'$LINES |
+  grep -o "[a-f0-9]\{7,\}"
+}
+
+gr() {
+  is_in_git_repo || return
+  git remote -v | awk '{print $1 "\t" $2}' | uniq |
+  fzf-down --tac \
+    --preview 'git log --oneline --graph --date=short --pretty="format:%C(auto)%cd %h%d %s" {1} | head -200' |
+  cut -d$'\t' -f1
+}
+join-lines() {
+  local item
+  while read item; do
+    echo -n "${(q)item} "
+  done
+}
+
+bind-git-helper() {
+  local char
+  for c in $@; do
+    eval "fzf-g$c-widget() { local result=\$(g$c | join-lines); zle reset-prompt; LBUFFER+=\$result }"
+    eval "zle -N fzf-g$c-widget"
+    eval "bindkey '^g^$c' fzf-g$c-widget"
+  done
+}
+bind-git-helper f b t r h
+unset -f bind-git-helper

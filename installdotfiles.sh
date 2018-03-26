@@ -107,6 +107,9 @@ cat > $BREWS <<EOF
     zsh
     antigen
     exa
+    ripgrep
+    fzf
+    fd
 EOF
 # mac-only packages
 if [ "$(uname -s)" = Darwin ]; then

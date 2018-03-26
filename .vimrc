@@ -13,6 +13,7 @@
 "    `gcc` pour commenter (ou ctrl+_ + c)
 "
 " Raccourcis intéressants :
+"     `gqq` pour reformater à 73 chars (voir 'set textwidth')
 "     `^` et `$` pour aller au début/fin ligne
 "     `a`/`s`/`o` pour insérer
 "     `ctrl+v` pour sélectionner un rectangle de texte
