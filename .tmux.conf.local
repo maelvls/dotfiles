@@ -267,8 +267,8 @@ set -g mode-keys vi
 #set -g status-position top
 
 # I really am into vi
-set-window-option -g mode-keys vi
-set-option -g mouse on
+set -g mode-keys vi
+set -g mouse on
 set -g default-terminal "screen-256color"
 
 # Because [ is such a pain to type on azerty keyboards
