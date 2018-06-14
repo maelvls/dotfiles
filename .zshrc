@@ -311,3 +311,7 @@ bind-git-helper() {
 }
 bind-git-helper f b t r h
 unset -f bind-git-helper
+
+# Fix tmux haing wrong grey
+# https://unix.stackexchange.com/questions/139082/zsh-set-term-screen-256color-in-tmux-but-xterm-256color-without-tmux
+[[ $TMUX != "" ]] && export TERM="screen-256color"
