@@ -251,7 +251,9 @@ fzf-down() {
   fzf --height 50% "$@" --border
 }
 
-unalias gf gb gr
+alias gf && unalias gf || true
+alias gb && unalias gb || true
+alias gr && unalias gr || true
 gf() {
   is_in_git_repo || return
   git -c color.status=always status --short |
