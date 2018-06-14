@@ -81,7 +81,7 @@ fi
 [ -d "~/.vim/bundle/Vundle.vim" ] || git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 
 # Install tpm, the tmux package manager
-[ -d "~/.tmux/plugins/tpm" ] || git clone ttps://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+[ -d "~/.tmux/plugins/tpm" ] || git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 [ -d "~/.tmux/plugins/gpakosz-tmux-conf" ] || (git clone https://github.com/gpakosz/.tmux.git ~/.tmux/plugins/gpakosz-tmux-conf && ln -s -f ~/.tmux.conf ~/.tmux/plugins/gpakosz-tmux-conf/.tmux.conf)
 
 # Install brew if not installed
