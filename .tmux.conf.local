@@ -277,13 +277,11 @@ bind-key -r -T prefix S-Down  resize-pane -D
 bind-key -r -T prefix S-Left  resize-pane -L
 bind-key -r -T prefix S-Right resize-pane -R
 
-# List of plugins. WARNING: must install them on new install:
-# ctrl+b + I
+# List of plugins
 set -g @plugin 'tmux-plugins/tpm'
 set -g @plugin 'tmux-plugins/tmux-sensible'
 # From https://github.com/NHDaly/tmux-scroll-copy-mode
 set -g @plugin 'nhdaly/tmux-better-mouse-mode'
 
 # Initialize TMUX plugin manager (keep this line at the very bottom of tmux.conf)
-# From: https://github.com/tmux-plugins/tpm
 run '~/.tmux/plugins/tpm/tpm'
