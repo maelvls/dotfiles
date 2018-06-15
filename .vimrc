@@ -142,7 +142,7 @@ Plugin 'touist/touist-vim'
 let g:opamshare = substitute(system('opam config var share'),'\n$','','''')
 execute "set rtp+=" . g:opamshare . "/merlin/vim"
 
-let g:grammalecte_cli_py='~/prog/grammalecte/cli.py'
+let g:grammalecte_cli_py='~/code/grammalecte/cli.py'
 
 Plugin 'vim-scripts/a.vim'
 " a.vim : ":A" pour changer header <-> code
@@ -280,7 +280,7 @@ let NERDTreeShowBookmarks = 1
 
 " Si on est sur MacVim on ouvre NERDTree
 if has("gui_running")
-    "autocmd VimEnter * NERDTreeFromBookmark prog
+    "autocmd VimEnter * NERDTreeFromBookmark code
     "autocmd VimEnter * NERDTree
     "autocmd BufEnter * NERDTreeMirror (synchro tous les nerdTree ouverts)
 endif
@@ -367,6 +367,3 @@ if exists("g:UltiSnipsExpandTrigger")
 endif
 " }}}
 
-" Merlin (the OCaml completion system)
-let g:opamshare = substitute(system('opam config var share'),'\n$','','''')
-execute "set rtp+=" . g:opamshare . "/merlin/vim"

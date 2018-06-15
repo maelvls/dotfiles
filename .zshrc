@@ -158,10 +158,11 @@ fi
 alias tlmonfly="texliveonfly"
 
 alias f=fzf
-function lw() { exa -l $(which -a $1 | awk '/: (aliased to|shell built-in)/ {print > "/dev/stderr"; next} {print; next}') }
+function lw() { which -a "$1" | awk '/(aliased to|shell built-in|not found)/ {print > "/dev/stderr"; next} {print; next}' | xargs exa -l ;}
 
 # Preferred editor for local and remote sessions
 export GIT_EDITOR='vim' # by default
+export FCEDIT='vim' # for 'fc' (fix command)
 export HGEDITOR='vim'
 if [[ -n $SSH_CONNECTION ]]; then
   export EDITOR='vim'
@@ -177,9 +178,9 @@ else
 fi
 
 # OPAM initialization
-if which opam >/dev/null 2>&1; then
-  eval $(opam env)
-fi
+# if which opam >/dev/null 2>&1; then
+#   eval $(opam env)
+# fi
 
 # Line added by iterm2 to enable the shell integration. But it messes with my
 # oh_my_zsh theme (agnoster) so I had to disable it...
@@ -251,9 +252,9 @@ fzf-down() {
   fzf --height 50% "$@" --border
 }
 
-alias gf && unalias gf || true
-alias gb && unalias gb || true
-alias gr && unalias gr || true
+alias gf >/dev/null && unalias gf || true
+alias gb >/dev/null && unalias gb || true
+alias gr >/dev/null && unalias gr || true
 gf() {
   is_in_git_repo || return
   git -c color.status=always status --short |

@@ -53,7 +53,7 @@
     autoupdate = true
 [merge]
     tool = vimdiff
-    conflictstyle = diff3
+	conflictstyle = merge
 [mergetool]
     prompt = false
 [diff]

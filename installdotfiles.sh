@@ -11,9 +11,18 @@
 # vim:set et sts=0 sw=4 ts=4:
 #
 
+while [ $# -gt 0 ]; do
+	case "$FORCE" in
+		--force) FORCE=yes ;;
+		*) ;;
+	esac
+	shift
+done
+
 if [ ! -d "old_dotfiles" ]; 
     then mkdir old_dotfiles; 
 fi
+
 already=""
 # The command 
 #     find $HOME -maxdepth 1 ! -type l ! -type d 
@@ -34,8 +43,13 @@ done < <(find $HOME -maxdepth 1 ! -type l ! -type d \
     if [ $found -eq 0 ]; then
         # Check if this .file has already a symlink in $HOME
         if (find "$HOME/$dotfile" -maxdepth 1 -type l 2>/dev/null >/dev/null); then
-            already="${dotfile} ${already}"
-            echo "$dotfile" already has a symlink in home.
+		if [ "$FORCE" = "yes" ]; then
+            		echo "$dotfile" already has a symlink in home.
+		else
+			echo "(--force) $dotfile already exists, resymlinking."
+            		echo ln -sf "$PWD/$dotfile" "$HOME/$dotfile"
+	    		ln -sf "$PWD/$dotfile" "$HOME/$dotfile"
+		fi
         else
             echo "No $HOME/$dotfile. Directly symlinking."
             echo ln -s "$PWD/$dotfile" "$HOME/$dotfile"
