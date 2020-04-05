@@ -93,7 +93,7 @@ if [ -n "$ALREADY" ] && [ "$1" == "-f" ]; then
 elif [ -n "$ALREADY" ]; then
     echo -e "${red}The following files already exist in home:${end}"
     echo -e "${green}$ALREADY${end}"
-    echo -e "You can use '${green}$0 --force${end}' to force symlink"
+    echo -e "\nYou can use '${green}$0 --force${end}' to force symlink"
 fi
 # find . -type t
 # b       block special

@@ -8,6 +8,9 @@
     branch = auto
     ui = true
 [alias]
+	ls = for-each-ref --count=5 --sort=-committerdate refs/heads/ --format='%(color:bold)%(HEAD)%(color:reset) %(refname:short)%(color:reset) - %(color:yellow)%(authorname)%(color:reset), %(color:green)%(committerdate:relative)%(color:reset)'
+    ll = for-each-ref --sort=-committerdate refs/heads/ --format='%(color:bold)%(HEAD)%(color:reset) %(refname:short)%(color:reset) - %(color:yellow)%(authorname)%(color:reset), %(color:green)%(committerdate:relative)%(color:reset)'
+    cia = commit --amend
     f = !git branch -vv --color=always | fzf --ansi |  sed 's:^[\\* ]*::' | cut -d' ' -f1 | xargs git checkout
     hg = hg-helper
     fixup = "!f() { TARGET=$(git rev-parse "$1"); git commit --fixup=$TARGET ${@:2} && EDITOR=true git rebase -i --autostash --autosquash $TARGET^; }; f"
@@ -30,9 +33,13 @@
     lg = log --graph --abbrev-commit --abbrev=6 --decorate --format=format:'%C(bold blue)%h%C(reset): %C(white)%s%C(reset)' --all
     dsf = "!f() { [ -z \"$GIT_PREFIX\" ] || cd \"$GIT_PREFIX\" && git diff --color \"$@\" | diff-so-fancy 2>/dev/null | less --tabs=4 -RFX; }; f"
     sync = !git pull && git push
+    dci = duet-commit
+    drv = duet-revert
+    dmg = duet-merge
+    drb = rebase -i --exec 'git duet-commit --amend'
 [core]
-	excludesfile = /Users/mvalais/.gitignore_global
-    pager = diff-so-fancy | less --tabs=4 -RFX
+	excludesfile = ~/.gitignore
+    pager = /usr/local/opt/diff-so-fancy/bin/diff-so-fancy | less --tabs=4 -RFX
 [web]
     browser = safari
 [filter "media"]
@@ -48,6 +55,7 @@
     ldiff = difftool -t latex
     ignore-io = "!gi() { curl -L -s https://www.gitignore.io/api/$@ ;}; gi"
 	lg3 = log --graph --pretty=format:'%Cred%h%Creset -%Cblue%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative
+	dig = !git log --date-order --all $(git reflog show --format=\"%h\" stash)
 [rerere]
     enabled = true
     autoupdate = true
@@ -73,7 +81,7 @@
 [status]
     showUntrackedFiles = all
 [pull]
-    rebase = preserve
+    rebase = merges
 [gc]
     autoDetach = false
 [color "diff-highlight"]
@@ -96,3 +104,5 @@
 [mergetool "sourcetree"]
 	cmd = /Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
 	trustExitCode = true
+[credential]
+	helper = osxkeychain

@@ -94,48 +94,47 @@
 "    Il suffit de faire `set list` pour activer l'affichage
 " 7 avril 2016
 "   - passage à git
+" 22 juillet 2019
+"   - passage de Vundle à vim-plug (https://github.com/junegunn/vim-plug)
 
-
-" Vundle {{{
-" Pour installer vundle:
-" git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim
-set nocompatible
-filetype off " pour Vundle
-set rtp+=~/.vim/bundle/Vundle.vim " pour Vundle
-call vundle#rc() " pour Vundle
+call plug#begin()
 " Redéfinition du <Leader>
 "let mapleader = ","
-Plugin 'VundleVim/Vundle.vim'
-" === Début Plugins (Vundle) ===
-"Plugin 'Valloric/YouCompleteMe'
-"Plugin 'rdnetto/YCM-Generator'
-Plugin 'ervandew/supertab'
-Plugin 'maelvalais/gmpl.vim'
-"Plugin 'SirVer/ultisnips'
-Plugin 'honza/vim-snippets'
-Plugin 'tomtom/tlib_vim'
-"Plugin 'MarcWeber/vim-addon-mw-utils'
-"Plugin 'vim-scripts/Colour-Sampler-Pack'
-"Plugin 'EasyMotion'
-Plugin 'tomtom/tcomment_vim'
-"Plugin 'Tagbar'
-Plugin 'scrooloose/nerdtree'
-Plugin 'vim-airline/vim-airline'
-Plugin 'vim-airline/vim-airline-themes'
-Plugin 'aperezdc/vim-template'
-"Plugin 'std_c.zip'
-"Plugin 'lervag/vimtex'
-"Plugin 'geetarista/ego.vim'
-Plugin 'chriskempson/tomorrow-theme', {'rtp': 'vim/'}
-"Plugin 'syntaxm4.vim'
-Plugin 'airblade/vim-gitgutter'
-Plugin 'tpope/vim-fugitive'
-"Plugin 'go.vim'
-Plugin 'jtratner/vim-flavored-markdown'
-"Plugin 'MatlabFilesEdition'
-"Plugin 'dpelle/vim-grammalecte'
-Plugin 'visual-increment'
-Plugin 'touist/touist-vim'
+" === Début Plugs (Vundle) ===
+Plug 'Valloric/YouCompleteMe', {'for': 'c'}
+"Plug 'rdnetto/YCM-Generator'
+Plug 'ervandew/supertab'
+Plug 'maelvalais/gmpl.vim'
+"Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
+Plug 'tomtom/tlib_vim'
+"Plug 'MarcWeber/vim-addon-mw-utils'
+"Plug 'EasyMotion'
+Plug 'tomtom/tcomment_vim'
+"Plug 'Tagbar'
+Plug 'scrooloose/nerdtree'
+"Plug 'vim-airline/vim-airline'
+"Plug 'vim-airline/vim-airline-themes'
+Plug 'aperezdc/vim-template'
+"Plug 'std_c.zip'
+"Plug 'lervag/vimtex'
+"Plug 'geetarista/ego.vim'
+"Plug 'syntaxm4.vim'
+Plug 'airblade/vim-gitgutter'
+Plug 'tpope/vim-fugitive'
+Plug 'myitcv/govim', {'for': 'go'}
+Plug 'jtratner/vim-flavored-markdown'
+"Plug 'MatlabFilesEdition'
+"Plug 'dpelle/vim-grammalecte'
+"Plug 'touist/touist-vim'
+"Plug 'vim-scripts/a.vim'
+Plug 'chriskempson/base16-vim'
+" a.vim : ":A" pour changer header <-> code
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
+
+
+call plug#end()
 
 " launches merlin, the ocaml completion.
 " I installed it using `opam install merlin`
@@ -144,11 +143,6 @@ execute "set rtp+=" . g:opamshare . "/merlin/vim"
 
 let g:grammalecte_cli_py='~/code/grammalecte/cli.py'
 
-Plugin 'vim-scripts/a.vim'
-" a.vim : ":A" pour changer header <-> code
-" === Fin plugins ===
-filetype plugin indent on " pour Vundle
-"}}}
 
 " Avoid warnings "Failure to setup sound" in term
 set visualbell
@@ -232,11 +226,14 @@ augroup END
 "}}}
 
 " Couleurs de Vim "{{{
-colo Tomorrow-Night
+if has("gui_running")
+    colorscheme base16-default-dark
+endif
+
 let c_cpp_comments = 1 " Pour std_c
 "map <c-h> :let @/ = ""<cr> " pour enlever les hilight des recherches
 if &t_Co > 2 || has("gui_running")
-       syntax on            " colo syntaxique
+    syntax on            " colo syntaxique
     set hlsearch     " colo pour la recherche
 endif
 "}}}
@@ -367,3 +364,35 @@ if exists("g:UltiSnipsExpandTrigger")
 endif
 " }}}
 
+" ## added by OPAM user-setup for vim / base ## 93ee63e278bdfc07d1139a748ed3fff2 ## you can edit, but keep this line
+let s:opam_share_dir = system("opam config var share")
+let s:opam_share_dir = substitute(s:opam_share_dir, '[\r\n]*$', '', '')
+
+let s:opam_configuration = {}
+
+function! OpamConfOcpIndent()
+  execute "set rtp^=" . s:opam_share_dir . "/ocp-indent/vim"
+endfunction
+let s:opam_configuration['ocp-indent'] = function('OpamConfOcpIndent')
+
+function! OpamConfOcpIndex()
+  execute "set rtp+=" . s:opam_share_dir . "/ocp-index/vim"
+endfunction
+let s:opam_configuration['ocp-index'] = function('OpamConfOcpIndex')
+
+function! OpamConfMerlin()
+  let l:dir = s:opam_share_dir . "/merlin/vim"
+  execute "set rtp+=" . l:dir
+endfunction
+let s:opam_configuration['merlin'] = function('OpamConfMerlin')
+
+let s:opam_packages = ["ocp-indent", "ocp-index", "merlin"]
+let s:opam_check_cmdline = ["opam list --installed --short --safe --color=never"] + s:opam_packages
+let s:opam_available_tools = split(system(join(s:opam_check_cmdline)))
+for tool in s:opam_packages
+  " Respect package order (merlin should be after ocp-index)
+  if count(s:opam_available_tools, tool) > 0
+    call s:opam_configuration[tool]()
+  endif
+endfor
+" ## end of OPAM user-setup addition for vim / base ## keep this line
