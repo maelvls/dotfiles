@@ -105,4 +105,8 @@
 	cmd = /Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
 	trustExitCode = true
 [credential]
-	helper = osxkeychain
+	helper = /usr/share/doc/git/contrib/credential/libsecret/git-credential-libsecret
+# BEGIN ANSIBLE MANAGED BLOCK
+[include]
+  path = ~/.gitconfig-shared
+# END ANSIBLE MANAGED BLOCK

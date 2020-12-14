@@ -78,10 +78,12 @@ eval "$(direnv hook zsh)"
 #bindkey "^[f" forward-word
 
 # Search antigen
-if which brew >/dev/null 2>&1; then
-  source $(brew --prefix)/share/antigen/antigen.zsh
-elif [ -f /usr/share/zsh/share/antigen/antigen.zsh ]; then
+if [ -f /usr/share/zsh/share/antigen/antigen.zsh ]; then
   source /usr/share/zsh/share/antigen/antigen.zsh
+elif [ -f $HOME/.antigen.zsh ]; then
+  # Warning: apt install zsh-antigen seems way too old.
+  # Prefer installing it with: curl -L git.io/antigen > ~/.antigen.zsh
+  source $HOME/.antigen.zsh
 else
   echo -e "\033[93mantigen:\033[0m antigen.zsh not installed?"
 fi
@@ -181,6 +183,9 @@ if [ -d "$HOME/go" ]; then
   export PATH="$GOPATH/bin:$PATH"
   export GO111MODULE=auto
 fi
+if [ -d "/usr/local/go" ]; then
+  export PATH=$PATH:/usr/local/go/bin
+fi
 
 if which hub >/dev/null 2>&1; then
   alias git=hub
@@ -188,6 +193,8 @@ fi
 
 if which exa >/dev/null 2>&1; then
   alias ls="exa"
+  alias l="exa -l"
+  alias ll="exa -la"
 elif ls --version | grep coreutils >/dev/null 2>&1; then
   # If (GNU coreutils) ls is available
   alias ls='ls --color=auto'
@@ -197,9 +204,6 @@ elif ls -G >/dev/null 2>&1; then
 fi
 
 alias tlmonfly="texliveonfly"
-
-alias l="exa -l"
-alias ll="exa -la"
 alias f=fzf
 
 whichl() { which -a "$1" | awk '/(aliased to|shell built-in|not found)/ {print > "/dev/stderr"; next} {print; next}'; }
@@ -277,9 +281,6 @@ man() {
     man "$@"
 }
 
-eval "$(perl -I$HOME/perl5/lib/perl5 -Mlocal::lib=$HOME/perl5)"
-export PERL5LIB=$HOME/perl5/lib/perl5
-
 #[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # From: https://gist.github.com/junegunn/8b572b8d4b5eddd8b85e5f4d40f17236
@@ -290,17 +291,6 @@ export PERL5LIB=$HOME/perl5/lib/perl5
 # Fix tmux haing wrong grey
 # https://unix.stackexchange.com/questions/139082/zsh-set-term-screen-256color-in-tmux-but-xterm-256color-without-tmux
 [[ $TMUX != "" ]] && export TERM="screen-256color"
-
-PATH="/Users/mvalais/perl5/bin${PATH:+:${PATH}}"
-export PATH
-PERL5LIB="/Users/mvalais/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"
-export PERL5LIB
-PERL_LOCAL_LIB_ROOT="/Users/mvalais/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"
-export PERL_LOCAL_LIB_ROOT
-PERL_MB_OPT="--install_base \"/Users/mvalais/perl5\""
-export PERL_MB_OPT
-PERL_MM_OPT="INSTALL_BASE=/Users/mvalais/perl5"
-export PERL_MM_OPT
 
 # added by travis gem
 [ -f /Users/mvalais/.travis/travis.sh ] && source /Users/mvalais/.travis/travis.sh
@@ -340,8 +330,8 @@ complete -o nospace -C /usr/local/bin/vault vault
 export OP_SESSION_my="G0Wq04kGir7qqVd6fvTSRIHPB9qZYk4cZRHMvFsuycM"
 
 # brew cask info google-cloud-sdk
-source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc'
-source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc'
+#source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc'
+#source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc'
 
 # kubectl krew
 export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
@@ -371,3 +361,5 @@ alias fdv="fd -E'vendor'"
 alias t=terraform
 
 alias kall="kubectl api-resources --verbs=list --namespaced -o name | grep ori.co | xargs -P16 -n1 kubectl get --show-kind -A 2>/dev/null"
+alias vim=nvim
+#alias rg=ripgrep
