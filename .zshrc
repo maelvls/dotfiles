@@ -1,4 +1,6 @@
-#! /usr/bin/env sh My zsh config for non-interactive shells Maël Valais
+#! /usr/bin/env sh
+#
+# My zsh config for non-interactive shells Maël Valais
 # <mael.valais@gmail.com> 2016
 #
 # Shortcuts: ctrl+G for 'z-jump' + fzf ctrl+R for reverse-i-search history
@@ -76,6 +78,8 @@ eval "$(direnv hook zsh)"
 # DOES NOT WORK AS INTENDED :(
 #bindkey "^[b" backward-word
 #bindkey "^[f" forward-word
+bindkey "\e\e[D" backward-word
+bindkey "\e\e[C" forward-word
 
 # Search antigen
 if [ -f /usr/share/zsh/share/antigen/antigen.zsh ]; then
@@ -107,7 +111,7 @@ antigen bundle andrewferrier/fzf-z
 antigen bundle psprint/zsh-navigation-tools
 antigen bundle lukechilds/zsh-nvm
 antigen bundle gitfast
-antigen bundle fzf
+#antigen bundle fzf
 antigen bundle docker docker-compose
 #antigen bundle git
 #antigen bundle jsontools
@@ -131,6 +135,8 @@ antigen apply
 
 # (agnoster theme) To hide the mvalais@mba-mael, set DEFAULT_USER=mvalais
 DEFAULT_USER=mvalais
+
+#eval "$(starship init zsh)"
 
 #### Paths (from least important to most important) ####
 #export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin"
@@ -183,9 +189,6 @@ if [ -d "$HOME/go" ]; then
   export PATH="$GOPATH/bin:$PATH"
   export GO111MODULE=auto
 fi
-if [ -d "/usr/local/go" ]; then
-  export PATH=$PATH:/usr/local/go/bin
-fi
 
 if which hub >/dev/null 2>&1; then
   alias git=hub
@@ -193,8 +196,6 @@ fi
 
 if which exa >/dev/null 2>&1; then
   alias ls="exa"
-  alias l="exa -l"
-  alias ll="exa -la"
 elif ls --version | grep coreutils >/dev/null 2>&1; then
   # If (GNU coreutils) ls is available
   alias ls='ls --color=auto'
@@ -204,20 +205,25 @@ elif ls -G >/dev/null 2>&1; then
 fi
 
 alias tlmonfly="texliveonfly"
+
+alias l="exa -l"
+alias ll="exa -la"
 alias f=fzf
+alias vim=nvim
 
 whichl() { which -a "$1" | awk '/(aliased to|shell built-in|not found)/ {print > "/dev/stderr"; next} {print; next}'; }
 lwl() { whichl "$1" | xargs readlink -f | xargs exa -l; }
 lw() { whichl "$1" | xargs readlink -f; }
 
 # Preferred editor for local and remote sessions
-export GIT_EDITOR='vim' # by default
-export FCEDIT='vim'     # for 'fc' (fix command)
+export GIT_EDITOR='nvim' # by default
+export FCEDIT='vim'      # for 'fc' (fix command)
 export HGEDITOR='vim'
 if [[ -n $SSH_CONNECTION ]]; then
-  export EDITOR='vim'
+  export EDITOR='nvim'
 elif which code >/dev/null 2>&1; then
-  export EDITOR='code --wait'
+  #export EDITOR='code --wait'
+  export EDITOR='nvim'
   # If we are inside vscode, git commit will open in vscode
   if [[ -n $VSCODE_PID ]]; then
     export GIT_EDITOR='code --wait'
@@ -228,9 +234,9 @@ else
 fi
 
 # OPAM initialization
-if which opam >/dev/null 2>&1; then
-  eval $(opam env)
-fi
+#if which opam >/dev/null 2>&1; then
+#  eval $(opam env)
+#fi
 
 # Line added by iterm2 to enable the shell integration. But it messes with my
 # oh_my_zsh theme (agnoster) so I had to disable it...
@@ -327,8 +333,6 @@ alias os=openstack
 autoload -U +X bashcompinit && bashcompinit
 complete -o nospace -C /usr/local/bin/vault vault
 
-export OP_SESSION_my="G0Wq04kGir7qqVd6fvTSRIHPB9qZYk4cZRHMvFsuycM"
-
 # brew cask info google-cloud-sdk
 #source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc'
 #source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc'
@@ -351,9 +355,13 @@ alias kk="cd ~/code/kubernetes"
 
 # Remeber that oh-my-zsh is also setting HISTSIZE. So I have
 # to keep these at the end of zshrc to avoid being overwritten.
-HISTFILE=~/.zsh_history
-HISTSIZE=1000000
-SAVEHIST=$HISTSIZE
+# I had to set another HISTFILE due to the fact that (somehow) the
+# ~/.zsh_history would get emptied for no reason, probably due to $HOME not
+# being set? It seems to always happen after a Time Machine backup?
+# See: https://unix.stackexchange.com/questions/568907/why-do-i-lose-my-zsh-history
+HISTFILE=~/.zsh_hist
+HISTSIZE=500000
+SAVEHIST=500000
 setopt EXTENDED_HISTORY
 
 alias rgv="rg -g'!vendor'"
@@ -361,5 +369,43 @@ alias fdv="fd -E'vendor'"
 alias t=terraform
 
 alias kall="kubectl api-resources --verbs=list --namespaced -o name | grep ori.co | xargs -P16 -n1 kubectl get --show-kind -A 2>/dev/null"
-alias vim=nvim
-#alias rg=ripgrep
+
+# MacOS trick: change the screenshot generated name.
+# Source: https://apple.stackexchange.com/questions/251385
+#
+# ⚠️  You can't change the name of generated screenshots!
+#
+# defaults write com.apple.screencapture "include-date" 0
+# defaults write com.apple.screencapture name screenshot-"$(date +%Y-%m-%d)-$(date +%H%M)"
+
+alias m=make
+if [ -e /Users/mvalais/.nix-profile/etc/profile.d/nix.sh ]; then . /Users/mvalais/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
+
+digc() {
+  dig $* | awk '
+    !/^;/           { print $0 }
+    /^;[^;]/        { print "\033[1;35m"$0"\033[0m" }
+    /^;;/           { print "\033[1;30m"$0"\033[0m" }
+  ' | sed 's|\(IN\)|\\033[1;33m\1\\033[0m|' | xargs -0 printf
+}
+
+export WASMTIME_HOME="$HOME/.wasmtime"
+
+export PATH="$WASMTIME_HOME/bin:$PATH"
+
+alias cat=bat
+alias b=bazel
+export PATH="/usr/local/opt/gcore/bin:$PATH"
+
+setopt share_history
+
+alias connect="gcloud auth login; \
+kubectl config get-contexts -oname | grep '^dev-\d' | xargs -L1 kubectl config delete-context; \
+gcloud container clusters get-credentials --region europe-west1-b --project tcifg-idp-dev-datastore idp-datastore-cluster; \
+kubectl config rename-context gke_tcifg-idp-dev-datastore_europe-west1-b_idp-datastore-cluster dev-1-gke_tcifg-idp-dev-datastore_europe-west1-b_idp-datastore-cluster; \
+gcloud container clusters get-credentials --region europe-west1-b --project d-dst-datastore-dev2 idp-datastore-cluster; \
+kubectl config rename-context gke_d-dst-datastore-dev2_europe-west1-b_idp-datastore-cluster dev-2-gke_d-dst-datastore-dev2_europe-west1-b_idp-datastore-cluster; \
+gcloud container clusters get-credentials --region europe-west1-b --project d-dst-intsophia idp-datastore-cluster; \
+kubectl config rename-context gke_d-dst-intsophia_europe-west1-b_idp-datastore-cluster dev-3-gke_d-dst-intsophia_europe-west1-b_idp-datastore-cluster"
+
+export PATH="$(gem env gemdir)/bin:$PATH"
