@@ -82,7 +82,7 @@ bindkey "\e\e[D" backward-word
 bindkey "\e\e[C" forward-word
 
 # Search antigen
-if [ -f /usr/share/zsh/share/antigen/antigen.zsh ]; then
+if [ -f /home/linuxbrew/.linuxbrew/opt/antigen/share/antigen/antigen.zsh ]; then
   source /home/linuxbrew/.linuxbrew/opt/antigen/share/antigen/antigen.zsh
 elif [ -f /usr/share/zsh/share/antigen/antigen.zsh ]; then
   source /usr/share/zsh/share/antigen/antigen.zsh

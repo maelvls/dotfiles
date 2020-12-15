@@ -128,7 +128,16 @@ if [ "$BREW" != yes ]; then
 fi
 
 if [ ! -d /usr/local/Cellar ] && [ ! -d "$HOME/.linuxbrew" ] && [ ! -d "/home/linuxbrew/.linuxbrew" ]; then
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)" || exit 1
+fi
+
+# At this point, we need to make sure that Homebrew is set in PATH for
+# Linux setups. I decided to put that in the .profile since it is both
+# sourced by Bash and Zsh. Note that it is also sourced by non-interactive
+# sessions. Downside: since it is set in ~/.profile, you have to restart
+# the session, not just the shell.
+if [ "$(uname -s)" = Linux ]; then
+    export PATH="/home/linuxbrew/.linuxbrew/bin:$HOME/.linuxbrew:$PATH"
 fi
 
 BREWS=/tmp/brews
@@ -147,10 +156,14 @@ cat >$BREWS <<EOF
     ripgrep
     fzf
     fd
+    go
+    kubectl
     k9s
     bat
     fx
     jq
+    direnv
+    nvim
 EOF
 # mac-only packages
 if [ "$(uname -s)" = Darwin ]; then
