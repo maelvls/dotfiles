@@ -26,6 +26,7 @@
     br = branch
     rb = rebase
     rs = reset
+    sw = switch
     pushtrack = push -u origin HEAD
     lg1 = log --graph --abbrev-commit --decorate --date=relative --format=format:'%C(bold blue)%h%C(reset) %C(bold green)(%<(8,trunc)%ar)%C(reset) %C(white)%w()%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)' --all
     lg2 = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n'' %C(white)%s%C(reset) %C(dim white)- %an%C(reset)' --all
@@ -37,11 +38,15 @@
     drv = duet-revert
     dmg = duet-merge
     drb = rebase -i --exec 'git duet-commit --amend'
+    ldiff = difftool -t latex
+    ignore-io = "!gi() { curl -L -s https://www.gitignore.io/api/$@ ;}; gi"
+	lg3 = log --graph --pretty=format:'%Cred%h%Creset -%Cblue%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative
+	dig = !git log --date-order --all $(git reflog show --format=\"%h\" stash)
 [core]
 	excludesfile = ~/.gitignore
     pager = /usr/local/opt/diff-so-fancy/bin/diff-so-fancy | less --tabs=4 -RFX
 [web]
-    browser = safari
+    browser = chrome
 [filter "media"]
     clean = git-media-clean %f
     smudge = git-media-smudge %f
@@ -51,11 +56,6 @@
     required = true
 [difftool.latex]
     cmd = git-latexdiff \"$LOCAL\" \"$REMOTE\"
-[alias]
-    ldiff = difftool -t latex
-    ignore-io = "!gi() { curl -L -s https://www.gitignore.io/api/$@ ;}; gi"
-	lg3 = log --graph --pretty=format:'%Cred%h%Creset -%Cblue%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative
-	dig = !git log --date-order --all $(git reflog show --format=\"%h\" stash)
 [rerere]
     enabled = true
     autoupdate = true
@@ -91,22 +91,17 @@
     newHighlight = green bold 22
 [rebase]
     autostash = true
-    abbreviateCommands = true
+    # I had to turn the abbrev to false since there is a bug in
+    # git 2.26.0:
+    # https://public-inbox.org/git/8017591585671131@myt3-605d5ea4bc20.qloud-c.yandex.net/
+    abbreviateCommands = false
 [commit]
     verbose = true
     gpgsign = false
     # template = /Users/mvalais/.stCommitMsg
 [gpg]
     program = gpg
-[difftool "sourcetree"]
-	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
-	path = 
-[mergetool "sourcetree"]
-	cmd = /Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
-	trustExitCode = true
 [credential]
-	helper = /usr/share/doc/git/contrib/credential/libsecret/git-credential-libsecret
-# BEGIN ANSIBLE MANAGED BLOCK
-[include]
-  path = ~/.gitconfig-shared
-# END ANSIBLE MANAGED BLOCK
+    helper = osxkeychain
+[init]
+	defaultBranch = main

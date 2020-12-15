@@ -3,8 +3,26 @@
 #         without any warranty.
 #         Copyright 2012— Gregory Pakosz (@gpakosz).
 
-
 # -- navigation ----------------------------------------------------------------
+
+# Mael: reload with C-b r
+
+# Mael: Jake Klein showed me "the" way: ctrl+space is better than ctrl+b. But
+# then I really wanted to use C-Space for auto-completion with coc.nvim so I
+# kind of went backwards on this...
+#set-option -g prefix C-Space
+
+# Mael: when selecting text with the mouse, it would jump to the bottom right
+# after releasing the click which means I can't show something to someone...
+# https://stackoverflow.com/questions/32374907/tmux-mouse-copy-mode-jumps-to-bottom
+setw -g mouse on
+setw -g mode-keys vi
+unbind-key -T copy-mode-vi MouseDragEnd1Pane
+bind-key -T copy-mode-vi Escape send -X copy-pipe "cat"
+unbind-key -T copy-mode-vi y
+#bind-key -T copy-mode-vi y copy-selection
+#bind-key -T copy-mode-vi y send -X copy-selection
+bind-key -T copy-mode-vi Y send -X copy-pipe "reattach-to-user-namespace pbcopy"\;
 
 # if you're running tmux within iTerm2
 #   - and tmux is 1.9 or 1.9a

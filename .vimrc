@@ -101,7 +101,7 @@ call plug#begin()
 " Redéfinition du <Leader>
 "let mapleader = ","
 " === Début Plugs (Vundle) ===
-Plug 'Valloric/YouCompleteMe', {'for': 'c'}
+"Plug 'Valloric/YouCompleteMe', {'for': 'c'}
 "Plug 'rdnetto/YCM-Generator'
 Plug 'ervandew/supertab'
 Plug 'maelvalais/gmpl.vim'

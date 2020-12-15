@@ -399,13 +399,4 @@ export PATH="/usr/local/opt/gcore/bin:$PATH"
 
 setopt share_history
 
-alias connect="gcloud auth login; \
-kubectl config get-contexts -oname | grep '^dev-\d' | xargs -L1 kubectl config delete-context; \
-gcloud container clusters get-credentials --region europe-west1-b --project tcifg-idp-dev-datastore idp-datastore-cluster; \
-kubectl config rename-context gke_tcifg-idp-dev-datastore_europe-west1-b_idp-datastore-cluster dev-1-gke_tcifg-idp-dev-datastore_europe-west1-b_idp-datastore-cluster; \
-gcloud container clusters get-credentials --region europe-west1-b --project d-dst-datastore-dev2 idp-datastore-cluster; \
-kubectl config rename-context gke_d-dst-datastore-dev2_europe-west1-b_idp-datastore-cluster dev-2-gke_d-dst-datastore-dev2_europe-west1-b_idp-datastore-cluster; \
-gcloud container clusters get-credentials --region europe-west1-b --project d-dst-intsophia idp-datastore-cluster; \
-kubectl config rename-context gke_d-dst-intsophia_europe-west1-b_idp-datastore-cluster dev-3-gke_d-dst-intsophia_europe-west1-b_idp-datastore-cluster"
-
 export PATH="$(gem env gemdir)/bin:$PATH"
