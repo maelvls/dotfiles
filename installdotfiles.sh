@@ -32,6 +32,7 @@ PWD_DOTFILES=$(find . -maxdepth 1 ! -type l ! -type d \( -name ".*" -a ! -name "
 
 # Install gpakosz-tmux: https://github.com/gpakosz/.tmux.git
 # My personal conf is in .tmux.conf.local
+git submodule init
 git submodule update
 PWD_DOTFILES+=$'\n'gpakosz-tmux/.tmux.conf
 
@@ -114,19 +115,20 @@ fi
 # Install tpm, the tmux package manager
 [ -d "$HOME/.tmux" ] || mkdir "$HOME/.tmux"
 [ -d "$HOME/.tmux/plugins/tpm" ] || git clone -q https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
-[ -d "$HOME/.tmux/plugins/gpakosz-tmux-conf" ] || (git clone -q https://github.com/gpakosz/.tmux.git ~/.tmux/plugins/gpakosz-tmux-conf && ln -s -f ~/.tmux.conf ~/.tmux/plugins/gpakosz-tmux-conf/.tmux.conf)
+if [ -d "$HOME/.tmux/plugins/gpakosz-tmux-conf" ]; then
+    git -C "$HOME/.tmux/plugins/gpakosz-tmux-conf" pull
+else
+    git clone -q https://github.com/gpakosz/.tmux.git ~/.tmux/plugins/gpakosz-tmux-conf
+    ln -s -f ~/.tmux.conf ~/.tmux/plugins/gpakosz-tmux-conf/.tmux.conf
+fi
 
 # Install brew if not installed
 if [ "$BREW" != yes ]; then
     exit 0
 fi
 
-if ! [ -d /usr/local/Cellar -o -d "$HOME/.linuxbrew" ] || [ -d "/home/linuxbrew/.linuxbrew" ]; then
-    if [ "$(uname -s)" = Darwin ]; then
-        /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-    else
-        sh -c "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)"
-    fi
+if [ ! -d /usr/local/Cellar ] && [ ! -d "$HOME/.linuxbrew" ] && [ ! -d "/home/linuxbrew/.linuxbrew" ]; then
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
 fi
 
 BREWS=/tmp/brews
@@ -145,6 +147,10 @@ cat >$BREWS <<EOF
     ripgrep
     fzf
     fd
+    k9s
+    bat
+    fx
+    jq
 EOF
 # mac-only packages
 if [ "$(uname -s)" = Darwin ]; then
@@ -153,9 +159,14 @@ if [ "$(uname -s)" = Darwin ]; then
     pinentry-mac
 EOF
 fi
+# linux-only packages
+if [ "$(uname -s)" = Darwin ]; then
+    cat >>$BREWS <<EOF
+EOF
+fi
 
 # Install the brew packages
 if command -v brew >/dev/null 2>&1; then
-    brew install $BREWS
+    brew install $(cat $BREWS)
 fi
 rm -f $BREWS

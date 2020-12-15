@@ -83,6 +83,8 @@ bindkey "\e\e[C" forward-word
 
 # Search antigen
 if [ -f /usr/share/zsh/share/antigen/antigen.zsh ]; then
+  source /home/linuxbrew/.linuxbrew/opt/antigen/share/antigen/antigen.zsh
+elif [ -f /usr/share/zsh/share/antigen/antigen.zsh ]; then
   source /usr/share/zsh/share/antigen/antigen.zsh
 elif [ -f $HOME/.antigen.zsh ]; then
   # Warning: apt install zsh-antigen seems way too old.
@@ -90,6 +92,9 @@ elif [ -f $HOME/.antigen.zsh ]; then
   source $HOME/.antigen.zsh
 else
   echo -e "\033[93mantigen:\033[0m antigen.zsh not installed?"
+  echo -e "\033[93mantigen:\033[0m go to the dotfiles/ folder and run:"
+  echo -e "    ./installdotfiles.sh"
+  exit 1
 fi
 
 export ZSH_AUTOSUGGEST_USE_ASYNC=1
@@ -400,3 +405,10 @@ export PATH="/usr/local/opt/gcore/bin:$PATH"
 setopt share_history
 
 export PATH="$(gem env gemdir)/bin:$PATH"
+
+if [ "$(uname -s)" = "Linux" ]; then
+  alias pbcopy='xclip -selection clipboard'
+  alias pbpaste='xclip -selection clipboard -o'
+  alias open='xdg-open'
+  export PATH="/usr/local/go/bin:$PATH"
+fi

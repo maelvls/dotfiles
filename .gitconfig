@@ -44,7 +44,7 @@
 	dig = !git log --date-order --all $(git reflog show --format=\"%h\" stash)
 [core]
 	excludesfile = ~/.gitignore
-    pager = /usr/local/opt/diff-so-fancy/bin/diff-so-fancy | less --tabs=4 -RFX
+    pager = diff-so-fancy | less --tabs=4 -RFX
 [web]
     browser = chrome
 [filter "media"]
@@ -98,7 +98,6 @@
 [commit]
     verbose = true
     gpgsign = false
-    # template = /Users/mvalais/.stCommitMsg
 [gpg]
     program = gpg
 [credential]

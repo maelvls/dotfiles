@@ -24,6 +24,11 @@ unbind-key -T copy-mode-vi y
 #bind-key -T copy-mode-vi y send -X copy-selection
 bind-key -T copy-mode-vi Y send -X copy-pipe "reattach-to-user-namespace pbcopy"\;
 
+# When I'm in copy mode (e.g. by scrolling up), I wanted to be able to
+# select and unselect without losing the position where I was looking at.
+# https://github.com/tmux/tmux/issues/1055
+bind -T copy-mode-vi MouseDown1Pane select-pane \; send -X clear-selection
+
 # if you're running tmux within iTerm2
 #   - and tmux is 1.9 or 1.9a
 #   - and iTerm2 is configured to let option key act as +Esc
