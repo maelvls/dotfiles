@@ -30,12 +30,6 @@ PWD_DOTFILES=$(find . -maxdepth 1 ! -type l ! -type d \( -name ".*" -a ! -name "
 # Install Vim-plug for Vim 8
 [ -f ~/.vim/autoload/plug.vim ] || curl -sfLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
-# Install gpakosz-tmux: https://github.com/gpakosz/.tmux.git
-# My personal conf is in .tmux.conf.local
-git submodule init
-git submodule update
-PWD_DOTFILES+=$'\n'gpakosz-tmux/.tmux.conf
-
 FORCE=no
 BREW=no
 while [ $# -gt 0 ]; do
@@ -112,7 +106,7 @@ fi
 #     ln -s $dir/$file $HOME/.$file
 # done
 
-# Install tpm, the tmux package manager
+# Install tpm, the tmux package manager as well as gpakosz/.tmux.
 [ -d "$HOME/.tmux" ] || mkdir "$HOME/.tmux"
 [ -d "$HOME/.tmux/plugins/tpm" ] || git clone -q https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 if [ -d "$HOME/.tmux/plugins/gpakosz-tmux-conf" ]; then

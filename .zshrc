@@ -86,6 +86,8 @@ if [ -f /home/linuxbrew/.linuxbrew/opt/antigen/share/antigen/antigen.zsh ]; then
   source /home/linuxbrew/.linuxbrew/opt/antigen/share/antigen/antigen.zsh
 elif [ -f /usr/share/zsh/share/antigen/antigen.zsh ]; then
   source /usr/share/zsh/share/antigen/antigen.zsh
+elif [ -f $(brew --prefix)/opt/antigen/share/antigen/antigen.zsh ]; then
+  source $(brew --prefix)/opt/antigen/share/antigen/antigen.zsh
 elif [ -f $HOME/.antigen.zsh ]; then
   # Warning: apt install zsh-antigen seems way too old.
   # Prefer installing it with: curl -L git.io/antigen > ~/.antigen.zsh
@@ -94,7 +96,7 @@ else
   echo -e "\033[93mantigen:\033[0m antigen.zsh not installed?"
   echo -e "\033[93mantigen:\033[0m go to the dotfiles/ folder and run:"
   echo -e "    ./installdotfiles.sh"
-  exit 1
+  return
 fi
 
 export ZSH_AUTOSUGGEST_USE_ASYNC=1
