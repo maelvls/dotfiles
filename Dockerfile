@@ -3,9 +3,10 @@
 ARG VARIANT="focal"
 FROM mcr.microsoft.com/vscode/devcontainers/base:0-${VARIANT}
 
-USER codespace
+RUN adduser -D linuxbrew
+USER linuxbrew
 
-COPY . /home/codespace/workspace/dotfiles
+COPY . dotfiles/
 
 ENV NONINTERACTIVE=yes
-RUN cd /home/codespace/workspace/dotfiles && ./installdotfiles.sh -f --brew
+RUN cd dotfiles && ./installdotfiles.sh -f --brew
