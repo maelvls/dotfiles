@@ -31,74 +31,15 @@ PWD_DOTFILES=$(find . -maxdepth 1 ! -type l ! -type d \( -name ".*" -a ! -name "
 [ -f ~/.vim/autoload/plug.vim ] || curl -sfLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
 FORCE=
-ONLYBREW=
+ONLY_BREW=
 while [ $# -gt 0 ]; do
     case "$1" in
     --force | -f) FORCE=yes ;;
-    --only-brew) ONLYBREW=yes ;;
+    --only-brew) ONLY_BREW=yes ;;
     *) ;;
     esac
     shift
 done
-
-install_brew() {
-    if [ ! -d /usr/local/Cellar ] && [ ! -d "$HOME/.linuxbrew" ] && [ ! -d "/home/linuxbrew/.linuxbrew" ]; then
-        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)" || exit 1
-    fi
-
-    # At this point, we need to make sure that Homebrew is set in PATH for
-    # Linux setups. I decided to put that in the .profile since it is both
-    # sourced by Bash and Zsh. Note that it is also sourced by non-interactive
-    # sessions. Downside: since it is set in ~/.profile, you have to restart
-    # the session, not just the shell.
-    if [ "$(uname -s)" = Linux ]; then
-        export PATH="/home/linuxbrew/.linuxbrew/bin:$HOME/.linuxbrew:$PATH"
-    fi
-
-    BREWS=/tmp/brews
-    cat >$BREWS <<EOF
-    coreutils
-    curl
-    diff-so-fancy
-    git
-    htop
-    hub
-    rlwrap
-    tmux
-    zsh
-    antigen
-    exa
-    ripgrep
-    fzf
-    fd
-    go
-    kubectl
-    k9s
-    bat
-    fx
-    jq
-    direnv
-    nvim
-EOF
-    # mac-only packages
-    if [ "$(uname -s)" = Darwin ]; then
-        cat >>$BREWS <<EOF
-    reattach-to-user-namespace
-    pinentry-mac
-EOF
-    fi
-    # linux-only packages
-    if [ "$(uname -s)" = Darwin ]; then
-        cat >>$BREWS <<EOF
-EOF
-    fi
-
-    # Install the brew packages
-    if command -v brew >/dev/null 2>&1; then
-        brew install $(cat $BREWS)
-    fi
-    rm -f $BREWS
-}
 
 install_dotfiles() {
     if [ ! -d "old_dotfiles" ]; then
@@ -177,10 +118,67 @@ install_dotfiles() {
     fi
 }
 
-install_brew
+install_brew() {
+    if [ ! -d /usr/local/Cellar ] && [ ! -d "$HOME/.linuxbrew" ] && [ ! -d "/home/linuxbrew/.linuxbrew" ]; then
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)" || exit 1
+    fi
 
-# Install brew if not installed
-if [ -n "$ONLYBREW" ]; then
+    # At this point, we need to make sure that Homebrew is set in PATH for
+    # Linux setups. I decided to put that in the .profile since it is both
+    # sourced by Bash and Zsh. Note that it is also sourced by non-interactive
+    # sessions. Downside: since it is set in ~/.profile, you have to restart
+    # the session, not just the shell.
+    if [ "$(uname -s)" = Linux ]; then
+        export PATH="/home/linuxbrew/.linuxbrew/bin:$HOME/.linuxbrew:$PATH"
+    fi
+
+    BREWS=/tmp/brews
+    cat >$BREWS <<EOF
+    coreutils
+    curl
+    diff-so-fancy
+    git
+    htop
+    hub
+    rlwrap
+    tmux
+    zsh
+    antigen
+    exa
+    ripgrep
+    fzf
+    fd
+    go
+    kubectl
+    k9s
+    bat
+    fx
+    jq
+    direnv
+    nvim
+EOF
+    # mac-only packages
+    if [ "$(uname -s)" = Darwin ]; then
+        cat >>$BREWS <<EOF
+    reattach-to-user-namespace
+    pinentry-mac
+EOF
+    fi
+    # linux-only packages
+    if [ "$(uname -s)" = Darwin ]; then
+        cat >>$BREWS <<EOF
+EOF
+    fi
+
+    # Install the brew packages
+    if command -v brew >/dev/null 2>&1; then
+        brew install $(cat $BREWS)
+    fi
+    rm -f $BREWS
+}
+
+install_brew
+if [ -n "$ONLY_BREW" ]; then
     exit 0
 fi
 
