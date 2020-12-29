@@ -19,7 +19,8 @@ yel='\033[93m'
 end='\033[0m'
 trace() {
     printf "%s ${gray}" "$1"
-    LANG=C perl -e 'print join (" ", map { $_ =~ / / ? "\"".$_."\"" : $_} @ARGV)' -- "${@:2}"
+    shift
+    LANG=C perl -e 'print join (" ", map { $_ =~ / / ? "\"".$_."\"" : $_} @ARGV)' -- "$@"
     printf "${end}\n"
     command "$@"
 }
