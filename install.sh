@@ -9,14 +9,15 @@
 # Note: Remember to run "chmod +x installdotfile.sh" if any issues occur
 #
 # vim:set et sts=0 sw=4 ts=4:
-#
 
-gray='\033[90m'
-red='\033[91m'
-green='\033[92m'
-yel='\033[93m'
-# blu='\033[94m'
-end='\033[0m'
+if [ -t 1 ] && [ "$COLOR" != never ]; then
+    gray='\033[90m'
+    red='\033[91m'
+    green='\033[92m'
+    yel='\033[93m'
+    # blu='\033[94m'
+    end='\033[0m'
+fi
 trace() {
     printf "${gray}"
     LANG=C perl -e 'print join (" ", map { $_ =~ / / ? "\"".$_."\"" : $_} @ARGV)' -- "$@"
@@ -126,49 +127,17 @@ install_brew() {
         export PATH="/home/linuxbrew/.linuxbrew/bin:$HOME/.linuxbrew:$PATH"
     fi
 
-    BREWS=/tmp/brews
-    cat >$BREWS <<EOF
-    coreutils
-    curl
-    diff-so-fancy
-    git
-    htop
-    hub
-    rlwrap
-    tmux
-    zsh
-    antigen
-    exa
-    ripgrep
-    fzf
-    fd
-    go
-    kubectl
-    k9s
-    bat
-    fx
-    jq
-    direnv
-    nvim
-EOF
+    # common packages
+    brew install coreutils curl diff-so-fancy git htop hub rlwrap tmux zsh antigen exa ripgrep fzf fd go kubectl k9s bat fx jq direnv nvim
+
     # mac-only packages
     if [ "$(uname -s)" = Darwin ]; then
-        cat >>$BREWS <<EOF
-    reattach-to-user-namespace
-    pinentry-mac
-EOF
+        brew install reattach-to-user-namespace pinentry-mac
     fi
     # linux-only packages
-    if [ "$(uname -s)" = Darwin ]; then
-        cat >>$BREWS <<EOF
-EOF
+    if [ "$(uname -s)" = Linux ]; then
+        sudo apt install lastpass-cli
     fi
-
-    # Install the brew packages
-    if command -v brew >/dev/null 2>&1; then
-        brew install $(cat $BREWS)
-    fi
-    rm -f $BREWS
 }
 
 install_brew
