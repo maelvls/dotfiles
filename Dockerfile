@@ -7,4 +7,4 @@ USER vscode
 COPY --chown=vscode . dotfiles/
 
 ENV NONINTERACTIVE=yes
-RUN cd dotfiles && ./installdotfiles.sh -f --brew
+RUN cd dotfiles && ./installdotfiles.sh --only-brew
