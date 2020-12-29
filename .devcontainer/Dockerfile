@@ -6,5 +6,4 @@ FROM mcr.microsoft.com/vscode/devcontainers/base:0-${VARIANT}
 USER vscode
 COPY --chown=vscode . dotfiles/
 
-ENV NONINTERACTIVE=yes
 RUN dotfiles/install.sh --only-brew

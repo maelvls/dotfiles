@@ -1,4 +1,4 @@
-#! /bin/bash
+#! /bin/sh
 #
 # installdotfiles.sh
 # Maël Valais
@@ -17,10 +17,10 @@ green='\033[92m'
 yel='\033[93m'
 # blu='\033[94m'
 end='\033[0m'
-function trace() {
-    echo -ne "$1 ${gray}"
+trace() {
+    printf "%s ${gray}" "$1"
     LANG=C perl -e 'print join (" ", map { $_ =~ / / ? "\"".$_."\"" : $_} @ARGV)' -- "${@:2}"
-    echo -e "${end}"
+    printf "${end}\n"
     command "$@"
 }
 
@@ -30,11 +30,9 @@ PWD_DOTFILES=$(find . -maxdepth 1 ! -type l ! -type d \( -name ".*" -a ! -name "
 # Install Vim-plug for Vim 8
 [ -f ~/.vim/autoload/plug.vim ] || curl -sfLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
-FORCE=
 ONLY_BREW=
 while [ $# -gt 0 ]; do
     case "$1" in
-    --force | -f) FORCE=yes ;;
     --only-brew) ONLY_BREW=yes ;;
     *) ;;
     esac
@@ -42,8 +40,9 @@ while [ $# -gt 0 ]; do
 done
 
 install_dotfiles() {
-    if [ ! -d "old_dotfiles" ]; then
-        mkdir old_dotfiles
+    OLD_DOTFILES=$HOME/old_dotfiles
+    if [ ! -d "$OLD_DOTFILES" ]; then
+        mkdir -p "$OLD_DOTFILES"
     fi
 
     ALREADY=""
@@ -55,28 +54,22 @@ install_dotfiles() {
         TARGET="$HOME/$(basename "$dotfile")"
         found=0
         for dotfile_in_home in $HOME_DOTFILES; do
-            if [ "$TARGET" == "$dotfile_in_home" ]; then
-                echo "Moving ${yel}$dotfile_in_home${end} to ${yel}./old_dotfiles${end} and symlinking instead with ${yel}$dotfile${end}"
-                trace mv "$HOME/$dotfile_in_home" "old_dotfiles/"
+            if [ "$TARGET" = "$dotfile_in_home" ]; then
+                printf "Moving ${yel}%s${end} to ${yel}%s${end} and symlinking instead with ${yel}%s${end}\n" "$dotfile_in_home" "$OLD_DOTFILES" "$dotfile"
+                trace mv "$HOME/$dotfile_in_home" "$OLD_DOTFILES"
                 trace ln -s "$SOURCE" "$TARGET" # source is in PWD, target is in HOME
                 found=1
             fi
-        done < <(echo "$HOME_DOTFILES")
+        done
         if [ $found -eq 0 ]; then
             # Check if this .file has already a symlink in $HOME
             if (find "$TARGET" -maxdepth 1 -type l 2>/dev/null >/dev/null); then
-                if [ "$FORCE" = "no" ]; then
-                    echo -e "${yel}$dotfile${end} already has a symlink in home. To force resymlink, use ${red}--force${end}"
-                    ALREADY+="\n$dotfile"
-                else
-                    echo -e "(${red}--force${end} mode) ${yel}$dotfile${end} already exists, resymlinking."
-                    trace ln -sf "$SOURCE" "$TARGET"
-                fi
+                printf "${yel}%s${end} symlink already exists, resymlinking.\n" "$dotfile"
+                trace ln -sf "$SOURCE" "$TARGET"
             else
-                echo -e "No ${yel}$HOME/$dotfile${end}. Directly symlinking."
+                printf "No ${yel}%s${end}. Directly symlinking.\n" "$HOME/$dotfile"
                 trace ln -s "$SOURCE" "$TARGET"
             fi
-
         fi
     done
 
@@ -87,9 +80,9 @@ install_dotfiles() {
             echo "Replaced $HOME/$dotfile symlink."
         done
     elif [ -n "$ALREADY" ]; then
-        echo -e "${red}The following files already exist in home:${end}"
-        echo -e "${green}$ALREADY${end}"
-        echo -e "\nYou can use '${green}$0 --force${end}' to force symlink"
+        printf "${red}The following files already exist in home:${end}\n"
+        printf "${green}$ALREADY${end}\n"
+        printf "\nYou can use '${green}$0 --force${end}' to force symlink\n"
     fi
     # find . -type t
     # b       block special
@@ -119,6 +112,7 @@ install_dotfiles() {
 }
 
 install_brew() {
+    export NONINTERACTIVE=yes
     if [ ! -d /usr/local/Cellar ] && [ ! -d "$HOME/.linuxbrew" ] && [ ! -d "/home/linuxbrew/.linuxbrew" ]; then
         /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)" || exit 1
     fi
