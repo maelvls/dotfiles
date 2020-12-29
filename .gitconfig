@@ -101,6 +101,6 @@
 [gpg]
     program = gpg
 [credential]
-    helper = osxkeychain
+    helper = lastpass
 [init]
 	defaultBranch = main
