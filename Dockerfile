@@ -9,6 +9,7 @@ RUN groupadd temp
 RUN useradd --gid temp -m temp
 USER temp
 
-COPY . dotfiles/
+COPY --chown=temp . dotfiles/
+
 ENV NONINTERACTIVE=yes
 RUN cd dotfiles && ./installdotfiles.sh -f --brew
