@@ -2,5 +2,8 @@
 
 ARG VARIANT="focal"
 FROM mcr.microsoft.com/vscode/devcontainers/base:0-${VARIANT}
+
+USER $USER_UID:$USER_GID
+
 COPY . /home/codespace/workspace/dotfiles
 RUN cd /home/codespace/workspace/dotfiles && ./installdotfiles.sh -f --brew
