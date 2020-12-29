@@ -6,4 +6,6 @@ FROM mcr.microsoft.com/vscode/devcontainers/base:0-${VARIANT}
 USER codespace
 
 COPY . /home/codespace/workspace/dotfiles
+
+ENV NONINTERACTIVE=yes
 RUN cd /home/codespace/workspace/dotfiles && ./installdotfiles.sh -f --brew
