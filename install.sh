@@ -18,8 +18,7 @@ yel='\033[93m'
 # blu='\033[94m'
 end='\033[0m'
 trace() {
-    printf "%s ${gray}" "$1"
-    shift
+    printf "${gray}"
     LANG=C perl -e 'print join (" ", map { $_ =~ / / ? "\"".$_."\"" : $_} @ARGV)' -- "$@"
     printf "${end}\n"
     command "$@"
