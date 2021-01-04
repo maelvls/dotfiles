@@ -140,7 +140,7 @@ install_brew() {
     fi
 }
 
-install_brew
+#install_brew
 if [ -n "$ONLY_BREW" ]; then
     exit 0
 fi
