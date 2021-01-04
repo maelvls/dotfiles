@@ -32,9 +32,15 @@ PWD_DOTFILES=$(find . -maxdepth 1 ! -type l ! -type d \( -name ".*" -a ! -name "
 [ -f ~/.vim/autoload/plug.vim ] || curl -sfLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
 ONLY_BREW=
+ONLY_DOT=
 while [ $# -gt 0 ]; do
     case "$1" in
     --only-brew) ONLY_BREW=yes ;;
+    --only-dotfiles) ONLY_DOT=yes ;;
+    -h | --help)
+        echo "Usage: $(basename "$0") [--only-dotfiles | --only-brew]"
+        exit 0
+        ;;
     *) ;;
     esac
     shift
@@ -108,8 +114,8 @@ install_dotfiles() {
         git -C "$HOME/.tmux/plugins/gpakosz-tmux-conf" pull
     else
         git clone -q https://github.com/gpakosz/.tmux.git ~/.tmux/plugins/gpakosz-tmux-conf
-        ln -s -f ~/.tmux.conf ~/.tmux/plugins/gpakosz-tmux-conf/.tmux.conf
     fi
+    ln -s -f ~/.tmux/plugins/gpakosz-tmux-conf/.tmux.conf ~/.tmux.conf
 }
 
 install_brew() {
@@ -140,9 +146,15 @@ install_brew() {
     fi
 }
 
-#install_brew
 if [ -n "$ONLY_BREW" ]; then
+    install_brew
     exit 0
 fi
 
+if [ -n "$ONLY_DOT" ]; then
+    install_dotfiles
+    exit 0
+fi
+
+install_brew
 install_dotfiles
