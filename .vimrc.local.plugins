@@ -1,1 +1,3 @@
-/home/mvalais/code/dotfiles-callisto13/config/.vimrc.local.plugins
+Plug 'arzg/vim-corvine'
+Plug 'scwood/vim-hybrid'
+"Plug 'tomtom/tcomment_vim'
