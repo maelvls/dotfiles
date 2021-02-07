@@ -1,9 +1,12 @@
-// For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
+// devcontainer.json reference: https://code.visualstudio.com/docs/remote/devcontainerjson-reference
+//
+// For config options, see the README at:
 // https://github.com/microsoft/vscode-dev-containers/tree/v0.154.0/containers/ubuntu
 {
   "name": "Mael's devcontainer",
+  "image": "docker.pkg.github.com/maelvls/dotfiles/devcontainer:latest",
   "build": {
-    "target": "docker.pkg.github.com/maelvls/dotfiles/dotfiles:latest"
+    "target": "docker.pkg.github.com/maelvls/dotfiles/devcontainer:latest"
   },
 
   // Set *default* container specific settings.json values on container create.
