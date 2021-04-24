@@ -1,6 +1,6 @@
 [user]
-	name = Maël Valais
-	email = mael.valais@gmail.com
+	name = Maël Valais
+	email = mael@vls.dev
     signingkey = 27F4C016
 [color]
     diff = auto
@@ -8,7 +8,7 @@
     branch = auto
     ui = true
 [alias]
-	ls = for-each-ref --count=5 --sort=-committerdate refs/heads/ --format='%(color:bold)%(HEAD)%(color:reset) %(refname:short)%(color:reset) - %(color:yellow)%(authorname)%(color:reset), %(color:green)%(committerdate:relative)%(color:reset)'
+    ls = for-each-ref --count=5 --sort=-committerdate refs/heads/ --format='%(color:bold)%(HEAD)%(color:reset) %(refname:short)%(color:reset) - %(color:yellow)%(authorname)%(color:reset), %(color:green)%(committerdate:relative)%(color:reset)'
     ll = for-each-ref --sort=-committerdate refs/heads/ --format='%(color:bold)%(HEAD)%(color:reset) %(refname:short)%(color:reset) - %(color:yellow)%(authorname)%(color:reset), %(color:green)%(committerdate:relative)%(color:reset)'
     cia = commit --amend
     f = !git branch -vv --color=always | fzf --ansi |  sed 's:^[\\* ]*::' | cut -d' ' -f1 | xargs git checkout
@@ -35,16 +35,16 @@
     dsf = "!f() { [ -z \"$GIT_PREFIX\" ] || cd \"$GIT_PREFIX\" && git diff --color \"$@\" | diff-so-fancy 2>/dev/null | less --tabs=4 -RFX; }; f"
     sync = !git pull && git push
     dci = duet-commit
+    dcia = duet-commit --amend
     drv = duet-revert
     dmg = duet-merge
     drb = rebase -i --exec 'git duet-commit --amend'
     ldiff = difftool -t latex
     ignore-io = "!gi() { curl -L -s https://www.gitignore.io/api/$@ ;}; gi"
-	lg3 = log --graph --pretty=format:'%Cred%h%Creset -%Cblue%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative
-	dig = !git log --date-order --all $(git reflog show --format=\"%h\" stash)
-[core]
-	excludesfile = ~/.gitignore
-    pager = diff-so-fancy | less --tabs=4 -RFX
+    lg3 = log --graph --pretty=format:'%Cred%h%Creset -%Cblue%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative
+    dig = !git log --date-order --all $(git reflog show --format=\"%h\" stash)
+    json = !git log --pretty=format:'{%n  \"commit\": \"%H\",%n  \"abbreviated_commit\": \"%h\",%n  \"tree\": \"%T\",%n  \"abbreviated_tree\": \"%t\",%n  \"parent\": \"%P\",%n  \"abbreviated_parent\": \"%p\",%n  \"refs\": \"%D\",%n  \"encoding\": \"%e\",%n  \"subject\": \"%s\",%n  \"sanitized_subject_line\": \"%f\",%n  \"body\": \"%B\",%n  \"commit_notes\": \"%N\",%n  \"verification_flag\": \"%G?\",%n  \"signer\": \"%GS\",%n  \"signer_key\": \"%GK\",%n  \"author\": {%n    \"name\": \"%aN\",%n    \"email\": \"%aE\",%n    \"date\": \"%aD\"%n  },%n  \"commiter\": {%n    \"name\": \"%cN\",%n    \"email\": \"%cE\",%n    \"date\": \"%cD\"%n  }%n},'
+    duetedit = !${EDITOR:-vim} ~/.git-authors
 [web]
     browser = chrome
 [filter "media"]
@@ -94,13 +94,28 @@
     # I had to turn the abbrev to false since there is a bug in
     # git 2.26.0:
     # https://public-inbox.org/git/8017591585671131@myt3-605d5ea4bc20.qloud-c.yandex.net/
-    abbreviateCommands = false
+    # abbreviateCommands = false
 [commit]
-    verbose = true
+	verbose = true
     gpgsign = false
 [gpg]
     program = gpg
 [credential]
     helper = lastpass
 [init]
-	defaultBranch = main
+    defaultBranch = main
+[core]
+    excludesfile = ~/.gitignore
+    pager = delta
+[delta]
+    plus-style = "syntax #012800"
+    minus-style = "syntax #340001"
+    syntax-theme = Monokai Extended
+    navigate = true
+[interactive]
+    diffFilter = delta --color-only
+[diff "spaceman-diff"]
+    command = spaceman-diff
+
+[maintenance]
+	repo = /Users/mvalais/code/cert-manager

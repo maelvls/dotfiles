@@ -21,9 +21,9 @@
 #    4. duration of the last command if it lasted more than 5 seconds
 
 UPDATE_ZSH_DAYS=13
-ENABLE_CORRECTION="false"
-COMPLETION_WAITING_DOTS="true"
-ZSH_HIGHLIGHT_MAXLENGTH=300
+ENABLE_CORRECTION=false
+COMPLETION_WAITING_DOTS=false
+#ZSH_HIGHLIGHT_MAXLENGTH=300
 
 # Disable auto-cd when typing a command not found that has the same name as
 # a directory. Very annoying with Go as the binary has the same name as the
@@ -101,7 +101,7 @@ fi
 
 export ZSH_AUTOSUGGEST_USE_ASYNC=1
 
-# When I developon my own forl of omz, remember to use
+# When I develop on my own forl of omz, remember to use
 #    antigen update maelvls/oh-my-zsh
 #    antigen cache-gen
 #export ANTIGEN_OMZ_REPO_URL=https://github.com/maelvls/oh-my-zsh.git
@@ -131,12 +131,12 @@ antigen bundle docker docker-compose
 #antigen theme borekb/agkozak-zsh-theme
 #antigen bundle mafredri/zsh-async
 #antigen bundle sindresorhus/pure
-antigen bundle agkozak/agkozak-zsh-prompt
+#antigen bundle agkozak/agkozak-zsh-prompt
 
 #antigen theme "$HOME/code/agkozak-zsh-prompt"
-AGKOZAK_CUSTOM_SYMBOLS=('⇣⇡' '⇣' '⇡' '+' 'x' '!' '>' '?')
-AGKOZAK_LEFT_PROMPT_ONLY=1
-AGKOZAK_USER_HOST_DISPLAY=0
+#AGKOZAK_CUSTOM_SYMBOLS=('⇣⇡' '⇣' '⇡' '+' 'x' '!' '>' '?')
+#AGKOZAK_LEFT_PROMPT_ONLY=1
+#AGKOZAK_USER_HOST_DISPLAY=0
 
 antigen apply
 
@@ -195,10 +195,6 @@ if [ -d "$HOME/go" ]; then
   export GOPATH="$HOME/go"
   export PATH="$GOPATH/bin:$PATH"
   export GO111MODULE=auto
-fi
-
-if which hub >/dev/null 2>&1; then
-  alias git=hub
 fi
 
 if which exa >/dev/null 2>&1; then
@@ -318,6 +314,8 @@ export HOMEBREW_AUTO_UPDATE_SECS=3600
 
 # Kubectl is soooo long to type
 alias k=kubectl
+alias h=helm
+alias b=bazel
 
 export ERL_AFLAGS="-kernel shell_history enabled"
 
@@ -414,3 +412,66 @@ if [ "$(uname -s)" = "Linux" ]; then
   alias open='xdg-open'
   export PATH="/usr/local/go/bin:$PATH"
 fi
+
+# Wasmer
+export WASMER_DIR="/Users/mvalais/.wasmer"
+[ -s "$WASMER_DIR/wasmer.sh" ] && source "$WASMER_DIR/wasmer.sh"
+
+# When I use git-duet, I just want git-duet to add the Co-Authored-By. I don't
+# need it to set different committer and author.
+export GIT_DUET_CO_AUTHORED_BY=1
+# Due to a bug, git solo does not reset the duet configuration stored in
+# .git/config. In order to force it update it, I set this option. See:
+# https://github.com/git-duet/git-duet/issues/68
+export GIT_DUET_DEFAULT_UPDATE=1
+export VAULT_ADDR=https://vault.jetstack.net:8200
+alias docker2="docker -H tcp://synology:2376"
+
+# ripgrep is great but does not support "in-place replace". Apparently, that's
+# one decision that BurntSushi took and he never changed his mind. So here is
+# a workaround from https://github.com/BurntSushi/ripgrep/issues/74:
+rgr() {
+  if [ $# -lt 2 ]; then
+    echo "rg with interactive text replacement"
+    echo "Usage: rgr text replacement-text"
+    return
+  fi
+  vim --clean -c ":execute ':argdo %s%$1%$2%gc | update' | :q" -- $(rg $1 -l ${@:3})
+}
+
+export PATH="$HOME/sdk/go1.16/bin:$PATH"
+
+retag() { # Usage: retag FROM_IMAGE_WITH_TAG TO_IMAGE_WITH_TAG
+  local FROM=$1 TO=$2
+  docker pull $FROM && docker tag $FROM $TO && docker push $TO
+}
+retagall() { # Usage: retagall FROM_REGISTRY FROM_TAG TO_REGISTRY TO_TAG
+  local FROM=$1 TO=$2 FROM_TAG=$3 TO_TAG=$4
+  retag $FROM:$FROM_TAG $TO:$TO_TAG || exit 1
+  retag $FROM/cert-manager-acmesolver:$FROM_TAG $TO/cert-manager-acmesolver:$TO_TAG || exit 1
+  retag $FROM/cert-manager-cainjector:$FROM_TAG $TO/cert-manager-cainjector:$TO_TAG || exit 1
+  retag $FROM/cert-manager-webhook:$FROM_TAG $TO/cert-manager-webhook:$TO_TAG || exit 1
+  retag $FROM/cert-manager-google-cas-issuer:$FROM_TAG $TO/cert-manager-google-cas-issuer:$TO_TAG || exit 1
+  retag $FROM/preflight:$FROM_TAG $TO/preflight:$TO_TAG || exit 1
+  retag gcr.io/cloud-marketplace-tools/metering/ubbagent:latest $TO/ubbagent:$TO_TAG || exit 1
+}
+
+# Scaleway CLI autocomplete initialization.
+eval "$(scw autocomplete script shell=zsh)"
+
+# Colors, a lot of colors!
+# from: https://coderwall.com/p/pb1uzq/z-shell-colors
+clicolors() {
+  i=1
+  for color in {000..255}; do
+    c=$c"$FG[$color]$color✔$reset_color  "
+    if [ $(expr $i % 8) -eq 0 ]; then
+      c=$c"\n"
+    fi
+    i=$(expr $i + 1)
+  done
+  echo $c | sed 's/%//g' | sed 's/{//g' | sed 's/}//g' | sed '$s/..$//'
+  c=''
+}
+
+eval "$(starship init zsh)"
