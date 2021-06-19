@@ -10,7 +10,7 @@
 # Mael: Jake Klein showed me "the" way: ctrl+space is better than ctrl+b. But
 # then I really wanted to use C-Space for auto-completion with coc.nvim so I
 # kind of went backwards on this...
-#set-option -g prefix C-Space
+set-option -g prefix C-Space
 
 # Mael: when selecting text with the mouse, it would jump to the bottom right
 # after releasing the click which means I can't show something to someone...
@@ -22,12 +22,40 @@ bind-key -T copy-mode-vi Escape send -X copy-pipe "cat"
 unbind-key -T copy-mode-vi y
 #bind-key -T copy-mode-vi y copy-selection
 #bind-key -T copy-mode-vi y send -X copy-selection
-bind-key -T copy-mode-vi Y send -X copy-pipe "reattach-to-user-namespace pbcopy"\;
+#bind-key -T copy-mode-vi Y send -X copy-pipe "reattach-to-user-namespace pbcopy"\;
 
 # When I'm in copy mode (e.g. by scrolling up), I wanted to be able to
 # select and unselect without losing the position where I was looking at.
 # https://github.com/tmux/tmux/issues/1055
 bind -T copy-mode-vi MouseDown1Pane select-pane \; send -X clear-selection
+
+
+# I want tmux to copy to pastebin whenever I double-click on a word or
+# triple-click on a line.
+# https://stackoverflow.com/questions/31404140/can-i-use-double-click-to-select-and-copy-in-tmux/46638561
+bind-key -T copy-mode-vi DoubleClick1Pane \
+    select-pane \; \
+    send-keys -X select-word-no-clear \; \
+    send-keys -X copy-pipe-no-clear "xclip -in -sel primary"
+bind-key -n DoubleClick1Pane \
+    select-pane \; \
+    copy-mode -M \; \
+    send-keys -X select-word \; \
+    send-keys -X copy-pipe-no-clear "xclip -in -sel primary"
+bind-key -T copy-mode-vi TripleClick1Pane \
+    select-pane \; \
+    send-keys -X select-line \; \
+    send-keys -X copy-pipe-no-clear "xclip -in -sel primary"
+bind-key -n TripleClick1Pane \
+    select-pane \; \
+    copy-mode -M \; \
+    send-keys -X select-line \; \
+    send-keys -X copy-pipe-no-clear "xclip -in -sel primary"
+
+# I want the Page-Up key to trigger the "Ctrl+B ]" history vi mode.
+# https://superuser.com/questions/702189/tmux-scroll-up-down-with-shift-page-up-down-into-a-pane/1110585
+bind -n Pageup copy-mode -u
+
 
 # if you're running tmux within iTerm2
 #   - and tmux is 1.9 or 1.9a

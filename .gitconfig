@@ -8,13 +8,15 @@
     branch = auto
     ui = true
 [alias]
+    # https://stackoverflow.com/questions/65763211/a-git-alias-to-accept-both-main-and-master-branch-names/67284322#67284322
+    m = !git switch $(awk -F "/" '{print $NF}' .git/refs/remotes/origin/HEAD)
     ls = for-each-ref --count=5 --sort=-committerdate refs/heads/ --format='%(color:bold)%(HEAD)%(color:reset) %(refname:short)%(color:reset) - %(color:yellow)%(authorname)%(color:reset), %(color:green)%(committerdate:relative)%(color:reset)'
     ll = for-each-ref --sort=-committerdate refs/heads/ --format='%(color:bold)%(HEAD)%(color:reset) %(refname:short)%(color:reset) - %(color:yellow)%(authorname)%(color:reset), %(color:green)%(committerdate:relative)%(color:reset)'
     cia = commit --amend
     f = !git branch -vv --color=always | fzf --ansi |  sed 's:^[\\* ]*::' | cut -d' ' -f1 | xargs git checkout
     hg = hg-helper
     fixup = "!f() { TARGET=$(git rev-parse "$1"); git commit --fixup=$TARGET ${@:2} && EDITOR=true git rebase -i --autostash --autosquash $TARGET^; }; f"
-    edit = !vim $(git root)/.git/config
+    edit = !nvim $(git rev-parse --show-toplevel)/.git/config
     # -C HEAD == --reuse-message of HEAD
     amend = commit -a --amend
     recommit = commit -a --amend -C HEAD
@@ -101,7 +103,7 @@
 [gpg]
     program = gpg
 [credential]
-    helper = lastpass
+    helper = lastpass -l mael.valais@gmail.com
 [init]
     defaultBranch = main
 [core]

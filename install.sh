@@ -134,7 +134,7 @@ install_brew() {
     fi
 
     # common packages
-    brew install coreutils curl diff-so-fancy git htop hub rlwrap tmux zsh antigen exa ripgrep fzf fd go kubectl k9s bat fx jq direnv nvim
+    brew install coreutils curl diff-so-fancy git htop hub rlwrap tmux zsh antigen exa ripgrep fzf fd go kubectl k9s bat fx jq direnv nvim starship git-delta
 
     # mac-only packages
     if [ "$(uname -s)" = Darwin ]; then

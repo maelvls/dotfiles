@@ -32,15 +32,20 @@ unsetopt AUTO_CD
 
 # On linux, add brew to path
 [ ! -d "$HOME/.linuxbrew" ] || export PATH="$HOME/.linuxbrew/bin:$PATH"
-[ ! -d "/home/linuxbrew/.linuxbrew" ] || export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
+if [ -d "/home/linuxbrew/.linuxbrew" ]; then
+  export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
+  export MANPATH="/home/linuxbrew/.linuxbrew/share/man:$MANPATH"
+  export INFOPATH="/home/linuxbrew/.linuxbrew/share/info:$INFOPATH"
+  export FPATH="/home/linuxbrew/.linuxbrew/share/zsh/site-functions:$FPATH"
+fi
 
 alias urldecode='python -c "import urllib.parse; print(urllib.parse.unquote_plus(open(0).read()))"'
-
 alias urlencode='python -c "import urllib.parse; print(urllib.parse.quote_plus(open(0).read()))"'
 
 # I use direnv for loading .envrc when entering a folder
 # brew install direnv / apt install direnv
 eval "$(direnv hook zsh)"
+export DIRENV_WARN_TIMEOUT=100s
 
 # For 'cargo install --git https://github.com/xcambar/purs'
 #function zle-line-init zle-keymap-select {
@@ -233,7 +238,7 @@ elif which code >/dev/null 2>&1; then
     export HGEDITOR='code --wait'
   fi
 else
-  which mvim >/dev/null 2>&1 && export EDITOR='mvim'
+  command -v nvim >/dev/null && export EDITOR='nvim'
 fi
 
 # OPAM initialization
@@ -328,8 +333,6 @@ export ERL_AFLAGS="-kernel shell_history enabled"
 # https://stackoverflow.com/questions/39494631/gpg-failed-to-sign-the-data-fatal-failed-to-write-commit-object-git-2-10-0
 export GPG_TTY=$(tty)
 
-export GOORI=$GOPATH/src/github.com/ori-edge
-
 # So much guilt when developping :)
 alias guilt=git
 alias strace=dtruss
@@ -409,7 +412,7 @@ export PATH="$(gem env gemdir)/bin:$PATH"
 if [ "$(uname -s)" = "Linux" ]; then
   alias pbcopy='xclip -selection clipboard'
   alias pbpaste='xclip -selection clipboard -o'
-  alias open='xdg-open'
+  alias open='xdg-open 2>/dev/null 1>&2'
   export PATH="/usr/local/go/bin:$PATH"
 fi
 
@@ -441,21 +444,6 @@ rgr() {
 
 export PATH="$HOME/sdk/go1.16/bin:$PATH"
 
-retag() { # Usage: retag FROM_IMAGE_WITH_TAG TO_IMAGE_WITH_TAG
-  local FROM=$1 TO=$2
-  docker pull $FROM && docker tag $FROM $TO && docker push $TO
-}
-retagall() { # Usage: retagall FROM_REGISTRY FROM_TAG TO_REGISTRY TO_TAG
-  local FROM=$1 TO=$2 FROM_TAG=$3 TO_TAG=$4
-  retag $FROM:$FROM_TAG $TO:$TO_TAG || exit 1
-  retag $FROM/cert-manager-acmesolver:$FROM_TAG $TO/cert-manager-acmesolver:$TO_TAG || exit 1
-  retag $FROM/cert-manager-cainjector:$FROM_TAG $TO/cert-manager-cainjector:$TO_TAG || exit 1
-  retag $FROM/cert-manager-webhook:$FROM_TAG $TO/cert-manager-webhook:$TO_TAG || exit 1
-  retag $FROM/cert-manager-google-cas-issuer:$FROM_TAG $TO/cert-manager-google-cas-issuer:$TO_TAG || exit 1
-  retag $FROM/preflight:$FROM_TAG $TO/preflight:$TO_TAG || exit 1
-  retag gcr.io/cloud-marketplace-tools/metering/ubbagent:latest $TO/ubbagent:$TO_TAG || exit 1
-}
-
 # Scaleway CLI autocomplete initialization.
 eval "$(scw autocomplete script shell=zsh)"
 
@@ -475,3 +463,40 @@ clicolors() {
 }
 
 eval "$(starship init zsh)"
+
+export LANGUAGE=en_US.UTF-8
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
+
+eval $(keychain --quiet --eval id_rsa)
+
+alias pbcopy='xclip -selection clipboard'
+alias pbpaste='xclip -selection clipboard -o'
+
+if command -v tmux >/dev/null; then
+  [[ ! $TERM =~ screen ]] && [ -z $TMUX ] && tmux new-session -A -s main
+fi
+
+source $HOME/.cargo/env
+
+# Workwround for the Shift+Ctrl+E that was stolen by ibus. See:
+# https://askubuntu.com/questions/1125726
+export GTK_IM_MODULE="xim"
+
+# By default, lpass show --sync=auto calls home every 5 seconds and it slows
+# down my .envrc's.
+export LPASS_AUTO_SYNC_TIME=$((60 * 60 * 24)) # 24 hours
+
+source /home/linuxbrew/.linuxbrew/opt/kubie/etc/bash_completion.d/kubie.bash
+
+alias cm="cd $HOME/code/cert-manager"
+
+# https://kubernetes.io/en/docs/tasks/tools/install-kubectl/
+autoload -U +X compinit && compinit
+eval $(kubectl completion zsh)
+
+alias code=code-insiders
+
+# Whenever I would type a command like "ls", zsh would output "ls" to stdout.
+# Fix found on: https://github.com/microsoft/vscode/issues/102107
+DISABLE_AUTO_TITLE="true"
