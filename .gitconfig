@@ -1,6 +1,6 @@
 [user]
-	name = Maël Valais
-	email = mael@vls.dev
+    name = Maël Valais
+    email = mael@vls.dev
     signingkey = 27F4C016
 [color]
     diff = auto
@@ -9,11 +9,11 @@
     ui = true
 [alias]
     # https://stackoverflow.com/questions/65763211/a-git-alias-to-accept-both-main-and-master-branch-names/67284322#67284322
-    m = !git switch $(awk -F "/" '{print $NF}' .git/refs/remotes/origin/HEAD)
+    m = !git switch $(test -f .git/refs/remotes/origin/main && echo main || echo master)
     ls = for-each-ref --count=5 --sort=-committerdate refs/heads/ --format='%(color:bold)%(HEAD)%(color:reset) %(refname:short)%(color:reset) - %(color:yellow)%(authorname)%(color:reset), %(color:green)%(committerdate:relative)%(color:reset)'
     ll = for-each-ref --sort=-committerdate refs/heads/ --format='%(color:bold)%(HEAD)%(color:reset) %(refname:short)%(color:reset) - %(color:yellow)%(authorname)%(color:reset), %(color:green)%(committerdate:relative)%(color:reset)'
     cia = commit --amend
-    f = !git branch -vv --color=always | fzf --ansi |  sed 's:^[\\* ]*::' | cut -d' ' -f1 | xargs git checkout
+    f = !git branch -vv --color=always | fzf --ansi | sed 's:^[\\* ]*::' | cut -d' ' -f1 | xargs git checkout
     hg = hg-helper
     fixup = "!f() { TARGET=$(git rev-parse "$1"); git commit --fixup=$TARGET ${@:2} && EDITOR=true git rebase -i --autostash --autosquash $TARGET^; }; f"
     edit = !nvim $(git rev-parse --show-toplevel)/.git/config
@@ -44,7 +44,7 @@
     ldiff = difftool -t latex
     ignore-io = "!gi() { curl -L -s https://www.gitignore.io/api/$@ ;}; gi"
     lg3 = log --graph --pretty=format:'%Cred%h%Creset -%Cblue%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative
-    dig = !git log --date-order --all $(git reflog show --format=\"%h\" stash)
+    dig = !git log --date-order --all @ $(git reflog show --format=\"%h\" stash) $(git reflog show --format=\"%h\")
     json = !git log --pretty=format:'{%n  \"commit\": \"%H\",%n  \"abbreviated_commit\": \"%h\",%n  \"tree\": \"%T\",%n  \"abbreviated_tree\": \"%t\",%n  \"parent\": \"%P\",%n  \"abbreviated_parent\": \"%p\",%n  \"refs\": \"%D\",%n  \"encoding\": \"%e\",%n  \"subject\": \"%s\",%n  \"sanitized_subject_line\": \"%f\",%n  \"body\": \"%B\",%n  \"commit_notes\": \"%N\",%n  \"verification_flag\": \"%G?\",%n  \"signer\": \"%GS\",%n  \"signer_key\": \"%GK\",%n  \"author\": {%n    \"name\": \"%aN\",%n    \"email\": \"%aE\",%n    \"date\": \"%aD\"%n  },%n  \"commiter\": {%n    \"name\": \"%cN\",%n    \"email\": \"%cE\",%n    \"date\": \"%cD\"%n  }%n},'
     duetedit = !${EDITOR:-vim} ~/.git-authors
 [web]
@@ -63,7 +63,7 @@
     autoupdate = true
 [merge]
     tool = vimdiff
-	conflictstyle = merge
+    conflictstyle = merge
 [mergetool]
     prompt = false
 [diff]
@@ -75,7 +75,7 @@
 #    oneline = true
 #    abbrevCommit = true
 #[format]
-    # pretty = oneline
+# pretty = oneline
 [push]
     default = simple
 [branch]
@@ -93,12 +93,9 @@
     newHighlight = green bold 22
 [rebase]
     autostash = true
-    # I had to turn the abbrev to false since there is a bug in
-    # git 2.26.0:
-    # https://public-inbox.org/git/8017591585671131@myt3-605d5ea4bc20.qloud-c.yandex.net/
-    # abbreviateCommands = false
+    abbreviateCommands = true
 [commit]
-	verbose = true
+    verbose = true
     gpgsign = false
 [gpg]
     program = gpg
@@ -108,16 +105,54 @@
     defaultBranch = main
 [core]
     excludesfile = ~/.gitignore
-    pager = delta
+
+[pager]
+    diff = delta
+    log = delta
+    reflog = delta
+    show = delta
+
+[interactive]
+    diffFilter = delta --color-only
 [delta]
-    plus-style = "syntax #012800"
-    minus-style = "syntax #340001"
-    syntax-theme = Monokai Extended
-    navigate = true
+    features = "torarnv-style"
+    hunk-header-line-number-style = bold black
+    hunk-header-file-style = magenta
+    hunk-header-decoration-style = omit
+    file-style = omit
+
+#[delta]
+#    plus-style = "syntax #012800"
+#    minus-style = "syntax #340001"
+#    syntax-theme = Monokai Extended
+#    navigate = true
+[delta "torarnv-style"]
+    syntax-theme = OneHalfDark
+    line-numbers = false
+
+    hunk-header-style = file line-number syntax
+    file-style = magenta omit
+    file-modified-label = modified:
+
+    hunk-header-decoration-style = bold black omit
+
+    zero-style                    = dim syntax
+
+    minus-style                   = bold red
+    minus-non-emph-style          = dim red
+    minus-emph-style              = bold red 52
+    minus-empty-line-marker-style = normal "#3f0001"
+
+    plus-style                    = bold green
+    plus-non-emph-style           = dim green
+    plus-emph-style               = bold green 22
+    plus-empty-line-marker-style  = normal "#002800"
+
+    whitespace-error-style        = reverse red
 [interactive]
     diffFilter = delta --color-only
 [diff "spaceman-diff"]
     command = spaceman-diff
 
 [maintenance]
-	repo = /Users/mvalais/code/cert-manager
+    repo = /Users/mvalais/code/cert-manager

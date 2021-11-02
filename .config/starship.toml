@@ -1,0 +1,78 @@
+# Inserts a blank line between shell prompts
+add_newline = true
+
+# I like having the path first, them git, then Kubernetes.
+format = """
+$status\
+$username\
+$hostname\
+$shlvl\
+$directory\
+$git_branch\
+$git_commit\
+$git_state\
+$git_status\
+$kubernetes\
+$hg_branch\
+$docker_context\
+$package\
+$cmake\
+$dart\
+$dotnet\
+$elixir\
+$elm\
+$erlang\
+$golang\
+$helm\
+$java\
+$julia\
+$kotlin\
+$nim\
+$nodejs\
+$ocaml\
+$perl\
+$php\
+$purescript\
+$python\
+$ruby\
+$rust\
+$scala\
+$swift\
+$terraform\
+$vagrant\
+$zig\
+$nix_shell\
+$conda\
+$memory_usage\
+$aws\
+$gcloud\
+$openstack\
+$env_var\
+$crystal\
+$custom\
+$cmd_duration\
+$line_break\
+$lua\
+$jobs\
+$battery\
+$time\
+$shell\
+$character"""
+
+[gcloud]
+#format = '[$symbol $account](black) [(\($project\))](dimmed red) '
+format = '[(\($project\))](dimmed red) '
+
+[kubernetes]
+format = '[⛵ $context \($namespace\)](dimmed green) '
+disabled = false
+
+[character]
+success_symbol = '[\$](bold green)'
+error_symbol = '[\$](bold red)'
+
+[status]
+disabled = false
+symbol = ""
+map_symbol = true
+format = "[$status $symbol ]($style)"

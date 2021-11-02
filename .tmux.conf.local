@@ -24,11 +24,26 @@ unbind-key -T copy-mode-vi y
 #bind-key -T copy-mode-vi y send -X copy-selection
 #bind-key -T copy-mode-vi Y send -X copy-pipe "reattach-to-user-namespace pbcopy"\;
 
+# Disable "release mouse drag to copy and exit copy-mode", ref:
+# https://github.com/tmux/tmux/issues/140
+unbind-key -T copy-mode-vi MouseDragEnd1Pane
+
+# I hate when what I just selected (when in terminal mode) is cancelled as soon
+# as I release the mouse button.
+unbind-key MouseDragEnd1Pane
+
+# I hate when what I just selected (when in copy-mode-vi mode) is cancelled as
+# soon as I release the mouse button.
+unbind-key -T copy-mode-vi MouseDragEnd1Pane
+
+# Since MouseDragEnd1Pane neither exit copy-mode nor clear selection now, let
+# single click do selection clearing for us.
+bind-key -T copy-mode-vi MouseDown1Pane select-pane\; send-keys -X clear-selection
+
 # When I'm in copy mode (e.g. by scrolling up), I wanted to be able to
 # select and unselect without losing the position where I was looking at.
 # https://github.com/tmux/tmux/issues/1055
 bind -T copy-mode-vi MouseDown1Pane select-pane \; send -X clear-selection
-
 
 # I want tmux to copy to pastebin whenever I double-click on a word or
 # triple-click on a line.
@@ -54,7 +69,7 @@ bind-key -n TripleClick1Pane \
 
 # I want the Page-Up key to trigger the "Ctrl+B ]" history vi mode.
 # https://superuser.com/questions/702189/tmux-scroll-up-down-with-shift-page-up-down-into-a-pane/1110585
-bind -n Pageup copy-mode -u
+bind -n C-Pageup copy-mode -u
 
 
 # if you're running tmux within iTerm2
@@ -336,3 +351,10 @@ set -g @plugin 'nhdaly/tmux-better-mouse-mode'
 
 # Initialize TMUX plugin manager (keep this line at the very bottom of tmux.conf)
 run '~/.tmux/plugins/tpm/tpm'
+
+
+# o and O to open a file in the EDITOR.
+set -g @plugin 'tmux-plugins/tmux-open'
+#set -g @plugin 'tmux-plugins/tmux-yank'
+set -g @plugin 'nhdaly/tmux-better-mouse-mode'
+

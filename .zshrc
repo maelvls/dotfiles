@@ -39,13 +39,8 @@ if [ -d "/home/linuxbrew/.linuxbrew" ]; then
   export FPATH="/home/linuxbrew/.linuxbrew/share/zsh/site-functions:$FPATH"
 fi
 
-alias urldecode='python -c "import urllib.parse; print(urllib.parse.unquote_plus(open(0).read()))"'
-alias urlencode='python -c "import urllib.parse; print(urllib.parse.quote_plus(open(0).read()))"'
-
-# I use direnv for loading .envrc when entering a folder
-# brew install direnv / apt install direnv
-eval "$(direnv hook zsh)"
-export DIRENV_WARN_TIMEOUT=100s
+alias urldecode='python3 -c "import urllib.parse; print(urllib.parse.unquote_plus(open(0).read()))"'
+alias urlencode='python3 -c "import urllib.parse; print(urllib.parse.quote_plus(open(0).read()))"'
 
 # For 'cargo install --git https://github.com/xcambar/purs'
 #function zle-line-init zle-keymap-select {
@@ -165,6 +160,8 @@ fi
 
 export PATH="$PATH:/usr/local/sbin"
 
+export PATH="$HOME/.deno/bin:$PATH"
+
 #export PATH=/Applications/MATLAB_R2016a.app/bin:$PATH
 # An alias to matlab to be able to use it command-line
 #alias matlab="matlab -nodisplay -nodesktop"
@@ -258,7 +255,7 @@ if [ -d "$HOME/.cargo" ]; then
   export PATH="$HOME/.cargo/bin:$PATH"
 fi
 # For using code-insiders instead of code:
-# ln -sf /usr/local/bin/code-insiders /usr/local/bin/code
+# sudo ln -sf /usr/local/bin/code-insiders /usr/local/bin/code
 
 # A small function for pretty-printting a json from stdin
 # From https://stackoverflow.com/questions/352098/how-can-i-pretty-print-json-in-unix-shell-script
@@ -468,16 +465,19 @@ export LANGUAGE=en_US.UTF-8
 export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 
-eval $(keychain --quiet --eval id_rsa)
+# Similar to ssh-agent.
+#eval $(keychain --quiet --eval id_rsa)
 
 alias pbcopy='xclip -selection clipboard'
 alias pbpaste='xclip -selection clipboard -o'
 
 if command -v tmux >/dev/null; then
-  [[ ! $TERM =~ screen ]] && [ -z $TMUX ] && tmux new-session -A -s main
+  [[ ! $TERM =~ screen ]] && [ -z $TMUX ] && [ "$TERM_PROGRAM" != vscode ] && tmux new-session -A -s main
 fi
 
 source $HOME/.cargo/env
+
+[ -f /usr/share/google-cloud-sdk/completion.zsh.inc ] && source /usr/share/google-cloud-sdk/completion.zsh.inc || true
 
 # Workwround for the Shift+Ctrl+E that was stolen by ibus. See:
 # https://askubuntu.com/questions/1125726
@@ -491,12 +491,19 @@ source /home/linuxbrew/.linuxbrew/opt/kubie/etc/bash_completion.d/kubie.bash
 
 alias cm="cd $HOME/code/cert-manager"
 
-# https://kubernetes.io/en/docs/tasks/tools/install-kubectl/
-autoload -U +X compinit && compinit
-eval $(kubectl completion zsh)
-
-alias code=code-insiders
+# https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/#enable-shell-autocompletion
+source <(kubectl completion zsh)
 
 # Whenever I would type a command like "ls", zsh would output "ls" to stdout.
 # Fix found on: https://github.com/microsoft/vscode/issues/102107
 DISABLE_AUTO_TITLE="true"
+
+# I use direnv for loading .envrc when entering a folder
+# brew install direnv / apt install direnv
+eval "$(direnv hook zsh)"
+export DIRENV_WARN_TIMEOUT=100s
+
+# Just to get auto-completion on HTTPS_PROXY and HTTP_PROXY.
+export HTTP_PROXY="" HTTPS_PROXY=""
+
+export PATH="$HOME/.crc/bin/oc:$PATH"

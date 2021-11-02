@@ -25,8 +25,8 @@ trace() {
     command "$@"
 }
 
-HOME_DOTFILES=$(find "$HOME" -maxdepth 1 ! -type l ! -type d \( -name ".*" -a ! -name ".DS_Store" \) -exec basename {} \;)
-PWD_DOTFILES=$(find . -maxdepth 1 ! -type l ! -type d \( -name ".*" -a ! -name ".DS_Store" \) -exec basename {} \;)
+HOME_DOTFILES=$(find "$HOME" -maxdepth 3 ! -type l ! -type d \( \( -name ".*" -o -wholename "./.config/*" \) -a ! -name ".DS_Store" \) | cut -c 3-)
+PWD_DOTFILES=$(find . -maxdepth 3 ! -type l ! -type d \( \( -name ".*" -o -wholename "./.config/*" \) -a ! -name ".DS_Store" \) | cut -c 3-)
 
 # Install Vim-plug for Vim 8
 [ -f ~/.vim/autoload/plug.vim ] || curl -sfLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
@@ -58,7 +58,7 @@ install_dotfiles() {
     # lists every normal file (no directories, no symlinks)
     for dotfile in $PWD_DOTFILES; do
         SOURCE="$PWD/$dotfile"
-        TARGET="$HOME/$(basename "$dotfile")"
+        TARGET="$HOME/$dotfile"
         found=0
         for dotfile_in_home in $HOME_DOTFILES; do
             if [ "$TARGET" = "$dotfile_in_home" ]; then
