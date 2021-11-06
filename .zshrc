@@ -487,12 +487,12 @@ export GTK_IM_MODULE="xim"
 # down my .envrc's.
 export LPASS_AUTO_SYNC_TIME=$((60 * 60 * 24)) # 24 hours
 
-source /home/linuxbrew/.linuxbrew/opt/kubie/etc/bash_completion.d/kubie.bash
+source $(brew --prefix)/opt/kubie/etc/bash_completion.d/kubie.bash
+source <(kubectl completion zsh)
 
 alias cm="cd $HOME/code/cert-manager"
 
 # https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/#enable-shell-autocompletion
-source <(kubectl completion zsh)
 
 # Whenever I would type a command like "ls", zsh would output "ls" to stdout.
 # Fix found on: https://github.com/microsoft/vscode/issues/102107
