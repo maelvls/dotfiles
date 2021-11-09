@@ -110,12 +110,10 @@ install_dotfiles() {
     # Install tpm, the tmux package manager as well as gpakosz/.tmux.
     [ -d "$HOME/.tmux" ] || mkdir "$HOME/.tmux"
     [ -d "$HOME/.tmux/plugins/tpm" ] || git clone -q https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
-    if [ -d "$HOME/.tmux/plugins/gpakosz-tmux-conf" ]; then
-        git -C "$HOME/.tmux/plugins/gpakosz-tmux-conf" pull
-    else
-        git clone -q https://github.com/gpakosz/.tmux.git ~/.tmux/plugins/gpakosz-tmux-conf
+    if [ ! -d "$HOME/.tmux/plugins/.tmux" ]; then
+        git clone -q https://github.com/gpakosz/.tmux.git ~/.tmux/plugins/.tmux
     fi
-    ln -s -f ~/.tmux/plugins/gpakosz-tmux-conf/.tmux.conf ~/.tmux.conf
+    ln -s -f ~/.tmux/plugins/.tmux/.tmux.conf ~/.tmux.conf
 }
 
 install_brew() {

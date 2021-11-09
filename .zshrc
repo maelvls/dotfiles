@@ -507,3 +507,10 @@ export DIRENV_WARN_TIMEOUT=100s
 export HTTP_PROXY="" HTTPS_PROXY=""
 
 export PATH="$HOME/.crc/bin/oc:$PATH"
+
+if [[ "$VSCODE_GIT_ASKPASS_NODE" =~ '/node$' ]]; then
+  export PATH="$(dirname "$VSCODE_GIT_ASKPASS_NODE")/bin:$PATH"
+  if [ -f "$(dirname "$VSCODE_GIT_ASKPASS_NODE")"/bin/code-insiders ]; then
+    ln -sf "$(dirname "$VSCODE_GIT_ASKPASS_NODE")"/bin/code-insiders "$(dirname "$VSCODE_GIT_ASKPASS_NODE")"/bin/code
+  fi
+fi
