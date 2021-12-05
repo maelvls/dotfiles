@@ -117,7 +117,8 @@ export ZSH_AUTOSUGGEST_USE_ASYNC=1
 antigen use oh-my-zsh
 antigen bundle rupa/z
 antigen bundle zsh-users/zsh-autosuggestions
-antigen bundle zsh-users/zsh-syntax-highlighting
+# antigen bundle zsh-users/zsh-syntax-highlighting
+antigen bundle zdharma-continuum/fast-syntax-highlighting
 antigen bundle zsh-users/zsh-completions
 
 # Not really must-haves
