@@ -122,7 +122,7 @@ antigen bundle zsh-users/zsh-completions
 
 # Not really must-haves
 antigen bundle andrewferrier/fzf-z
-antigen bundle psprint/zsh-navigation-tools
+# antigen bundle psprint/zsh-navigation-tools
 antigen bundle lukechilds/zsh-nvm
 antigen bundle gitfast
 #antigen bundle fzf
