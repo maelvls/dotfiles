@@ -25,6 +25,12 @@ trace() {
     command "$@"
 }
 
+if [ "$(uname -m)" = arm64 ] && command -v arch >/dev/null && [ "$(arch)" != arm64 ]; then
+    echo "You are on an Apple Silicon system but the current shell session runs with arch -$(arch)." >&2
+    echo "Please run: 'arch -arm64 $(basename "$0")'." >&2
+    exit 1
+fi
+
 HOME_DOTFILES=$(find "$HOME" -maxdepth 3 ! -type l ! -type d \( \( -name ".*" -o -wholename "./.config/*" \) -a ! -name ".DS_Store" \) | cut -c 3-)
 PWD_DOTFILES=$(find . -maxdepth 3 ! -type l ! -type d \( \( -name ".*" -o -wholename "./.config/*" \) -a ! -name ".DS_Store" \) | cut -c 3-)
 
@@ -118,7 +124,7 @@ install_dotfiles() {
 
 install_brew() {
     export NONINTERACTIVE=yes
-    if [ ! -d /usr/local/Cellar ] && [ ! -d "$HOME/.linuxbrew" ] && [ ! -d "/home/linuxbrew/.linuxbrew" ]; then
+    if [ ! -d /usr/local/Cellar ] && [ -d /opt/homebrew ] && [ ! -d "$HOME/.linuxbrew" ] && [ ! -d "/home/linuxbrew/.linuxbrew" ]; then
         /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)" || exit 1
     fi
 
@@ -129,6 +135,9 @@ install_brew() {
     # the session, not just the shell.
     if [ "$(uname -s)" = Linux ]; then
         export PATH="/home/linuxbrew/.linuxbrew/bin:$HOME/.linuxbrew:$PATH"
+    fi
+    if [ "$(uname -m)" = arm64 ]; then
+        export PATH="/opt/homebrew/bin:$PATH"
     fi
 
     # common packages
