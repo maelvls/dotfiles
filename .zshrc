@@ -38,6 +38,13 @@ if [ -d "/home/linuxbrew/.linuxbrew" ]; then
   export INFOPATH="/home/linuxbrew/.linuxbrew/share/info:$INFOPATH"
   export FPATH="/home/linuxbrew/.linuxbrew/share/zsh/site-functions:$FPATH"
 fi
+# On arm64, add brew to PATH.
+if [ -d "/opt/homebrew" ]; then
+  export PATH="/opt/homebrew/bin:$PATH"
+  export MANPATH="/opt/homebrew/share/man:$MANPATH"
+  export INFOPATH="/opt/homebrew/share/info:$INFOPATH"
+  export FPATH="/opt/homebrew/share/zsh/site-functions:$FPATH"
+fi
 
 alias urldecode='python3 -c "import urllib.parse; print(urllib.parse.unquote_plus(open(0).read()))"'
 alias urlencode='python3 -c "import urllib.parse; print(urllib.parse.quote_plus(open(0).read()))"'
@@ -395,11 +402,10 @@ digc() {
 }
 
 export WASMTIME_HOME="$HOME/.wasmtime"
-
 export PATH="$WASMTIME_HOME/bin:$PATH"
 
-alias cat=bat
-alias b=bazel
+command -v bat >/dev/null && alias cat=bat
+command -v bazel >/dev/null && alias b=bazel
 export PATH="/usr/local/opt/gcore/bin:$PATH"
 
 setopt share_history
@@ -425,7 +431,6 @@ export GIT_DUET_CO_AUTHORED_BY=1
 # https://github.com/git-duet/git-duet/issues/68
 export GIT_DUET_DEFAULT_UPDATE=1
 export VAULT_ADDR=https://vault.jetstack.net:8200
-alias docker2="docker -H tcp://synology:2376"
 
 # ripgrep is great but does not support "in-place replace". Apparently, that's
 # one decision that BurntSushi took and he never changed his mind. So here is
@@ -439,9 +444,8 @@ rgr() {
   vim --clean -c ":execute ':argdo %s%$1%$2%gc | update' | :q" -- $(rg $1 -l ${@:3})
 }
 
-
 # Scaleway CLI autocomplete initialization.
-eval "$(scw autocomplete script shell=zsh)"
+command -v scw >/dev/null && eval "$(scw autocomplete script shell=zsh)"
 
 # Colors, a lot of colors!
 # from: https://coderwall.com/p/pb1uzq/z-shell-colors
@@ -458,7 +462,7 @@ clicolors() {
   c=''
 }
 
-eval "$(starship init zsh)"
+command -v starship >/dev/null && eval "$(starship init zsh)"
 
 export LANGUAGE=en_US.UTF-8
 export LANG=en_US.UTF-8
@@ -467,15 +471,17 @@ export LC_ALL=en_US.UTF-8
 # Similar to ssh-agent.
 #eval $(keychain --quiet --eval id_rsa)
 
+alias pbcopy='xclip -selection clipboard'
+alias pbpaste='xclip -selection clipboard -o'
+
 # I don't want to run in tmux on macOS since iTerm2 already has a good support
 # for multiplexing-like.
 if command -v tmux >/dev/null && [ "$(uname -s)" = "Linux" ]; then
   [[ ! $TERM =~ screen ]] && [ -z $TMUX ] && [ "$TERM_PROGRAM" != vscode ] && tmux new-session -A -s main
 fi
 
-source $HOME/.cargo/env
-
-[ -f /usr/share/google-cloud-sdk/completion.zsh.inc ] && source /usr/share/google-cloud-sdk/completion.zsh.inc || true
+[ -f $HOME/.cargo/env ] && source $HOME/.cargo/env
+[ -f /usr/share/google-cloud-sdk/completion.zsh.inc ] && source /usr/share/google-cloud-sdk/completion.zsh.inc
 
 # Workwround for the Shift+Ctrl+E that was stolen by ibus. See:
 # https://askubuntu.com/questions/1125726
@@ -485,10 +491,8 @@ export GTK_IM_MODULE="xim"
 # down my .envrc's.
 export LPASS_AUTO_SYNC_TIME=$((60 * 60 * 24)) # 24 hours
 
-if command -v kubie >/dev/null; then
-  source $(brew --prefix)/opt/kubie/etc/bash_completion.d/kubie.bash
-fi
-source <(kubectl completion zsh)
+command -v kubie >/dev/null && source $(brew --prefix)/opt/kubie/etc/bash_completion.d/kubie.bash
+command -v kubectl >/dev/null && source <(kubectl completion zsh)
 
 alias cm="cd $HOME/code/cert-manager"
 
@@ -500,7 +504,7 @@ DISABLE_AUTO_TITLE="true"
 
 # I use direnv for loading .envrc when entering a folder
 # brew install direnv / apt install direnv
-eval "$(direnv hook zsh)"
+command -v direnv >/dev/null && eval "$(direnv hook zsh)"
 export DIRENV_WARN_TIMEOUT=100s
 
 # Just to get auto-completion on HTTPS_PROXY and HTTP_PROXY.
@@ -515,7 +519,13 @@ if [[ "$VSCODE_GIT_ASKPASS_NODE" =~ '/node$' ]]; then
   fi
 fi
 
-if test -f /Applications/Tailscale.app/Contents/MacOS/Tailscale; then
-  export PATH="$PATH:/Applications/Tailscale.app/Contents/MacOS"
-fi
+test -f /Applications/Tailscale.app/Contents/MacOS/Tailscale && export PATH="$PATH:/Applications/Tailscale.app/Contents/MacOS"
 
+# xclip often stop working due to DISPLAY not being set.
+export DISPLAY=:0
+
+# Even though we already have a symbolic link in /usr/local/bin/code that links
+# to code-insiders, we still want to also have this alias because when using
+# vscode remotely, the code-insiders in PATH is replaced by a shell script that
+# allows you to open files remotely.
+alias code=code-insiders
