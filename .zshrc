@@ -439,7 +439,6 @@ rgr() {
   vim --clean -c ":execute ':argdo %s%$1%$2%gc | update' | :q" -- $(rg $1 -l ${@:3})
 }
 
-export PATH="$HOME/sdk/go1.16/bin:$PATH"
 
 # Scaleway CLI autocomplete initialization.
 eval "$(scw autocomplete script shell=zsh)"
@@ -468,10 +467,9 @@ export LC_ALL=en_US.UTF-8
 # Similar to ssh-agent.
 #eval $(keychain --quiet --eval id_rsa)
 
-alias pbcopy='xclip -selection clipboard'
-alias pbpaste='xclip -selection clipboard -o'
-
-if command -v tmux >/dev/null; then
+# I don't want to run in tmux on macOS since iTerm2 already has a good support
+# for multiplexing-like.
+if command -v tmux >/dev/null && [ "$(uname -s)" = "Linux" ]; then
   [[ ! $TERM =~ screen ]] && [ -z $TMUX ] && [ "$TERM_PROGRAM" != vscode ] && tmux new-session -A -s main
 fi
 
@@ -487,7 +485,9 @@ export GTK_IM_MODULE="xim"
 # down my .envrc's.
 export LPASS_AUTO_SYNC_TIME=$((60 * 60 * 24)) # 24 hours
 
-source $(brew --prefix)/opt/kubie/etc/bash_completion.d/kubie.bash
+if command -v kubie >/dev/null; then
+  source $(brew --prefix)/opt/kubie/etc/bash_completion.d/kubie.bash
+fi
 source <(kubectl completion zsh)
 
 alias cm="cd $HOME/code/cert-manager"
@@ -514,3 +514,8 @@ if [[ "$VSCODE_GIT_ASKPASS_NODE" =~ '/node$' ]]; then
     ln -sf "$(dirname "$VSCODE_GIT_ASKPASS_NODE")"/bin/code-insiders "$(dirname "$VSCODE_GIT_ASKPASS_NODE")"/bin/code
   fi
 fi
+
+if test -f /Applications/Tailscale.app/Contents/MacOS/Tailscale; then
+  export PATH="$PATH:/Applications/Tailscale.app/Contents/MacOS"
+fi
+
