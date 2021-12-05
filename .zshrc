@@ -30,17 +30,17 @@ COMPLETION_WAITING_DOTS=false
 # directory its main.go is in...
 unsetopt AUTO_CD
 
-# On linux, add brew to path
-[ ! -d "$HOME/.linuxbrew" ] || export PATH="$HOME/.linuxbrew/bin:$PATH"
+# On linux, add brew to PATH.
+[ ! -d "$HOME/.linuxbrew" ] || export PATH="$HOME/.linuxbrew/bin:$HOME/.linuxbrew/sbin:$PATH"
 if [ -d "/home/linuxbrew/.linuxbrew" ]; then
-  export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
+  export PATH="/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:$PATH"
   export MANPATH="/home/linuxbrew/.linuxbrew/share/man:$MANPATH"
   export INFOPATH="/home/linuxbrew/.linuxbrew/share/info:$INFOPATH"
   export FPATH="/home/linuxbrew/.linuxbrew/share/zsh/site-functions:$FPATH"
 fi
 # On arm64, add brew to PATH.
 if [ -d "/opt/homebrew" ]; then
-  export PATH="/opt/homebrew/bin:$PATH"
+  export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$PATH"
   export MANPATH="/opt/homebrew/share/man:$MANPATH"
   export INFOPATH="/opt/homebrew/share/info:$INFOPATH"
   export FPATH="/opt/homebrew/share/zsh/site-functions:$FPATH"
