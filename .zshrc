@@ -523,7 +523,7 @@ fi
 test -f /Applications/Tailscale.app/Contents/MacOS/Tailscale && export PATH="$PATH:/Applications/Tailscale.app/Contents/MacOS"
 
 # xclip often stop working due to DISPLAY not being set.
-export DISPLAY=:0
+#export DISPLAY=:0
 
 # Even though we already have a symbolic link in /usr/local/bin/code that links
 # to code-insiders, we still want to also have this alias because when using
