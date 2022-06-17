@@ -463,7 +463,7 @@ clicolors() {
   c=''
 }
 
-command -v starship >/dev/null && eval "$(starship init zsh)"
+command -v starship >/dev/null && source <($(command -v starship) init zsh --print-full-init)
 
 export LANGUAGE=en_US.UTF-8
 export LANG=en_US.UTF-8
@@ -474,6 +474,22 @@ export LC_ALL=en_US.UTF-8
 
 alias pbcopy='xclip -selection clipboard'
 alias pbpaste='xclip -selection clipboard -o'
+
+# The SSH_AUTH_SOCK is either set by gnome-keyring (when I open a terminal on
+# Ubuntu), or by ssh when ssh-forwarding is set on the ssh client. If it was
+# set by ssh (-o ForwardAgent=true), the symlink is updated to something that
+# looks like this:
+#
+#    ~/.ssh/ssh_auth_sock -> /tmp/ssh-7Ge7uOlhK1/agent.243572
+#
+# When I open a terminal window on Ubuntu, the gnome keyring sets SSH_AUTH_SOCK
+# and the symlink looks like this:
+#
+#    ~/.ssh/ssh_auth_sock -> /run/user/1000/keyring/ssh
+#
+if [ ! -S ~/.ssh/ssh_auth_sock ] && [ -S "$SSH_AUTH_SOCK" ]; then
+  ln -sf $SSH_AUTH_SOCK ~/.ssh/ssh_auth_sock
+fi
 
 # I don't want to run in tmux on macOS since iTerm2 already has a good support
 # for multiplexing-like.
@@ -529,4 +545,30 @@ test -f /Applications/Tailscale.app/Contents/MacOS/Tailscale && export PATH="$PA
 # to code-insiders, we still want to also have this alias because when using
 # vscode remotely, the code-insiders in PATH is replaced by a shell script that
 # allows you to open files remotely.
-alias code=code-insiders
+#    alias code=code-insiders
+# 2022-02-09: I had to disable this alias due to the fact that code-insiders
+# was broken and I needed to install code (the stable version).
+
+# if printenv VSCODE_IPC_HOOK_CLI >/dev/null; then
+#   export PATH="$(ls -t $HOME/.vscode-server-insiders/bin/*/bin/remote-cli/code-insiders | head -n1):$PATH"
+#   echo VSCODE_IPC_HOOK_CLI >$HOME/.vscode-server-insiders/vscode-ipc.sock
+#   echo VSCODE_PATH >$HOME/.vscode-server-insiders/vscode-ipc.sock
+#   export VSCODE_IPC_HOOK_CLI=$(ls -t /run/user/$UID/vscode-ipc-* | head -n1)
+# fi
+
+command -v xsetwacom >/dev/null && xsetwacom list | cut -f2 | cut -d' ' -f2 | tee /dev/stderr | xargs -I@ xsetwacom --set '@' MapToOutput DisplayPort-1
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/home/mvalais/miniconda/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/home/mvalais/miniconda/etc/profile.d/conda.sh" ]; then
+        . "/home/mvalais/miniconda/etc/profile.d/conda.sh"
+    else
+        export PATH="/home/mvalais/miniconda/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
+

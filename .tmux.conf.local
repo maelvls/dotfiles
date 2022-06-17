@@ -9,7 +9,8 @@
 
 # Mael: Jake Klein showed me "the" way: ctrl+space is better than ctrl+b. But
 # then I really wanted to use C-Space for auto-completion with coc.nvim so I
-# kind of went backwards on this...
+# kind of went backwards on this... But then I still adopted C-Space for the
+# prefix!
 set-option -g prefix C-Space
 
 # Mael: when selecting text with the mouse, it would jump to the bottom right
@@ -358,3 +359,16 @@ set -g @plugin 'gpakosz/.tmux'
 
 # Initialize TMUX plugin manager (keep this line at the very bottom of tmux.conf)
 run '~/.tmux/plugins/tpm/tpm'
+
+setenv -g SSH_AUTH_SOCK $HOME/.ssh/ssh_auth_sock
+set -g update-environment "DISPLAY SSH_ASKPASS SSH_AGENT_PID SSH_CONNECTION WINDOWID XAUTHORITY"
+# https://goosebearingbashshell.github.io/2017/12/07/reset-display-variable-in-tmux.html
+#
+# In an existing tmux pane, run:
+#
+#     source <(tmux show-env -s)
+
+# I use ctrl+a and ctrl+x to increment and decrement in Vim, but ctrl+a is
+# captured by Tmux too. I don't know how that works, but the following line
+# disables the "secondary prefix" on C-a.
+set -gu prefix2

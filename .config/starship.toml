@@ -1,3 +1,5 @@
+# "$schema" = 'https://starship.rs/config-schema.json'
+
 # Inserts a blank line between shell prompts
 add_newline = true
 
@@ -60,12 +62,20 @@ $shell\
 $character"""
 
 [gcloud]
-#format = '[$symbol $account](black) [(\($project\))](dimmed red) '
-format = '[(\($project\))](dimmed red) '
+format = '([G](bold blue) ([$project](238)))'
+
+[golang]
+format = "([Go](bold 4) [$version](238)) "
+version_format = "${major}.${minor}"
 
 [kubernetes]
-format = '[⛵ $context \($namespace\)](dimmed green) '
+format = '([☸](bold 33) [($user on )($cluster in )$context (\($namespace\))](238))'
 disabled = false
+
+[kubernetes.context_aliases]
+"kind-kind" = "kind"
+"k3d-.*" = "k3s"
+"gke_.*_(?P<var_cluster>[\\w-]+)" = "$var_cluster"
 
 [character]
 success_symbol = '[\$](bold green)'
@@ -76,3 +86,24 @@ disabled = false
 symbol = ""
 map_symbol = true
 format = "[$status $symbol ]($style)"
+
+[git_branch]
+disabled = false
+format = "[$symbol$branch(:$remote_branch)]($style) "
+
+[git_status]
+disabled = false
+format = '([$all_status$ahead_behind]($style)) '
+
+[nodejs]
+format ="([$symbol](bold green)[$version](238)) "
+version_format = "${major}.${minor}"
+symbol = " "
+
+[package]
+format	= "[$symbol]($style)[$version](238) "
+symbol = "pkg "
+version_format = "${major}.${minor}"
+style = "bold 208"
+display_private = false
+disabled = false

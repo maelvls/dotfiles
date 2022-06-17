@@ -1,6 +1,6 @@
 [user]
-    name = Maël Valais
-    email = mael@vls.dev
+	name = Maël Valais
+	email = mael@vls.dev
     signingkey = 27F4C016
 [color]
     diff = auto
@@ -12,7 +12,7 @@
     m = !git switch $(test -f .git/refs/remotes/origin/main && echo main || echo master)
     ls = for-each-ref --count=5 --sort=-committerdate refs/heads/ --format='%(color:bold)%(HEAD)%(color:reset) %(refname:short)%(color:reset) - %(color:yellow)%(authorname)%(color:reset), %(color:green)%(committerdate:relative)%(color:reset)'
     ll = for-each-ref --sort=-committerdate refs/heads/ --format='%(color:bold)%(HEAD)%(color:reset) %(refname:short)%(color:reset) - %(color:yellow)%(authorname)%(color:reset), %(color:green)%(committerdate:relative)%(color:reset)'
-    cia = commit --amend
+	cia = commit --amend
     f = !git branch -vv --color=always | fzf --ansi | sed 's:^[\\* ]*::' | cut -d' ' -f1 | xargs git checkout
     hg = hg-helper
     fixup = "!f() { TARGET=$(git rev-parse "$1"); git commit --fixup=$TARGET ${@:2} && EDITOR=true git rebase -i --autostash --autosquash $TARGET^; }; f"
@@ -63,11 +63,12 @@
     autoupdate = true
 [merge]
     tool = vimdiff
-    conflictstyle = merge
+	conflictStyle = zdiff3
 [mergetool]
     prompt = false
 [diff]
     tool = default-difftool
+	algorithm = histogram
 [difftool "default-difftool"]
     cmd = code --wait --diff $LOCAL $REMOTE
 #[log]
