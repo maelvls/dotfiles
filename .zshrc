@@ -472,8 +472,11 @@ export LC_ALL=en_US.UTF-8
 # Similar to ssh-agent.
 #eval $(keychain --quiet --eval id_rsa)
 
-alias pbcopy='xclip -selection clipboard'
-alias pbpaste='xclip -selection clipboard -o'
+# Only on Linux.
+if [ "$(uname -s)" = "Linux" ]; then
+  alias pbcopy='xclip -selection clipboard'
+  alias pbpaste='xclip -selection clipboard -o'
+fi
 
 # The SSH_AUTH_SOCK is either set by gnome-keyring (when I open a terminal on
 # Ubuntu), or by ssh when ssh-forwarding is set on the ssh client. If it was
@@ -556,19 +559,10 @@ test -f /Applications/Tailscale.app/Contents/MacOS/Tailscale && export PATH="$PA
 #   export VSCODE_IPC_HOOK_CLI=$(ls -t /run/user/$UID/vscode-ipc-* | head -n1)
 # fi
 
+# My drawing table "One by Wacom" is spread across the two screens I have
+# on my desktop environment. This is a workaround for that.
 command -v xsetwacom >/dev/null && xsetwacom list | cut -f2 | cut -d' ' -f2 | tee /dev/stderr | xargs -I@ xsetwacom --set '@' MapToOutput DisplayPort-1
-# >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/home/mvalais/miniconda/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
-if [ $? -eq 0 ]; then
-    eval "$__conda_setup"
-else
-    if [ -f "/home/mvalais/miniconda/etc/profile.d/conda.sh" ]; then
-        . "/home/mvalais/miniconda/etc/profile.d/conda.sh"
-    else
-        export PATH="/home/mvalais/miniconda/bin:$PATH"
-    fi
-fi
-unset __conda_setup
-# <<< conda initialize <<<
 
+### MANAGED BY RANCHER DESKTOP START (DO NOT EDIT)
+export PATH="/Users/mvalais/.rd/bin:$PATH"
+### MANAGED BY RANCHER DESKTOP END (DO NOT EDIT)
