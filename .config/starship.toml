@@ -62,14 +62,37 @@ $shell\
 $character"""
 
 [gcloud]
-format = '([G](bold blue) ([$project](238)))'
+format = '$symbol[$account(@$domain)(:$region)]($style) '
+symbol = '[G](bold blue) '
+style = '238'
+
+[aws]
+format = '$symbol[($profile )($region )(\[$duration\] )]($style)'
+symbol = '[aws](bold 130) '
+style = '238'
+disabled = false
 
 [golang]
-format = "([Go](bold 4) [$version](238)) "
+format = "$symbol[$version](238) "
+symbol = "[](bold white) "
+version_format = "${major}.${minor}"
+
+[docker_context]
+format = "$symbol[$context]($style) "
+symbol = '[](bold white) '
+style = '238'
+
+[java]
+format = "$symbol[(${version})]($style) "
+symbol = '[](bold white) '
+style = '238'
 version_format = "${major}.${minor}"
 
 [kubernetes]
-format = '([☸](bold 33) [($user on )($cluster in )$context (\($namespace\))](238))'
+# format = '$symbol [($user on )($cluster in )$context (\($namespace\))]($style)'
+format = '$symbol [$context (\($namespace\))]($style)'
+symbol = '[☸](bold 33)'
+style = '238'
 disabled = false
 
 [kubernetes.context_aliases]
@@ -107,3 +130,4 @@ version_format = "${major}.${minor}"
 style = "bold 208"
 display_private = false
 disabled = false
+
