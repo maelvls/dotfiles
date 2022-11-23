@@ -119,10 +119,11 @@ antigen bundle rupa/z
 antigen bundle zsh-users/zsh-autosuggestions
 # antigen bundle zsh-users/zsh-syntax-highlighting
 antigen bundle zdharma-continuum/fast-syntax-highlighting
-antigen bundle zsh-users/zsh-completions
+#antigen bundle zsh-users/zsh-completions
 
 # Not really must-haves
 antigen bundle andrewferrier/fzf-z
+#antigen bundle z-shell/zsh-navigation-tools
 antigen bundle zdharma-continuum/zsh-navigation-tools
 antigen bundle lukechilds/zsh-nvm
 antigen bundle gitfast
@@ -340,8 +341,11 @@ export GPG_TTY=$(tty)
 
 # So much guilt when developping :)
 alias guilt=git
-alias strace=dtruss
 alias os=openstack
+
+if [ "$(uname -s)" = "Darwin" ]; then
+  alias strace=dtruss
+fi
 
 autoload -U +X bashcompinit && bashcompinit
 complete -o nospace -C /usr/local/bin/vault vault
@@ -373,15 +377,16 @@ alias kk="cd ~/code/kubernetes"
 # being set? It seems to always happen after a Time Machine backup?
 # See: https://unix.stackexchange.com/questions/568907/why-do-i-lose-my-zsh-history
 HISTFILE=~/.zsh_hist
-HISTSIZE=500000
-SAVEHIST=500000
+HISTSIZE=500000 # In memory. Too big = n-history (ctrl+R) crashes.
+SAVEHIST=500000 # Saved to disk.
+HISTCONTROL=ignoredups:erasedups
 setopt EXTENDED_HISTORY
 
 alias rgv="rg -g'!vendor'"
 alias fdv="fd -E'vendor'"
 alias t=terraform
 
-alias kall="kubectl api-resources --verbs=list --namespaced -o name | grep ori.co | xargs -P16 -n1 kubectl get --show-kind -A 2>/dev/null"
+alias kall="kubectl api-resources --verbs=list --namespaced -o name | grep cert-manager.io | xargs -P16 -n1 kubectl get --show-kind -A 2>/dev/null"
 
 # MacOS trick: change the screenshot generated name.
 # Source: https://apple.stackexchange.com/questions/251385
@@ -463,8 +468,6 @@ clicolors() {
   c=''
 }
 
-command -v starship >/dev/null && source <($(command -v starship) init zsh --print-full-init)
-
 export LANGUAGE=en_US.UTF-8
 export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
@@ -476,6 +479,11 @@ export LC_ALL=en_US.UTF-8
 if [ "$(uname -s)" = "Linux" ]; then
   alias pbcopy='xclip -selection clipboard'
   alias pbpaste='xclip -selection clipboard -o'
+
+  # When using Homebrew's curl on linux, curl uses the CA certificates from
+  # /home/linuxbrew/.linuxbrew/etc/ca-certificates/cert.pem, but my scripts
+  # expect the source of truth to be /etc/ssl/certs/ca-certificates.crt.
+  export SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
 fi
 
 # The SSH_AUTH_SOCK is either set by gnome-keyring (when I open a terminal on
@@ -511,8 +519,8 @@ export GTK_IM_MODULE="xim"
 # down my .envrc's.
 export LPASS_AUTO_SYNC_TIME=$((60 * 60 * 24)) # 24 hours
 
-command -v kubie >/dev/null && source $(brew --prefix)/opt/kubie/etc/bash_completion.d/kubie.bash
-command -v kubectl >/dev/null && source <(kubectl completion zsh)
+#command -v kubie >/dev/null && source $(brew --prefix)/opt/kubie/etc/bash_completion.d/kubie.bash
+#command -v kubectl >/dev/null && source <(kubectl completion zsh)
 
 alias cm="cd $HOME/code/cert-manager"
 
@@ -530,7 +538,7 @@ export DIRENV_WARN_TIMEOUT=100s
 # Just to get auto-completion on HTTPS_PROXY and HTTP_PROXY.
 export HTTP_PROXY="" HTTPS_PROXY=""
 
-export PATH="$HOME/.crc/bin/oc:$PATH"
+[ -f "$HOME/.crc/bin/oc" ] && export PATH="$HOME/.crc/bin/oc:$PATH"
 
 if [[ "$VSCODE_GIT_ASKPASS_NODE" =~ '/node$' ]]; then
   export PATH="$(dirname "$VSCODE_GIT_ASKPASS_NODE")/bin:$PATH"
@@ -539,7 +547,7 @@ if [[ "$VSCODE_GIT_ASKPASS_NODE" =~ '/node$' ]]; then
   fi
 fi
 
-test -f /Applications/Tailscale.app/Contents/MacOS/Tailscale && export PATH="$PATH:/Applications/Tailscale.app/Contents/MacOS"
+[ -f /Applications/Tailscale.app/Contents/MacOS/Tailscale ] && export PATH="$PATH:/Applications/Tailscale.app/Contents/MacOS"
 
 # xclip often stop working due to DISPLAY not being set.
 #export DISPLAY=:0
@@ -561,8 +569,10 @@ test -f /Applications/Tailscale.app/Contents/MacOS/Tailscale && export PATH="$PA
 
 # My drawing table "One by Wacom" is spread across the two screens I have
 # on my desktop environment. This is a workaround for that.
-command -v xsetwacom >/dev/null && xsetwacom list | cut -f2 | cut -d' ' -f2 | tee /dev/stderr | xargs -I@ xsetwacom --set '@' MapToOutput DisplayPort-1
+command -v xsetwacom >/dev/null && xsetwacom list | cut -f2 | cut -d' ' -f2 | xargs -I@ xsetwacom --set '@' MapToOutput DisplayPort-1
 
 ### MANAGED BY RANCHER DESKTOP START (DO NOT EDIT)
 export PATH="/Users/mvalais/.rd/bin:$PATH"
 ### MANAGED BY RANCHER DESKTOP END (DO NOT EDIT)
+
+command -v starship >/dev/null && source <($(command -v starship) init zsh --print-full-init)
