@@ -152,8 +152,6 @@ antigen apply
 # (agnoster theme) To hide the mvalais@mba-mael, set DEFAULT_USER=mvalais
 DEFAULT_USER=mvalais
 
-#eval "$(starship init zsh)"
-
 #### Paths (from least important to most important) ####
 #export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin"
 if [ -d '/Applications/Ipe.app' ]; then
