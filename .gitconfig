@@ -2,6 +2,9 @@
 	name = Maël Valais
 	email = mael@vls.dev
     signingkey = 27F4C016
+    #signingkey = /Users/ashley/.ssh/id_ed25519.pub
+#[gpg]
+#    format = "ssh"
 [color]
     diff = auto
     status = auto
@@ -10,7 +13,7 @@
 [alias]
     # https://stackoverflow.com/questions/65763211/a-git-alias-to-accept-both-main-and-master-branch-names/67284322#67284322
     m = !git switch $(test -f .git/refs/remotes/origin/main && echo main || echo master)
-    ls = for-each-ref --count=5 --sort=-committerdate refs/heads/ --format='%(color:bold)%(HEAD)%(color:reset) %(refname:short)%(color:reset) - %(color:yellow)%(authorname)%(color:reset), %(color:green)%(committerdate:relative)%(color:reset)'
+    ls = for-each-ref --count=10 --sort=-committerdate refs/heads/ --format='%(color:bold)%(HEAD)%(color:reset) %(refname:short)%(color:reset) - %(color:yellow)%(authorname)%(color:reset), %(color:green)%(committerdate:relative)%(color:reset)'
     ll = for-each-ref --sort=-committerdate refs/heads/ --format='%(color:bold)%(HEAD)%(color:reset) %(refname:short)%(color:reset) - %(color:yellow)%(authorname)%(color:reset), %(color:green)%(committerdate:relative)%(color:reset)'
 	cia = commit --amend
     f = !git branch -vv --color=always | fzf --ansi | sed 's:^[\\* ]*::' | cut -d' ' -f1 | xargs git checkout
@@ -157,3 +160,13 @@
 
 [maintenance]
     repo = /Users/mvalais/code/cert-manager
+[duet "env"]
+	git-author-initials = mael
+	git-author-name = Maël Valais
+	git-author-email = mael@vls.dev
+	mtime = 1683035091
+	git-committer-initials = 
+	git-committer-name = 
+	git-committer-email = 
+[url "https://github.com/venafi"]
+	insteadOf = git@github.com:venafi

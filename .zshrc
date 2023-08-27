@@ -221,28 +221,28 @@ alias tlmonfly="texliveonfly"
 alias l="exa -l"
 alias ll="exa -la"
 alias f=fzf
-alias vim=nvim
+alias vim=lvim
 
 whichl() { which -a "$1" | awk '/(aliased to|shell built-in|not found)/ {print > "/dev/stderr"; next} {print; next}'; }
 lwl() { whichl "$1" | xargs readlink -f | xargs exa -l; }
 lw() { whichl "$1" | xargs readlink -f; }
 
 # Preferred editor for local and remote sessions
-export GIT_EDITOR='nvim' # by default
+export GIT_EDITOR='lvim' # by default
 export FCEDIT='vim'      # for 'fc' (fix command)
 export HGEDITOR='vim'
 if [[ -n $SSH_CONNECTION ]]; then
-  export EDITOR='nvim'
+  export EDITOR='lvim'
 elif which code >/dev/null 2>&1; then
   #export EDITOR='code --wait'
-  export EDITOR='nvim'
+  export EDITOR='lvim'
   # If we are inside vscode, git commit will open in vscode
   if [[ -n $VSCODE_PID ]]; then
     export GIT_EDITOR='code --wait'
     export HGEDITOR='code --wait'
   fi
 else
-  command -v nvim >/dev/null && export EDITOR='nvim'
+  command -v lvim >/dev/null && export EDITOR='lvim'
 fi
 
 # OPAM initialization
@@ -351,6 +351,8 @@ complete -o nospace -C /usr/local/bin/vault vault
 # brew cask info google-cloud-sdk
 #source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc'
 #source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc'
+source "$(brew --prefix)/share/google-cloud-sdk/path.zsh.inc"
+source "$(brew --prefix)/share/google-cloud-sdk/completion.zsh.inc"
 
 # kubectl krew
 export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
@@ -449,7 +451,7 @@ rgr() {
 }
 
 # Scaleway CLI autocomplete initialization.
-command -v scw >/dev/null && eval "$(scw autocomplete script shell=zsh)"
+#command -v scw >/dev/null && eval "$(scw autocomplete script shell=zsh)"
 
 # Colors, a lot of colors!
 # from: https://coderwall.com/p/pb1uzq/z-shell-colors
@@ -520,7 +522,7 @@ export LPASS_AUTO_SYNC_TIME=$((60 * 60 * 24)) # 24 hours
 #command -v kubie >/dev/null && source $(brew --prefix)/opt/kubie/etc/bash_completion.d/kubie.bash
 #command -v kubectl >/dev/null && source <(kubectl completion zsh)
 
-alias cm="cd $HOME/code/cert-manager"
+alias cm="cd $HOME/code/cert-manager/cert-manager"
 
 # https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/#enable-shell-autocompletion
 
@@ -574,3 +576,6 @@ export PATH="/Users/mvalais/.rd/bin:$PATH"
 ### MANAGED BY RANCHER DESKTOP END (DO NOT EDIT)
 
 command -v starship >/dev/null && source <($(command -v starship) init zsh --print-full-init)
+
+# opam configuration
+[[ ! -r /Users/mvalais/.opam/opam-init/init.zsh ]] || source /Users/mvalais/.opam/opam-init/init.zsh  > /dev/null 2> /dev/null
