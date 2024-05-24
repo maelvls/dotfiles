@@ -208,12 +208,15 @@ fi
 
 if which eza >/dev/null 2>&1; then
   alias ls="eza"
-elif ls --version | grep coreutils >/dev/null 2>&1; then
-  # If (GNU coreutils) ls is available
-  alias ls='ls --color=auto'
-elif ls -G >/dev/null 2>&1; then
-  # If FreeBSD (=mac) ls is available
-  alias ls="ls -G"
+else
+  printf "'eza' not found. Defaulting to 'ls'.\n"
+  if ls --version | grep coreutils >/dev/null 2>&1; then
+    # If (GNU coreutils) ls is available
+    alias ls='ls --color=auto'
+  elif ls -G >/dev/null 2>&1; then
+    # If FreeBSD (=mac) ls is available
+    alias ls="ls -G"
+  fi
 fi
 
 alias tlmonfly="texliveonfly"
