@@ -206,8 +206,8 @@ if [ -d "$HOME/go" ]; then
   export GO111MODULE=auto
 fi
 
-if which exa >/dev/null 2>&1; then
-  alias ls="exa"
+if which eza >/dev/null 2>&1; then
+  alias ls="eza"
 elif ls --version | grep coreutils >/dev/null 2>&1; then
   # If (GNU coreutils) ls is available
   alias ls='ls --color=auto'
@@ -218,13 +218,13 @@ fi
 
 alias tlmonfly="texliveonfly"
 
-alias l="exa -l"
-alias ll="exa -la"
+alias l="eza -l"
+alias ll="eza -la"
 alias f=fzf
 alias vim=lvim
 
 whichl() { which -a "$1" | awk '/(aliased to|shell built-in|not found)/ {print > "/dev/stderr"; next} {print; next}'; }
-lwl() { whichl "$1" | xargs readlink -f | xargs exa -l; }
+lwl() { whichl "$1" | xargs readlink -f | xargs eza -l; }
 lw() { whichl "$1" | xargs readlink -f; }
 
 # Preferred editor for local and remote sessions
@@ -536,7 +536,7 @@ command -v direnv >/dev/null && eval "$(direnv hook zsh)"
 export DIRENV_WARN_TIMEOUT=100s
 
 # Just to get auto-completion on HTTPS_PROXY and HTTP_PROXY.
-export HTTP_PROXY="" HTTPS_PROXY=""
+export HTTP_PROXY="" HTTPS_PROXY="" NO_PROXY="lastpass.com"
 
 [ -f "$HOME/.crc/bin/oc" ] && export PATH="$HOME/.crc/bin/oc:$PATH"
 

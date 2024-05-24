@@ -19,11 +19,8 @@ set-option -g prefix C-Space
 setw -g mouse on
 setw -g mode-keys vi
 unbind-key -T copy-mode-vi MouseDragEnd1Pane
-bind-key -T copy-mode-vi Escape send -X copy-pipe "cat"
-unbind-key -T copy-mode-vi y
-#bind-key -T copy-mode-vi y copy-selection
-#bind-key -T copy-mode-vi y send -X copy-selection
-#bind-key -T copy-mode-vi Y send -X copy-pipe "reattach-to-user-namespace pbcopy"\;
+bind-key -T copy-mode-vi Escape send -X copy-pipe -x "cat"
+run -b 'tmux bind -T copy-mode-vi y send -X copy-selection -x 2> /dev/null || true'
 
 # Disable "release mouse drag to copy and exit copy-mode", ref:
 # https://github.com/tmux/tmux/issues/140

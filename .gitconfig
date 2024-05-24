@@ -13,7 +13,7 @@
 [alias]
     # https://stackoverflow.com/questions/65763211/a-git-alias-to-accept-both-main-and-master-branch-names/67284322#67284322
     m = !git switch $(test -f .git/refs/remotes/origin/main && echo main || echo master)
-    ls = for-each-ref --count=10 --sort=-committerdate refs/heads/ --format='%(color:bold)%(HEAD)%(color:reset) %(refname:short)%(color:reset) - %(color:yellow)%(authorname)%(color:reset), %(color:green)%(committerdate:relative)%(color:reset)'
+    ls = for-each-ref --count=15 --sort=-committerdate refs/heads/ --format='%(color:bold)%(HEAD)%(color:reset) %(refname:short)%(color:reset) - %(color:yellow)%(authorname)%(color:reset), %(color:green)%(committerdate:relative)%(color:reset)'
     ll = for-each-ref --sort=-committerdate refs/heads/ --format='%(color:bold)%(HEAD)%(color:reset) %(refname:short)%(color:reset) - %(color:yellow)%(authorname)%(color:reset), %(color:green)%(committerdate:relative)%(color:reset)'
 	cia = commit --amend
     f = !git branch -vv --color=always | fzf --ansi | sed 's:^[\\* ]*::' | cut -d' ' -f1 | xargs git checkout
