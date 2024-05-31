@@ -119,15 +119,18 @@ disabled = false
 format = '([$all_status$ahead_behind]($style)) '
 
 [nodejs]
-format ="([$symbol](bold green)[$version](238)) "
+format = "([$symbol](bold green)[$version](238)) "
 version_format = "${major}.${minor}"
 symbol = " "
 
 [package]
-format	= "[$symbol]($style)[$version](238) "
+format = "[$symbol]($style)[$version](238) "
 symbol = "pkg "
 version_format = "${major}.${minor}"
 style = "bold 208"
 display_private = false
 disabled = false
 
+[env_var.HTTPS_PROXY]
+format = "[⚠️ HTTPS_PROXY ⚠️](bold yellow) "
+default = ""
