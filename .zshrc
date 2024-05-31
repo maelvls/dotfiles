@@ -584,3 +584,5 @@ command -v starship >/dev/null && source <($(command -v starship) init zsh --pri
 
 # opam configuration
 [[ ! -r /Users/mvalais/.opam/opam-init/init.zsh ]] || source /Users/mvalais/.opam/opam-init/init.zsh  > /dev/null 2> /dev/null
+
+ts() { T=$(gdate "+%s.%N"); while read R; do T2=$(gdate "+%s.%N"); echo "$((T2-T)) $R"; T=$T2; done }

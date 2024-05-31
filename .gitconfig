@@ -159,7 +159,7 @@
     command = spaceman-diff
 
 [maintenance]
-    repo = /Users/mvalais/code/cert-manager
+    repo = /Users/mvalais/code/cert-manager/cert-manager
 [duet "env"]
 	git-author-initials = mael
 	git-author-name = Maël Valais
