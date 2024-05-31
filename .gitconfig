@@ -104,7 +104,7 @@
 [gpg]
     program = gpg
 [credential]
-    helper = lastpass -l mael.valais@gmail.com
+	helper = lastpass -l mael.valais@gmail.com
 [init]
     defaultBranch = main
 [core]
@@ -170,3 +170,5 @@
 	git-committer-email = 
 [url "https://github.com/venafi"]
 	insteadOf = git@github.com:venafi
+
+
