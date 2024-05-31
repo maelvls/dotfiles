@@ -131,4 +131,5 @@ display_private = false
 disabled = false
 
 [env_var.HTTPS_PROXY]
-format = "[⚠️ HTTPS_PROXY ⚠️](bold yellow) "
+format = "([⚠️ HTTPS_PROXY ⚠️](bold yellow) )"
+default = ""
