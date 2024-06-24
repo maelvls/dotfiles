@@ -1,4 +1,4 @@
-#! /usr/bin/env sh
+#! /usr/bin/env zsh
 #
 # My zsh config for non-interactive shells Maël Valais
 # <mael.valais@gmail.com> 2016
@@ -93,7 +93,7 @@ if [ -f /home/linuxbrew/.linuxbrew/opt/antigen/share/antigen/antigen.zsh ]; then
   source /home/linuxbrew/.linuxbrew/opt/antigen/share/antigen/antigen.zsh
 elif [ -f /usr/share/zsh/share/antigen/antigen.zsh ]; then
   source /usr/share/zsh/share/antigen/antigen.zsh
-elif [ -f $(brew --prefix)/opt/antigen/share/antigen/antigen.zsh ]; then
+elif command -v brew >/dev/null && [ -f $(brew --prefix)/opt/antigen/share/antigen/antigen.zsh ]; then
   source $(brew --prefix)/opt/antigen/share/antigen/antigen.zsh
 elif [ -f $HOME/.antigen.zsh ]; then
   # Warning: apt install zsh-antigen seems way too old.
@@ -102,7 +102,9 @@ elif [ -f $HOME/.antigen.zsh ]; then
 else
   echo -e "\033[93mantigen:\033[0m antigen.zsh not installed?"
   echo -e "\033[93mantigen:\033[0m go to the dotfiles/ folder and run:"
-  echo -e "    ./installdotfiles.sh"
+  echo -e "    ./install.sh"
+  echo -e "or run the following:"
+  echo -e "    curl -L git.io/antigen > ~/.antigen.zsh"
   return
 fi
 
@@ -352,7 +354,7 @@ autoload -U +X bashcompinit && bashcompinit
 complete -o nospace -C /usr/local/bin/vault vault
 
 # brew cask info google-cloud-sdk
-if [ -f "$(brew --prefix)/share/google-cloud-sdk" ]; then
+if command -v brew >/dev/null && [ -f "$(brew --prefix)/share/google-cloud-sdk" ]; then
   #source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc'
   #source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc'
   source "$(brew --prefix)/share/google-cloud-sdk/path.zsh.inc"
@@ -583,7 +585,7 @@ export PATH="/Users/mvalais/.rd/bin:$PATH"
 command -v starship >/dev/null && source <($(command -v starship) init zsh --print-full-init)
 
 # opam configuration
-[[ ! -r /Users/mvalais/.opam/opam-init/init.zsh ]] || source /Users/mvalais/.opam/opam-init/init.zsh  > /dev/null 2> /dev/null
+[[ ! -r /Users/mvalais/.opam/opam-init/init.zsh ]] || source /Users/mvalais/.opam/opam-init/init.zsh >/dev/null 2>/dev/null
 
 # I use the "ts" func to prepend nanosecond time between two log lines. Useful
 # to understand when time is spent.

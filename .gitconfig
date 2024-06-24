@@ -168,8 +168,6 @@
 	git-committer-email = 
 [url "https://github.com/venafi"]
 	insteadOf = git@github.com:venafi
-
-
 [credential]
 	helper = lastpass -l mael.valais@gmail.com
 [url "https://gitlab.com/"]
