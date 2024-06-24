@@ -172,3 +172,5 @@
 
 [credential]
 	helper = lastpass -l mael.valais@gmail.com
+[url "https://gitlab.com/"]
+	insteadOf = git@gitlab.com:
