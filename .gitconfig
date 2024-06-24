@@ -103,8 +103,6 @@
     gpgsign = false
 [gpg]
     program = gpg
-[credential]
-	helper = lastpass -l mael.valais@gmail.com
 [init]
     defaultBranch = main
 [core]
@@ -172,3 +170,5 @@
 	insteadOf = git@github.com:venafi
 
 
+[credential]
+	helper = lastpass -l mael.valais@gmail.com
