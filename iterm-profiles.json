@@ -1,12 +1,8 @@
 {
 "Profiles": [
 {
-  "Ansi 5 Color" : {
-    "Green Component" : 0.26314744353294373,
-    "Red Component" : 0.42564234137535095,
-    "Blue Component" : 0.65052211284637451
-  },
-  "Set Local Environment Vars" : true,
+  "Thin Strokes" : 0,
+  "ASCII Ligatures" : true,
   "Working Directory" : "",
   "Prompt Before Closing 2" : 0,
   "Selected Text Color" : {
@@ -350,32 +346,32 @@
     "Red Component" : 1,
     "Blue Component" : 0.0940093994140625
   },
-  "Default Bookmark" : "No",
-  "Cursor Color" : {
-    "Green Component" : 0,
-    "Red Component" : 1,
-    "Blue Component" : 0.0940093994140625
-  },
-  "Disable Smcup Rmcup" : false,
-  "Name" : "Zsh",
-  "Blinking Cursor" : false,
-  "Guid" : "93C15A8D-9240-4962-A16F-8BDDD1227B48",
   "Ansi 1 Color" : {
     "Green Component" : 0,
     "Red Component" : 1,
     "Blue Component" : 0.058871746063232422
   },
-  "Idle Code" : 0,
-  "Ansi 10 Color" : {
-    "Green Component" : 0.88189995288848877,
-    "Red Component" : 0.67126059532165527,
-    "Blue Component" : 0.35646489262580872
+  "Default Bookmark" : "No",
+  "Disable Smcup Rmcup" : false,
+  "Name" : "Zsh",
+  "Blinking Cursor" : false,
+  "Cursor Color" : {
+    "Green Component" : 0,
+    "Red Component" : 1,
+    "Blue Component" : 0.0940093994140625
   },
+  "Guid" : "93C15A8D-9240-4962-A16F-8BDDD1227B48",
   "Ansi 8 Color" : {
     "Green Component" : 0.26696833968162537,
     "Red Component" : 0.26696833968162537,
     "Blue Component" : 0.26696833968162537
   },
+  "Ansi 10 Color" : {
+    "Green Component" : 0.88189995288848877,
+    "Red Component" : 0.67126059532165527,
+    "Blue Component" : 0.35646489262580872
+  },
+  "Idle Code" : 0,
   "Automatically Log" : false,
   "Smart Cursor Color" : true,
   "Semantic History" : {
@@ -395,7 +391,7 @@
   "Cursor Type" : 2,
   "AWDS Pane Directory" : "",
   "Blur" : false,
-  "Normal Font" : "FiraCodeNerdFontComplete-Retina 11",
+  "Normal Font" : "HackNF-Regular 11",
   "Vertical Spacing" : 1,
   "Use Underline Color" : false,
   "Disable Printing" : false,
@@ -448,9 +444,13 @@
   "Unicode Normalization" : 0,
   "Use Tab Color" : false,
   "Visual Bell" : true,
-  "ASCII Ligatures" : true,
-  "Thin Strokes" : 4,
-  "Custom Directory" : "Recycle"
+  "Custom Directory" : "Recycle",
+  "Ansi 5 Color" : {
+    "Green Component" : 0.26314744353294373,
+    "Red Component" : 0.42564234137535095,
+    "Blue Component" : 0.65052211284637451
+  },
+  "Set Local Environment Vars" : true
 }
 ]
 }
