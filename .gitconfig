@@ -50,6 +50,7 @@
     dig = !git log --date-order --all @ $(git reflog show --format=\"%h\" stash) $(git reflog show --format=\"%h\")
     json = !git log --pretty=format:'{%n  \"commit\": \"%H\",%n  \"abbreviated_commit\": \"%h\",%n  \"tree\": \"%T\",%n  \"abbreviated_tree\": \"%t\",%n  \"parent\": \"%P\",%n  \"abbreviated_parent\": \"%p\",%n  \"refs\": \"%D\",%n  \"encoding\": \"%e\",%n  \"subject\": \"%s\",%n  \"sanitized_subject_line\": \"%f\",%n  \"body\": \"%B\",%n  \"commit_notes\": \"%N\",%n  \"verification_flag\": \"%G?\",%n  \"signer\": \"%GS\",%n  \"signer_key\": \"%GK\",%n  \"author\": {%n    \"name\": \"%aN\",%n    \"email\": \"%aE\",%n    \"date\": \"%aD\"%n  },%n  \"commiter\": {%n    \"name\": \"%cN\",%n    \"email\": \"%cE\",%n    \"date\": \"%cD\"%n  }%n},'
     duetedit = !${EDITOR:-vim} ~/.git-authors
+	root = !pwd
 [web]
     browser = chrome
 [filter "media"]
@@ -169,6 +170,6 @@
 [url "https://github.com/venafi"]
 	insteadOf = git@github.com:venafi
 [credential]
-	helper = lastpass -l mael.valais@gmail.com
+	#helper = lastpass -l mael.valais@gmail.com
 [url "https://gitlab.com/"]
 	insteadOf = git@gitlab.com:

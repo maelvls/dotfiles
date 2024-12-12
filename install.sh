@@ -124,8 +124,10 @@ install_dotfiles() {
 
 install_brew() {
     export NONINTERACTIVE=yes
-    if [ ! -d /usr/local/Cellar ] && [ ! -d /opt/homebrew ] && [ ! -d "$HOME/.linuxbrew" ] && [ ! -d "/home/linuxbrew/.linuxbrew" ]; then
-        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)" || exit 1
+    if [ ! -d ~/brew ] && [ ! -d /usr/local/Cellar ] && [ ! -d /opt/homebrew ] && [ ! -d "$HOME/.linuxbrew" ] && [ ! -d "/home/linuxbrew/.linuxbrew" ]; then
+        echo "Homebrew isn't installed. Install it first with:"
+        echo "    /bin/bash -c \"\$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)\""
+        exit 1
     fi
 
     # At this point, we need to make sure that Homebrew is set in PATH for

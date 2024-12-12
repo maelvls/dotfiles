@@ -45,6 +45,14 @@ if [ -d "/opt/homebrew" ]; then
   export INFOPATH="/opt/homebrew/share/info:$INFOPATH"
   export FPATH="/opt/homebrew/share/zsh/site-functions:$FPATH"
 fi
+# My work laptop is a mac and are are forbidden to use bottles and Homebrew
+# can't be installed under /opt/homebrew.
+if [ -d ~/brew ]; then
+  export PATH="$HOME/brew/bin:$HOME/brew/sbin:$PATH"
+  export MANPATH="$HOME/brew/share/man:$MANPATH"
+  export INFOPATH="$HOME/brew/share/info:$INFOPATH"
+  export FPATH="$HOME/brew/share/zsh/site-functions:$FPATH"
+fi
 
 alias urldecode='python3 -c "import urllib.parse; print(urllib.parse.unquote_plus(open(0).read()))"'
 alias urlencode='python3 -c "import urllib.parse; print(urllib.parse.quote_plus(open(0).read()))"'
@@ -130,7 +138,7 @@ antigen bundle zdharma-continuum/zsh-navigation-tools
 antigen bundle lukechilds/zsh-nvm
 antigen bundle gitfast
 #antigen bundle fzf
-antigen bundle docker docker-compose
+#antigen bundle docker docker-compose
 #antigen bundle git
 #antigen bundle jsontools
 #antigen bundle zsh-users/zsh-history-substring-search
@@ -211,8 +219,8 @@ fi
 if which eza >/dev/null 2>&1; then
   alias ls="eza"
 else
-  printf "'eza' not found. Defaulting to 'ls'.\n"
-  if ls --version | grep coreutils >/dev/null 2>&1; then
+  printf "Mael: 'eza' not found. Defaulting to 'ls'.\n"
+  if ls --version 2>&1 | grep -q coreutils; then
     # If (GNU coreutils) ls is available
     alias ls='ls --color=auto'
   elif ls -G >/dev/null 2>&1; then
@@ -223,31 +231,34 @@ fi
 
 alias tlmonfly="texliveonfly"
 
-alias l="eza -l"
-alias ll="eza -la"
+alias l="ls -l"
+alias ll="ls -la"
 alias f=fzf
-alias vim=lvim
+
+if which lvim >/dev/null 2>&1; then
+  alias vim=lvim
+fi
 
 whichl() { which -a "$1" | awk '/(aliased to|shell built-in|not found)/ {print > "/dev/stderr"; next} {print; next}'; }
 lwl() { whichl "$1" | xargs readlink -f | xargs eza -l; }
 lw() { whichl "$1" | xargs readlink -f; }
 
 # Preferred editor for local and remote sessions
-export GIT_EDITOR='lvim' # by default
-export FCEDIT='vim'      # for 'fc' (fix command)
+export GIT_EDITOR='vim' # by default
+export FCEDIT='vim'     # for 'fc' (fix command)
 export HGEDITOR='vim'
 if [[ -n $SSH_CONNECTION ]]; then
-  export EDITOR='lvim'
+  export EDITOR="$GIT_EDITOR"
 elif which code >/dev/null 2>&1; then
   #export EDITOR='code --wait'
-  export EDITOR='lvim'
+  export EDITOR="$GIT_EDITOR"
   # If we are inside vscode, git commit will open in vscode
   if [[ -n $VSCODE_PID ]]; then
     export GIT_EDITOR='code --wait'
     export HGEDITOR='code --wait'
   fi
-else
-  command -v lvim >/dev/null && export EDITOR='lvim'
+elif command -v lvim >/dev/null; then
+  export EDITOR='lvim'
 fi
 
 # OPAM initialization
@@ -506,6 +517,7 @@ fi
 #    ~/.ssh/ssh_auth_sock -> /run/user/1000/keyring/ssh
 #
 if [ ! -S ~/.ssh/ssh_auth_sock ] && [ -S "$SSH_AUTH_SOCK" ]; then
+  mkdir -p ~/.ssh
   ln -sf $SSH_AUTH_SOCK ~/.ssh/ssh_auth_sock
 fi
 
@@ -589,4 +601,11 @@ command -v starship >/dev/null && source <($(command -v starship) init zsh --pri
 
 # I use the "ts" func to prepend nanosecond time between two log lines. Useful
 # to understand when time is spent.
-ts() { T=$(gdate "+%s.%N"); while read R; do T2=$(gdate "+%s.%N"); echo "$((T2-T)) $R"; T=$T2; done }
+ts() {
+  T=$(gdate "+%s.%N")
+  while read R; do
+    T2=$(gdate "+%s.%N")
+    echo "$((T2 - T)) $R"
+    T=$T2
+  done
+}
