@@ -365,9 +365,7 @@ autoload -U +X bashcompinit && bashcompinit
 complete -o nospace -C /usr/local/bin/vault vault
 
 # brew cask info google-cloud-sdk
-if command -v brew >/dev/null && [ -f "$(brew --prefix)/share/google-cloud-sdk" ]; then
-  #source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc'
-  #source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc'
+if command -v brew >/dev/null && [ -d "$(brew --prefix)/share/google-cloud-sdk" ]; then
   source "$(brew --prefix)/share/google-cloud-sdk/path.zsh.inc"
   source "$(brew --prefix)/share/google-cloud-sdk/completion.zsh.inc"
 fi
@@ -528,7 +526,6 @@ if command -v tmux >/dev/null && [ "$(uname -s)" = "Linux" ]; then
 fi
 
 [ -f $HOME/.cargo/env ] && source $HOME/.cargo/env
-[ -f /usr/share/google-cloud-sdk/completion.zsh.inc ] && source /usr/share/google-cloud-sdk/completion.zsh.inc
 
 # Workwround for the Shift+Ctrl+E that was stolen by ibus. See:
 # https://askubuntu.com/questions/1125726
@@ -609,3 +606,7 @@ ts() {
     T=$T2
   done
 }
+
+alias dlv="dlv --headless -l :2345 --accept-multiclient"
+
+export DOCKER_HOST=unix://$HOME/.colima/docker.sock
