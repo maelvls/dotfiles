@@ -609,4 +609,4 @@ ts() {
 
 alias dlv="dlv --headless -l :2345 --accept-multiclient"
 
-export DOCKER_HOST=unix://$HOME/.colima/docker.sock
+#export DOCKER_HOST=unix://$HOME/.colima/docker.sock
