@@ -81,6 +81,8 @@ install_dotfiles() {
                 trace ln -sf "$SOURCE" "$TARGET"
             else
                 printf "No ${yel}%s${end}. Directly symlinking.\n" "$HOME/$dotfile"
+                # It might be in a subdirectory. Create it if it doesn't exist.
+                mkdir -p "$(dirname "$TARGET")"
                 trace ln -s "$SOURCE" "$TARGET"
             fi
         fi
