@@ -249,18 +249,16 @@ export FCEDIT='vim'     # for 'fc' (fix command)
 export HGEDITOR='vim'
 if [[ -n $SSH_CONNECTION ]]; then
   export EDITOR="$GIT_EDITOR"
-elif which code >/dev/null 2>&1; then
-  #export EDITOR='code --wait'
-  export EDITOR="$GIT_EDITOR"
-  # If we are inside vscode, git commit will open in vscode
-  if [[ -n $VSCODE_PID ]]; then
-    export GIT_EDITOR='code --wait'
-    export HGEDITOR='code --wait'
-  fi
 elif command -v lvim >/dev/null; then
   export EDITOR='lvim'
 fi
 
+# If we are inside vscode, git commit will open in vscode.
+if which code >/dev/null 2>&1 && [[ -n $VSCODE_PID ]]; then
+  export EDITOR='code --wait'
+  export GIT_EDITOR='code --wait'
+  export HGEDITOR='code --wait'
+fi
 # OPAM initialization
 #if which opam >/dev/null 2>&1; then
 #  eval $(opam env)
@@ -607,6 +605,12 @@ ts() {
   done
 }
 
-alias dlv="dlv --headless -l :2345 --accept-multiclient"
+# Using --accept-multiclient=false makes sure that the Delve session is stopped
+# as soon as the binary exits. With --accept-multiclient (which is true by
+# default), the Delve session hangs after the binary exits, and Ctrl+C doesn't
+# do anything, no idea why. Ref: https://github.com/go-delve/delve/issues/1929
+alias dlv="dlv --headless -l :2345 --accept-multiclient=false"
 
 #export DOCKER_HOST=unix://$HOME/.colima/docker.sock
+
+export TPP_URL=https://tpp-ext.tpp-tests.jetstack.net
