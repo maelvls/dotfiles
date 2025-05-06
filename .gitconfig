@@ -65,16 +65,15 @@
 [rerere]
     enabled = true
     autoupdate = true
-[merge]
-    tool = vimdiff
-	conflictStyle = zdiff3
-[mergetool]
-    prompt = false
 [diff]
     tool = default-difftool
 	algorithm = histogram
 [difftool "default-difftool"]
     cmd = code --wait --diff $LOCAL $REMOTE
+[merge]
+    tool = code
+[mergetool "code"]
+    cmd = code --wait --merge $REMOTE $LOCAL $BASE $MERGED
 #[log]
 #    decorate = auto
 #    oneline = true

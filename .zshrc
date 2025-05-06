@@ -129,7 +129,7 @@ antigen bundle rupa/z
 antigen bundle zsh-users/zsh-autosuggestions
 # antigen bundle zsh-users/zsh-syntax-highlighting
 antigen bundle zdharma-continuum/fast-syntax-highlighting
-#antigen bundle zsh-users/zsh-completions
+antigen bundle zsh-users/zsh-completions
 
 # Not really must-haves
 antigen bundle andrewferrier/fzf-z
@@ -160,7 +160,7 @@ antigen bundle gitfast
 antigen apply
 
 # (agnoster theme) To hide the mvalais@mba-mael, set DEFAULT_USER=mvalais
-DEFAULT_USER=mvalais
+# DEFAULT_USER=mael.valais
 
 #### Paths (from least important to most important) ####
 #export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin"
@@ -614,3 +614,4 @@ alias dlv="dlv --headless -l :2345 --accept-multiclient=false"
 #export DOCKER_HOST=unix://$HOME/.colima/docker.sock
 
 export TPP_URL=https://tpp-ext.tpp-tests.jetstack.net
+export PATH="/opt/homebrew/opt/mysql-client/bin:$PATH"

@@ -3,3 +3,4 @@
 .envrc
 telepresence.log
 /.gd/
+.config/glab-cli/config.yml
