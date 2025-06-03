@@ -30,28 +30,29 @@ COMPLETION_WAITING_DOTS=false
 # directory its main.go is in...
 unsetopt AUTO_CD
 
-# On linux, add brew to PATH.
-[ ! -d "$HOME/.linuxbrew" ] || export PATH="$HOME/.linuxbrew/bin:$HOME/.linuxbrew/sbin:$PATH"
-if [ -d "/home/linuxbrew/.linuxbrew" ]; then
+if [ -d "$HOME/.linuxbrew" ]; then
+  export PATH="$HOME/.linuxbrew/bin:$HOME/.linuxbrew/sbin:$PATH"
+  BREW_PREFIX="$HOME/.linuxbrew"
+elif [ -d "/home/linuxbrew/.linuxbrew" ]; then
   export PATH="/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:$PATH"
   export MANPATH="/home/linuxbrew/.linuxbrew/share/man:$MANPATH"
   export INFOPATH="/home/linuxbrew/.linuxbrew/share/info:$INFOPATH"
   export FPATH="/home/linuxbrew/.linuxbrew/share/zsh/site-functions:$FPATH"
-fi
-# On arm64, add brew to PATH.
-if [ -d "/opt/homebrew" ]; then
+  BREW_PREFIX="/home/linuxbrew/.linuxbrew"
+elif [ -d "/opt/homebrew" ]; then
   export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$PATH"
   export MANPATH="/opt/homebrew/share/man:$MANPATH"
   export INFOPATH="/opt/homebrew/share/info:$INFOPATH"
   export FPATH="/opt/homebrew/share/zsh/site-functions:$FPATH"
-fi
-# My work laptop is a mac and are are forbidden to use bottles and Homebrew
-# can't be installed under /opt/homebrew.
-if [ -d ~/brew ]; then
+  BREW_PREFIX="/opt/homebrew"
+elif [ -d ~/brew ]; then
+  # My work laptop is a mac and are are forbidden to use bottles and Homebrew
+  # can't be installed under /opt/homebrew.
   export PATH="$HOME/brew/bin:$HOME/brew/sbin:$PATH"
   export MANPATH="$HOME/brew/share/man:$MANPATH"
   export INFOPATH="$HOME/brew/share/info:$INFOPATH"
   export FPATH="$HOME/brew/share/zsh/site-functions:$FPATH"
+  BREW_PREFIX="$HOME/brew"
 fi
 
 alias urldecode='python3 -c "import urllib.parse; print(urllib.parse.unquote_plus(open(0).read()))"'
@@ -97,12 +98,10 @@ bindkey "\e\e[D" backward-word
 bindkey "\e\e[C" forward-word
 
 # Search antigen
-if [ -f /home/linuxbrew/.linuxbrew/opt/antigen/share/antigen/antigen.zsh ]; then
-  source /home/linuxbrew/.linuxbrew/opt/antigen/share/antigen/antigen.zsh
+if [ -f $BREW_PREFIX/opt/antigen/share/antigen/antigen.zsh ]; then
+  source $BREW_PREFIX/opt/antigen/share/antigen/antigen.zsh
 elif [ -f /usr/share/zsh/share/antigen/antigen.zsh ]; then
   source /usr/share/zsh/share/antigen/antigen.zsh
-elif command -v brew >/dev/null && [ -f $(brew --prefix)/opt/antigen/share/antigen/antigen.zsh ]; then
-  source $(brew --prefix)/opt/antigen/share/antigen/antigen.zsh
 elif [ -f $HOME/.antigen.zsh ]; then
   # Warning: apt install zsh-antigen seems way too old.
   # Prefer installing it with: curl -L git.io/antigen > ~/.antigen.zsh
@@ -163,10 +162,6 @@ antigen apply
 # DEFAULT_USER=mael.valais
 
 #### Paths (from least important to most important) ####
-#export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin"
-if [ -d '/Applications/Ipe.app' ]; then
-  export PATH="$PATH:/Applications/Ipe.app/Contents/MacOS"
-fi
 
 if [ -d "$HOME/.local/bin" ]; then
   export PATH="$HOME/.local/bin:$PATH" # for 'stack'
@@ -188,8 +183,9 @@ export PATH="$HOME/.deno/bin:$PATH"
 # as the /etc/man.conf file.
 # Warkaround: we first ask man to tell us the MANPATH when no
 # MANPATH is set, and then (in the rest of this .zshrc) we can
-# append others.
-export MANPATH="$(man -w)"
+# append others:
+#
+#  export MANPATH="$(man -w)"
 
 # Coreutils 5.93 (2005) are COMPLETELY outdated as it was the last version that
 # shipped without the GPL version (or such). So I had to install coreutils
@@ -216,7 +212,7 @@ if [ -d "$HOME/go" ]; then
   export GO111MODULE=auto
 fi
 
-if which eza >/dev/null 2>&1; then
+if command -v eza >/dev/null; then
   alias ls="eza"
 else
   printf "Mael: 'eza' not found. Defaulting to 'ls'.\n"
@@ -254,7 +250,7 @@ elif command -v lvim >/dev/null; then
 fi
 
 # If we are inside vscode, git commit will open in vscode.
-if which code >/dev/null 2>&1 && [[ -n $VSCODE_PID ]]; then
+if command -v code >/dev/null 2>&1 && [[ -n $VSCODE_PID ]]; then
   export EDITOR='code --wait'
   export GIT_EDITOR='code --wait'
   export HGEDITOR='code --wait'
@@ -324,16 +320,7 @@ man() {
 # https://unix.stackexchange.com/questions/139082/zsh-set-term-screen-256color-in-tmux-but-xterm-256color-without-tmux
 [[ $TMUX != "" ]] && export TERM="screen-256color"
 
-# added by travis gem
-[ -f /Users/mvalais/.travis/travis.sh ] && source /Users/mvalais/.travis/travis.sh
-
-#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
-export SDKMAN_DIR="/Users/mvalais/.sdkman"
-[[ -s "/Users/mvalais/.sdkman/bin/sdkman-init.sh" ]] && source "/Users/mvalais/.sdkman/bin/sdkman-init.sh"
-
 export HOMEBREW_AUTO_UPDATE_SECS=3600
-
-[ -s "/Users/mvalais/.jabba/jabba.sh" ] && source "/Users/mvalais/.jabba/jabba.sh"
 
 # Kubectl is soooo long to type
 alias k=kubectl
@@ -359,13 +346,10 @@ if [ "$(uname -s)" = "Darwin" ]; then
   alias strace=dtruss
 fi
 
-autoload -U +X bashcompinit && bashcompinit
-complete -o nospace -C /usr/local/bin/vault vault
-
 # brew cask info google-cloud-sdk
-if command -v brew >/dev/null && [ -d "$(brew --prefix)/share/google-cloud-sdk" ]; then
-  source "$(brew --prefix)/share/google-cloud-sdk/path.zsh.inc"
-  source "$(brew --prefix)/share/google-cloud-sdk/completion.zsh.inc"
+if command -v brew >/dev/null && [ -d "$BREW_PREFIX/share/google-cloud-sdk" ]; then
+  source "$BREW_PREFIX/share/google-cloud-sdk/path.zsh.inc"
+  source "$BREW_PREFIX/share/google-cloud-sdk/completion.zsh.inc"
 fi
 
 # kubectl krew
@@ -374,13 +358,7 @@ export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 # wireshark
 export PATH="$PATH":/Applications/Wireshark.app/Contents/MacOS/
 
-# Ruby
-export PATH="/usr/local/opt/ruby/bin:$PATH"
-export PATH="/usr/local/lib/ruby/gems/2.6.0/bin:$PATH"
-
 export LPASS_AGENT_TIMEOUT=0
-
-complete -o nospace -C /Users/mvalais/go/bin/mc mc
 
 alias kk="cd ~/code/kubernetes"
 
@@ -411,7 +389,6 @@ alias kall="kubectl api-resources --verbs=list --namespaced -o name | grep cert-
 # defaults write com.apple.screencapture name screenshot-"$(date +%Y-%m-%d)-$(date +%H%M)"
 
 alias m=make
-if [ -e /Users/mvalais/.nix-profile/etc/profile.d/nix.sh ]; then . /Users/mvalais/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
 
 digc() {
   dig $* | awk '
@@ -420,6 +397,7 @@ digc() {
     /^;;/           { print "\033[1;30m"$0"\033[0m" }
   ' | sed 's|\(IN\)|\\033[1;33m\1\\033[0m|' | xargs -0 printf
 }
+alias dig=digc
 
 export WASMTIME_HOME="$HOME/.wasmtime"
 export PATH="$WASMTIME_HOME/bin:$PATH"
@@ -429,8 +407,6 @@ command -v bazel >/dev/null && alias b=bazel
 export PATH="/usr/local/opt/gcore/bin:$PATH"
 
 setopt share_history
-
-export PATH="$(gem env gemdir)/bin:$PATH"
 
 if [ "$(uname -s)" = "Linux" ]; then
   alias pbcopy='xclip -selection clipboard'
@@ -533,7 +509,7 @@ export GTK_IM_MODULE="xim"
 # down my .envrc's.
 export LPASS_AUTO_SYNC_TIME=$((60 * 60 * 24)) # 24 hours
 
-#command -v kubie >/dev/null && source $(brew --prefix)/opt/kubie/etc/bash_completion.d/kubie.bash
+#command -v kubie >/dev/null && source $BREW_PREFIX/opt/kubie/etc/bash_completion.d/kubie.bash
 #command -v kubectl >/dev/null && source <(kubectl completion zsh)
 
 alias cm="cd $HOME/code/cert-manager/cert-manager"
