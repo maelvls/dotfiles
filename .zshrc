@@ -91,11 +91,13 @@ alias urlencode='python3 -c "import urllib.parse; print(urllib.parse.quote_plus(
 # it jumps to the next word).
 # https://coderwall.com/p/a8uxma/zsh-iterm2-osx-shortcuts
 #
-# DOES NOT WORK AS INTENDED :(
-#bindkey "^[b" backward-word
-#bindkey "^[f" forward-word
-bindkey "\e\e[D" backward-word
-bindkey "\e\e[C" forward-word
+# This is for iTerm2:
+bindkey "\eb" backward-word
+bindkey "\ef" forward-word
+# For VSCode. I ran "cat | hexdump -C" to know what key was sent when pressing
+# alt+left.`
+bindkey "\e[1;3D" backward-word
+bindkey "\e[1;3C" forward-word
 
 # Search antigen
 if [ -f $BREW_PREFIX/opt/antigen/share/antigen/antigen.zsh ]; then
@@ -136,6 +138,7 @@ antigen bundle andrewferrier/fzf-z
 antigen bundle zdharma-continuum/zsh-navigation-tools
 antigen bundle lukechilds/zsh-nvm
 antigen bundle gitfast
+
 #antigen bundle fzf
 #antigen bundle docker docker-compose
 #antigen bundle git
@@ -591,3 +594,10 @@ alias dlv="dlv --headless -l :2345 --accept-multiclient=false"
 
 export TPP_URL=https://tpp-ext.tpp-tests.jetstack.net
 export PATH="/opt/homebrew/opt/mysql-client/bin:$PATH"
+
+# Zsh git completion was super slow, even on moderately sized repositories such
+# as cert-manager. See:
+#  https://stackoverflow.com/questions/9810327/9810485#9810485
+__git_files() {
+  _wanted files expl 'local files' _files
+}

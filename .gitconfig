@@ -11,6 +11,11 @@
     branch = auto
     ui = true
 [alias]
+    ctx = "!f() { \
+        git for-each-ref --sort=-committerdate refs/heads/ --format='%(refname:short)' | \
+        fzf --preview='echo -e \"$(git log -1 --format=\"%C(bold)Author:%Creset %an%n%C(bold)Date:%Creset %ad\" --date=short {})\\n\"; git log --oneline --color=always {} | head -20' | \
+        xargs git switch; \
+    }; f"
     # https://stackoverflow.com/questions/65763211/a-git-alias-to-accept-both-main-and-master-branch-names/67284322#67284322
     m = !git switch $(test -f .git/refs/remotes/origin/main && echo main || echo master)
     ls = for-each-ref --count=15 --sort=-committerdate refs/heads/ --format='%(color:bold)%(HEAD)%(color:reset) %(refname:short)%(color:reset) - %(color:yellow)%(authorname)%(color:reset), %(color:green)%(committerdate:relative)%(color:reset)'
