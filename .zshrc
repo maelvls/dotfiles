@@ -601,3 +601,7 @@ export PATH="/opt/homebrew/opt/mysql-client/bin:$PATH"
 __git_files() {
   _wanted files expl 'local files' _files
 }
+export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
+export PATH="$HOME/.cargo/bin:$PATH"
+
+export JL_OPTS="--include-fields=msg"
