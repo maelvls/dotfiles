@@ -605,3 +605,5 @@ export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
 export PATH="$HOME/.cargo/bin:$PATH"
 
 export JL_OPTS="--include-fields=msg"
+
+export HOMEBREW_DOWNLOAD_CONCURRENCY=auto
