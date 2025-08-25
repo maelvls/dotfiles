@@ -607,3 +607,5 @@ export PATH="$HOME/.cargo/bin:$PATH"
 export JL_OPTS="--include-fields=msg"
 
 export HOMEBREW_DOWNLOAD_CONCURRENCY=auto
+
+export RIPGREP_CONFIG_PATH="$HOME/.config/ripgreprc"
