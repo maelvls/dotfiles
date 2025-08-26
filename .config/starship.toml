@@ -132,5 +132,7 @@ style = "bold 208"
 display_private = false
 disabled = false
 
+# Caveat: the HTTPS_PROXY won't show up if it's set but empty. It only shows if
+# it's set to some value. See: https://github.com/starship/starship/issues/5400
 [env_var.HTTPS_PROXY]
 format = "([⚠️ HTTPS_PROXY](bold yellow) $env_value [⚠️](bold yellow))"

@@ -528,9 +528,6 @@ DISABLE_AUTO_TITLE="true"
 command -v direnv >/dev/null && eval "$(direnv hook zsh)"
 export DIRENV_WARN_TIMEOUT=100s
 
-# Just to get auto-completion on HTTPS_PROXY and HTTP_PROXY.
-export HTTP_PROXY="" HTTPS_PROXY="" NO_PROXY="lastpass.com"
-
 [ -f "$HOME/.crc/bin/oc" ] && export PATH="$HOME/.crc/bin/oc:$PATH"
 
 if [[ "$VSCODE_GIT_ASKPASS_NODE" =~ '/node$' ]]; then
