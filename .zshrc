@@ -31,28 +31,28 @@ COMPLETION_WAITING_DOTS=false
 unsetopt AUTO_CD
 
 if [ -d "$HOME/.linuxbrew" ]; then
-  export PATH="$HOME/.linuxbrew/bin:$HOME/.linuxbrew/sbin:$PATH"
-  BREW_PREFIX="$HOME/.linuxbrew"
+	export PATH="$HOME/.linuxbrew/bin:$HOME/.linuxbrew/sbin:$PATH"
+	BREW_PREFIX="$HOME/.linuxbrew"
 elif [ -d "/home/linuxbrew/.linuxbrew" ]; then
-  export PATH="/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:$PATH"
-  export MANPATH="/home/linuxbrew/.linuxbrew/share/man:$MANPATH"
-  export INFOPATH="/home/linuxbrew/.linuxbrew/share/info:$INFOPATH"
-  export FPATH="/home/linuxbrew/.linuxbrew/share/zsh/site-functions:$FPATH"
-  BREW_PREFIX="/home/linuxbrew/.linuxbrew"
+	export PATH="/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:$PATH"
+	export MANPATH="/home/linuxbrew/.linuxbrew/share/man:$MANPATH"
+	export INFOPATH="/home/linuxbrew/.linuxbrew/share/info:$INFOPATH"
+	export FPATH="/home/linuxbrew/.linuxbrew/share/zsh/site-functions:$FPATH"
+	BREW_PREFIX="/home/linuxbrew/.linuxbrew"
 elif [ -d "/opt/homebrew" ]; then
-  export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$PATH"
-  export MANPATH="/opt/homebrew/share/man:$MANPATH"
-  export INFOPATH="/opt/homebrew/share/info:$INFOPATH"
-  export FPATH="/opt/homebrew/share/zsh/site-functions:$FPATH"
-  BREW_PREFIX="/opt/homebrew"
+	export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$PATH"
+	export MANPATH="/opt/homebrew/share/man:$MANPATH"
+	export INFOPATH="/opt/homebrew/share/info:$INFOPATH"
+	export FPATH="/opt/homebrew/share/zsh/site-functions:$FPATH"
+	BREW_PREFIX="/opt/homebrew"
 elif [ -d ~/brew ]; then
-  # My work laptop is a mac and are are forbidden to use bottles and Homebrew
-  # can't be installed under /opt/homebrew.
-  export PATH="$HOME/brew/bin:$HOME/brew/sbin:$PATH"
-  export MANPATH="$HOME/brew/share/man:$MANPATH"
-  export INFOPATH="$HOME/brew/share/info:$INFOPATH"
-  export FPATH="$HOME/brew/share/zsh/site-functions:$FPATH"
-  BREW_PREFIX="$HOME/brew"
+	# My work laptop is a mac and are are forbidden to use bottles and Homebrew
+	# can't be installed under /opt/homebrew.
+	export PATH="$HOME/brew/bin:$HOME/brew/sbin:$PATH"
+	export MANPATH="$HOME/brew/share/man:$MANPATH"
+	export INFOPATH="$HOME/brew/share/info:$INFOPATH"
+	export FPATH="$HOME/brew/share/zsh/site-functions:$FPATH"
+	BREW_PREFIX="$HOME/brew"
 fi
 
 alias urldecode='python3 -c "import urllib.parse; print(urllib.parse.unquote_plus(open(0).read()))"'
@@ -101,20 +101,20 @@ bindkey "\e[1;3C" forward-word
 
 # Search antigen
 if [ -f $BREW_PREFIX/opt/antigen/share/antigen/antigen.zsh ]; then
-  source $BREW_PREFIX/opt/antigen/share/antigen/antigen.zsh
+	source $BREW_PREFIX/opt/antigen/share/antigen/antigen.zsh
 elif [ -f /usr/share/zsh/share/antigen/antigen.zsh ]; then
-  source /usr/share/zsh/share/antigen/antigen.zsh
+	source /usr/share/zsh/share/antigen/antigen.zsh
 elif [ -f $HOME/.antigen.zsh ]; then
-  # Warning: apt install zsh-antigen seems way too old.
-  # Prefer installing it with: curl -L git.io/antigen > ~/.antigen.zsh
-  source $HOME/.antigen.zsh
+	# Warning: apt install zsh-antigen seems way too old.
+	# Prefer installing it with: curl -L git.io/antigen > ~/.antigen.zsh
+	source $HOME/.antigen.zsh
 else
-  echo -e "\033[93mantigen:\033[0m antigen.zsh not installed?"
-  echo -e "\033[93mantigen:\033[0m go to the dotfiles/ folder and run:"
-  echo -e "    ./install.sh"
-  echo -e "or run the following:"
-  echo -e "    curl -L git.io/antigen > ~/.antigen.zsh"
-  return
+	echo -e "\033[93mantigen:\033[0m antigen.zsh not installed?"
+	echo -e "\033[93mantigen:\033[0m go to the dotfiles/ folder and run:"
+	echo -e "    ./install.sh"
+	echo -e "or run the following:"
+	echo -e "    curl -L git.io/antigen > ~/.antigen.zsh"
+	return
 fi
 
 export ZSH_AUTOSUGGEST_USE_ASYNC=1
@@ -167,10 +167,10 @@ antigen apply
 #### Paths (from least important to most important) ####
 
 if [ -d "$HOME/.local/bin" ]; then
-  export PATH="$HOME/.local/bin:$PATH" # for 'stack'
+	export PATH="$HOME/.local/bin:$PATH" # for 'stack'
 fi
 if [ -d "$HOME/bin" ]; then
-  export PATH="$HOME/bin:$PATH"
+	export PATH="$HOME/bin:$PATH"
 fi
 
 export PATH="$PATH:/usr/local/sbin"
@@ -194,38 +194,38 @@ export PATH="$HOME/.deno/bin:$PATH"
 # shipped without the GPL version (or such). So I had to install coreutils
 # using brew.
 if which /usr/local/opt/coreutils/libexec/gnubin/ls >/dev/null 2>&1; then
-  export PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
-  #export MANPATH="/usr/local/opt/coreutils/libexec/gnuman:$MANPATH"
+	export PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
+	#export MANPATH="/usr/local/opt/coreutils/libexec/gnuman:$MANPATH"
 fi
 
 # I want to be sure python2 won't be used in my workflows
 if which /usr/local/opt/python/libexec/bin/python >/dev/null 2>&1; then
-  export PATH="/usr/local/opt/python/libexec/bin:$PATH"
+	export PATH="/usr/local/opt/python/libexec/bin:$PATH"
 fi
 
 # Gnu-sed (brew install gnu-sed)
 if which /usr/local/opt/gnu-sed/libexec/gnubin/sed >/dev/null 2>&1; then
-  export PATH="/usr/local/opt/gnu-sed/libexec/gnubin:$PATH"
-  #export MANPATH="/usr/local/opt/gnu-sed/libexec/gnuman:$MANPATH"
+	export PATH="/usr/local/opt/gnu-sed/libexec/gnubin:$PATH"
+	#export MANPATH="/usr/local/opt/gnu-sed/libexec/gnuman:$MANPATH"
 fi
 
 if [ -d "$HOME/go" ]; then
-  export GOPATH="$HOME/go"
-  export PATH="$GOPATH/bin:$PATH"
-  export GO111MODULE=auto
+	export GOPATH="$HOME/go"
+	export PATH="$GOPATH/bin:$PATH"
+	export GO111MODULE=auto
 fi
 
 if command -v eza >/dev/null; then
-  alias ls="eza"
+	alias ls="eza"
 else
-  printf "Mael: 'eza' not found. Defaulting to 'ls'.\n"
-  if ls --version 2>&1 | grep -q coreutils; then
-    # If (GNU coreutils) ls is available
-    alias ls='ls --color=auto'
-  elif ls -G >/dev/null 2>&1; then
-    # If FreeBSD (=mac) ls is available
-    alias ls="ls -G"
-  fi
+	printf "Mael: 'eza' not found. Defaulting to 'ls'.\n"
+	if ls --version 2>&1 | grep -q coreutils; then
+		# If (GNU coreutils) ls is available
+		alias ls='ls --color=auto'
+	elif ls -G >/dev/null 2>&1; then
+		# If FreeBSD (=mac) ls is available
+		alias ls="ls -G"
+	fi
 fi
 
 alias tlmonfly="texliveonfly"
@@ -235,7 +235,7 @@ alias ll="ls -la"
 alias f=fzf
 
 if which lvim >/dev/null 2>&1; then
-  alias vim=lvim
+	alias vim=lvim
 fi
 
 whichl() { which -a "$1" | awk '/(aliased to|shell built-in|not found)/ {print > "/dev/stderr"; next} {print; next}'; }
@@ -247,16 +247,16 @@ export GIT_EDITOR='vim' # by default
 export FCEDIT='vim'     # for 'fc' (fix command)
 export HGEDITOR='vim'
 if [[ -n $SSH_CONNECTION ]]; then
-  export EDITOR="$GIT_EDITOR"
+	export EDITOR="$GIT_EDITOR"
 elif command -v lvim >/dev/null; then
-  export EDITOR='lvim'
+	export EDITOR='lvim'
 fi
 
 # If we are inside vscode, git commit will open in vscode.
 if command -v code >/dev/null 2>&1 && [[ -n $VSCODE_PID ]]; then
-  export EDITOR='code --wait'
-  export GIT_EDITOR='code --wait'
-  export HGEDITOR='code --wait'
+	export EDITOR='code --wait'
+	export GIT_EDITOR='code --wait'
+	export HGEDITOR='code --wait'
 fi
 # OPAM initialization
 #if which opam >/dev/null 2>&1; then
@@ -272,7 +272,7 @@ alias mlre="pbpaste | refmt --parse ml --print re --interface false | pbcopy"
 alias reml="pbpaste | refmt --parse re --print ml --interface false | pbcopy"
 
 if [ -d "$HOME/.cargo" ]; then
-  export PATH="$HOME/.cargo/bin:$PATH"
+	export PATH="$HOME/.cargo/bin:$PATH"
 fi
 # For using code-insiders instead of code:
 # sudo ln -sf /usr/local/bin/code-insiders /usr/local/bin/code
@@ -285,7 +285,7 @@ alias to_j="ruby -e \"require 'json';require 'awesome_print';ap JSON.parse(STDIN
 
 # A small fonction to 'uri-fy' any text from stdin
 uri() {
-  cat | od -An -tx1 | tr ' ' % | xargs printf "%s"
+	cat | od -An -tx1 | tr ' ' % | xargs printf "%s"
 }
 
 # From 10.2, MANPATH should not be set; if it is, 'man' will skip
@@ -301,15 +301,15 @@ alias hg=chg
 #    antigen bundle colored-man-pages
 # does. But for some reason 'colored-man-pages' doesn't work on macos.
 man() {
-  env \
-    LESS_TERMCAP_mb=$(printf "\e[1;31m") \
-    LESS_TERMCAP_md=$(printf "\e[1;31m") \
-    LESS_TERMCAP_me=$(printf "\e[0m") \
-    LESS_TERMCAP_se=$(printf "\e[0m") \
-    LESS_TERMCAP_so=$(printf "\e[1;44;33m") \
-    LESS_TERMCAP_ue=$(printf "\e[0m") \
-    LESS_TERMCAP_us=$(printf "\e[1;32m") \
-    man "$@"
+	env \
+		LESS_TERMCAP_mb=$(printf "\e[1;31m") \
+		LESS_TERMCAP_md=$(printf "\e[1;31m") \
+		LESS_TERMCAP_me=$(printf "\e[0m") \
+		LESS_TERMCAP_se=$(printf "\e[0m") \
+		LESS_TERMCAP_so=$(printf "\e[1;44;33m") \
+		LESS_TERMCAP_ue=$(printf "\e[0m") \
+		LESS_TERMCAP_us=$(printf "\e[1;32m") \
+		man "$@"
 }
 
 #[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
@@ -346,13 +346,13 @@ alias guilt=git
 alias os=openstack
 
 if [ "$(uname -s)" = "Darwin" ]; then
-  alias strace=dtruss
+	alias strace=dtruss
 fi
 
 # brew cask info google-cloud-sdk
 if command -v brew >/dev/null && [ -d "$BREW_PREFIX/share/google-cloud-sdk" ]; then
-  source "$BREW_PREFIX/share/google-cloud-sdk/path.zsh.inc"
-  source "$BREW_PREFIX/share/google-cloud-sdk/completion.zsh.inc"
+	source "$BREW_PREFIX/share/google-cloud-sdk/path.zsh.inc"
+	source "$BREW_PREFIX/share/google-cloud-sdk/completion.zsh.inc"
 fi
 
 # kubectl krew
@@ -394,7 +394,7 @@ alias kall="kubectl api-resources --verbs=list --namespaced -o name | grep cert-
 alias m=make
 
 digc() {
-  dig $* | awk '
+	dig $* | awk '
     !/^;/           { print $0 }
     /^;[^;]/        { print "\033[1;35m"$0"\033[0m" }
     /^;;/           { print "\033[1;30m"$0"\033[0m" }
@@ -412,10 +412,10 @@ export PATH="/usr/local/opt/gcore/bin:$PATH"
 setopt share_history
 
 if [ "$(uname -s)" = "Linux" ]; then
-  alias pbcopy='xclip -selection clipboard'
-  alias pbpaste='xclip -selection clipboard -o'
-  alias open='xdg-open 2>/dev/null 1>&2'
-  export PATH="/usr/local/go/bin:$PATH"
+	alias pbcopy='xclip -selection clipboard'
+	alias pbpaste='xclip -selection clipboard -o'
+	alias open='xdg-open 2>/dev/null 1>&2'
+	export PATH="/usr/local/go/bin:$PATH"
 fi
 
 # Wasmer
@@ -435,12 +435,12 @@ export VAULT_ADDR=https://vault.jetstack.net:8200
 # one decision that BurntSushi took and he never changed his mind. So here is
 # a workaround from https://github.com/BurntSushi/ripgrep/issues/74:
 rgr() {
-  if [ $# -lt 2 ]; then
-    echo "rg with interactive text replacement"
-    echo "Usage: rgr text replacement-text"
-    return
-  fi
-  vim --clean -c ":execute ':argdo %s%$1%$2%gc | update' | :q" -- $(rg $1 -l ${@:3})
+	if [ $# -lt 2 ]; then
+		echo "rg with interactive text replacement"
+		echo "Usage: rgr text replacement-text"
+		return
+	fi
+	vim --clean -c ":execute ':argdo %s%$1%$2%gc | update' | :q" -- $(rg $1 -l ${@:3})
 }
 
 # Scaleway CLI autocomplete initialization.
@@ -449,16 +449,16 @@ rgr() {
 # Colors, a lot of colors!
 # from: https://coderwall.com/p/pb1uzq/z-shell-colors
 clicolors() {
-  i=1
-  for color in {000..255}; do
-    c=$c"$FG[$color]$color✔$reset_color  "
-    if [ $(expr $i % 8) -eq 0 ]; then
-      c=$c"\n"
-    fi
-    i=$(expr $i + 1)
-  done
-  echo $c | sed 's/%//g' | sed 's/{//g' | sed 's/}//g' | sed '$s/..$//'
-  c=''
+	i=1
+	for color in {000..255}; do
+		c=$c"$FG[$color]$color✔$reset_color  "
+		if [ $(expr $i % 8) -eq 0 ]; then
+			c=$c"\n"
+		fi
+		i=$(expr $i + 1)
+	done
+	echo $c | sed 's/%//g' | sed 's/{//g' | sed 's/}//g' | sed '$s/..$//'
+	c=''
 }
 
 export LANGUAGE=en_US.UTF-8
@@ -470,13 +470,13 @@ export LC_ALL=en_US.UTF-8
 
 # Only on Linux.
 if [ "$(uname -s)" = "Linux" ]; then
-  alias pbcopy='xclip -selection clipboard'
-  alias pbpaste='xclip -selection clipboard -o'
+	alias pbcopy='xclip -selection clipboard'
+	alias pbpaste='xclip -selection clipboard -o'
 
-  # When using Homebrew's curl on linux, curl uses the CA certificates from
-  # /home/linuxbrew/.linuxbrew/etc/ca-certificates/cert.pem, but my scripts
-  # expect the source of truth to be /etc/ssl/certs/ca-certificates.crt.
-  export SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
+	# When using Homebrew's curl on linux, curl uses the CA certificates from
+	# /home/linuxbrew/.linuxbrew/etc/ca-certificates/cert.pem, but my scripts
+	# expect the source of truth to be /etc/ssl/certs/ca-certificates.crt.
+	export SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
 fi
 
 # The SSH_AUTH_SOCK is either set by gnome-keyring (when I open a terminal on
@@ -492,14 +492,14 @@ fi
 #    ~/.ssh/ssh_auth_sock -> /run/user/1000/keyring/ssh
 #
 if [ ! -S ~/.ssh/ssh_auth_sock ] && [ -S "$SSH_AUTH_SOCK" ]; then
-  mkdir -p ~/.ssh
-  ln -sf $SSH_AUTH_SOCK ~/.ssh/ssh_auth_sock
+	mkdir -p ~/.ssh
+	ln -sf $SSH_AUTH_SOCK ~/.ssh/ssh_auth_sock
 fi
 
 # I don't want to run in tmux on macOS since iTerm2 already has a good support
 # for multiplexing-like.
 if command -v tmux >/dev/null && [ "$(uname -s)" = "Linux" ]; then
-  [[ ! $TERM =~ screen ]] && [ -z $TMUX ] && [ "$TERM_PROGRAM" != vscode ] && tmux new-session -A -s main
+	[[ ! $TERM =~ screen ]] && [ -z $TMUX ] && [ "$TERM_PROGRAM" != vscode ] && tmux new-session -A -s main
 fi
 
 [ -f $HOME/.cargo/env ] && source $HOME/.cargo/env
@@ -531,10 +531,10 @@ export DIRENV_WARN_TIMEOUT=100s
 [ -f "$HOME/.crc/bin/oc" ] && export PATH="$HOME/.crc/bin/oc:$PATH"
 
 if [[ "$VSCODE_GIT_ASKPASS_NODE" =~ '/node$' ]]; then
-  export PATH="$(dirname "$VSCODE_GIT_ASKPASS_NODE")/bin:$PATH"
-  if [ -f "$(dirname "$VSCODE_GIT_ASKPASS_NODE")"/bin/code-insiders ]; then
-    ln -sf "$(dirname "$VSCODE_GIT_ASKPASS_NODE")"/bin/code-insiders "$(dirname "$VSCODE_GIT_ASKPASS_NODE")"/bin/code
-  fi
+	export PATH="$(dirname "$VSCODE_GIT_ASKPASS_NODE")/bin:$PATH"
+	if [ -f "$(dirname "$VSCODE_GIT_ASKPASS_NODE")"/bin/code-insiders ]; then
+		ln -sf "$(dirname "$VSCODE_GIT_ASKPASS_NODE")"/bin/code-insiders "$(dirname "$VSCODE_GIT_ASKPASS_NODE")"/bin/code
+	fi
 fi
 
 [ -f /Applications/Tailscale.app/Contents/MacOS/Tailscale ] && export PATH="$PATH:/Applications/Tailscale.app/Contents/MacOS"
@@ -573,12 +573,12 @@ command -v starship >/dev/null && source <($(command -v starship) init zsh --pri
 # I use the "ts" func to prepend nanosecond time between two log lines. Useful
 # to understand when time is spent.
 ts() {
-  T=$(gdate "+%s.%N")
-  while read R; do
-    T2=$(gdate "+%s.%N")
-    echo "$((T2 - T)) $R"
-    T=$T2
-  done
+	T=$(gdate "+%s.%N")
+	while read R; do
+		T2=$(gdate "+%s.%N")
+		echo "$((T2 - T)) $R"
+		T=$T2
+	done
 }
 
 # Using --accept-multiclient=false makes sure that the Delve session is stopped
@@ -596,13 +596,17 @@ export PATH="/opt/homebrew/opt/mysql-client/bin:$PATH"
 # as cert-manager. See:
 #  https://stackoverflow.com/questions/9810327/9810485#9810485
 __git_files() {
-  _wanted files expl 'local files' _files
+	_wanted files expl 'local files' _files
 }
 export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
 export PATH="$HOME/.cargo/bin:$PATH"
 
 export JL_OPTS="--include-fields=msg"
 
-export HOMEBREW_DOWNLOAD_CONCURRENCY=auto
+if [[ "$OSTYPE" == "darwin"* ]]; then
+	# export PATH="/Library/Developer/CommandLineTools/usr/bin:$PATH"
+fi
+export PATH="/opt/homebrew/opt/rustup/bin:$PATH"
 
+export HOMEBREW_DOWNLOAD_CONCURRENCY=auto
 export RIPGREP_CONFIG_PATH="$HOME/.config/ripgreprc"

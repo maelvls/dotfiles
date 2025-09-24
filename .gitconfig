@@ -17,7 +17,8 @@
         xargs git switch; \
     }; f"
     # https://stackoverflow.com/questions/65763211/a-git-alias-to-accept-both-main-and-master-branch-names/67284322#67284322
-    m = !git switch $(test -f .git/refs/remotes/origin/main && echo main || echo master)
+    m = !git switch $(awk -F "/" '{print $NF}' $(git rev-parse --show-toplevel)/.git/refs/remotes/origin/HEAD)
+
     ls = for-each-ref --count=15 --sort=-committerdate refs/heads/ --format='%(color:bold)%(HEAD)%(color:reset) %(refname:short)%(color:reset) - %(color:yellow)%(authorname)%(color:reset), %(color:green)%(committerdate:relative)%(color:reset)'
     ll = for-each-ref --sort=-committerdate refs/heads/ --format='%(color:bold)%(HEAD)%(color:reset) %(refname:short)%(color:reset) - %(color:yellow)%(authorname)%(color:reset), %(color:green)%(committerdate:relative)%(color:reset)'
 	cia = commit --amend
