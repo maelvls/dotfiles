@@ -1,0 +1,8 @@
+#!/bin/bash
+
+# Only run for normal commits, not merges.
+if [ "$2" != "merge" ]; then
+	DIFF="$(git diff --cached)"
+	MESSAGE="$(echo "$DIFF" | codex "Write a concise git commit message")"
+	echo "$MESSAGE" >"$1"
+fi
