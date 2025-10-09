@@ -133,6 +133,8 @@ display_private = false
 disabled = false
 
 # Caveat: the HTTPS_PROXY won't show up if it's set but empty. It only shows if
-# it's set to some value. See: https://github.com/starship/starship/issues/5400
+# it's set to some value. See: https://github.com/starship/starship/issues/5400.
+# Problem comes from here:
+# https://github.com/starship/starship/blob/fe184e64/src/modules/env_var.rs#L43
 [env_var.HTTPS_PROXY]
 format = "([⚠️ HTTPS_PROXY](bold yellow) $env_value [⚠️](bold yellow))"
