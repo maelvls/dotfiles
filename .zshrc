@@ -1,4 +1,7 @@
 #! /usr/bin/env zsh
+PS4=$'\11%D{%s%6.}11%x11%I11%N11%e11'
+exec 3>&2 2>/tmp/zshstart.$$.log
+setopt xtrace prompt_subst
 #
 # My zsh config for non-interactive shells Maël Valais
 # <mael.valais@gmail.com> 2016
@@ -136,7 +139,7 @@ antigen bundle zsh-users/zsh-completions
 antigen bundle andrewferrier/fzf-z
 #antigen bundle z-shell/zsh-navigation-tools
 antigen bundle zdharma-continuum/zsh-navigation-tools
-antigen bundle lukechilds/zsh-nvm
+#antigen bundle lukechilds/zsh-nvm
 antigen bundle gitfast
 
 #antigen bundle fzf
@@ -498,6 +501,7 @@ fi
 
 # I don't want to run in tmux on macOS since iTerm2 already has a good support
 # for multiplexing-like.
+# I'm using https://github.com/gpakosz/.tmux (Oh My Tmux).
 if command -v tmux >/dev/null && [ "$(uname -s)" = "Linux" ]; then
 	[[ ! $TERM =~ screen ]] && [ -z $TMUX ] && [ "$TERM_PROGRAM" != vscode ] && tmux new-session -A -s main
 fi
@@ -583,8 +587,21 @@ ts() {
 
 # Using --accept-multiclient=false makes sure that the Delve session is stopped
 # as soon as the binary exits. With --accept-multiclient (which is true by
-# default), the Delve session hangs after the binary exits, and Ctrl+C doesn't
-# do anything, no idea why. Ref: https://github.com/go-delve/delve/issues/1929
+# default), the Delve session hangs after the binary exits as explained in [1].
+#
+# Also, Ctrl-C doesn't work as explained in [2] because Delve needs to be able
+# to pass --unmask-signals to lldb's debugserver binary. This flag was
+# introduced in [3].
+#
+#  $ /Library/Developer/CommandLineTools/Library/PrivateFrameworks/LLDB.framework/Versions/Current/Resources/debugserver --version
+#  debugserver-@(#)PROGRAM:LLDB  PROJECT:lldb-1703.0.236.21
+#   for arm64.
+#  $ /Library/Developer/CommandLineTools/Library/PrivateFrameworks/LLDB.framework/Versions/Current/Resources/debugserver --unmask-signals a 2>&1 | grep "unrecognized option"
+#
+# [1]: https://github.com/go-delve/delve/issues/1929
+# [2]: https://github.com/go-delve/delve/issues/1057
+# [3]: https://github.com/llvm/llvm-project/issues/23242#issuecomment-1412215877
+# [4]: https://github.com/go-delve/delve/issues/2157#issuecomment-982077042
 alias dlv="dlv --headless -l :2345 --accept-multiclient=false"
 
 #export DOCKER_HOST=unix://$HOME/.colima/docker.sock
@@ -601,7 +618,7 @@ __git_files() {
 export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
 export PATH="$HOME/.cargo/bin:$PATH"
 
-export JL_OPTS="--include-fields=msg"
+export JL_OPTS="--include-fields=msg,err"
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
 	# export PATH="/Library/Developer/CommandLineTools/usr/bin:$PATH"
@@ -609,4 +626,30 @@ fi
 export PATH="/opt/homebrew/opt/rustup/bin:$PATH"
 
 export HOMEBREW_DOWNLOAD_CONCURRENCY=auto
+export HOMEBREW_NO_REQUIRE_TAP_TRUST=0
 export RIPGREP_CONFIG_PATH="$HOME/.config/ripgreprc"
+
+export MITMPROXY_EDITOR='vim'
+
+# Mark Khouzam created a kubectl plugin to generate shell completions for
+# kubectl: https://github.com/marckhouzam/kubectl-plugin_completion
+#
+#  k krew install --manifest-url \
+#    https://raw.githubusercontent.com/marckhouzam/kubectl-plugin_completion/v0.1.0/plugin-completion.yaml
+#  k plugin-completion generate
+export PATH="$HOME/.kubectl-plugin-completion:$PATH"
+
+unsetopt xtrace
+exec 2>&3 3>&-
+
+if command -v vcpctl >/dev/null; then
+	source <(vcpctl completion zsh)
+fi
+export PATH="/opt/homebrew/opt/postgresql@18/bin:$PATH"
+export MIRRORD_CHECK_VERSION=false
+export PATH="$HOME/Library/pnpm/bin:$PATH"
+
+source <(vcpctl completion zsh)
+
+alias v=vcpctl
+source <(vcpctl completion zsh)

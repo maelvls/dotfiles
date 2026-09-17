@@ -4,3 +4,5 @@
 telepresence.log
 /.gd/
 .config/glab-cli/config.yml
+
+**/.claude/settings.local.json

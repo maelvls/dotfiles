@@ -1,0 +1,44 @@
+# Window appearance
+window-decoration = true
+
+# Font size (smaller)
+font-size = 11
+
+# Vivid colors from iTerm2 profile
+background = 000000
+foreground = fff9f3
+
+# ANSI colors
+palette = 0=#1a1a1a
+palette = 1=#ff000f
+palette = 2=#8ce10a
+palette = 3=#ffb900
+palette = 4=#008ef8
+palette = 5=#6d43a6
+palette = 6=#00d8ec
+palette = 7=#ffffff
+palette = 8=#444444
+palette = 9=#ff273f
+palette = 10=#abe15b
+palette = 11=#ffdd69
+palette = 12=#0092ff
+palette = 13=#9a5fec
+palette = 14=#67fff0
+palette = 15=#ffffff
+
+# Cursor and selection
+cursor-color = ff0018
+selection-background = 0066aa
+selection-foreground = ffffff
+
+cursor-color = #e8e8e8
+cursor-text = #1a1a1a
+selection-background = #b3d7ff
+selection-foreground = #000000
+
+# Split divider - brighter color to make it more visible
+split-divider-color = 444444
+
+auto-update-channel = tip
+
+desktop-notifications = true

@@ -2,7 +2,6 @@
 	name = Maël Valais
 	email = mael@vls.dev
     signingkey = 27F4C016
-    #signingkey = /Users/ashley/.ssh/id_ed25519.pub
 #[gpg]
 #    format = "ssh"
 [color]
@@ -19,6 +18,15 @@
     # https://stackoverflow.com/questions/65763211/a-git-alias-to-accept-both-main-and-master-branch-names/67284322#67284322
     m = !git switch $(awk -F "/" '{print $NF}' $(git rev-parse --show-toplevel)/.git/refs/remotes/origin/HEAD)
 
+    ci-codex = "!f() { \
+        if git diff --cached --quiet; then echo 'No staged changes.'; return 1; fi; \
+        { \
+          printf 'create concise git commit message of these staged changes. dont capitalize the first word of the commit title.\n\n'; \
+          git diff --cached; \
+        } \
+          | codex exec -c model=gpt-5-codex -c model_reasoning_effort=low - \
+          | git commit -F /dev/stdin; \
+    }; f"
     ls = for-each-ref --count=15 --sort=-committerdate refs/heads/ --format='%(color:bold)%(HEAD)%(color:reset) %(refname:short)%(color:reset) - %(color:yellow)%(authorname)%(color:reset), %(color:green)%(committerdate:relative)%(color:reset)'
     ll = for-each-ref --sort=-committerdate refs/heads/ --format='%(color:bold)%(HEAD)%(color:reset) %(refname:short)%(color:reset) - %(color:yellow)%(authorname)%(color:reset), %(color:green)%(committerdate:relative)%(color:reset)'
 	cia = commit --amend
@@ -57,15 +65,12 @@
     json = !git log --pretty=format:'{%n  \"commit\": \"%H\",%n  \"abbreviated_commit\": \"%h\",%n  \"tree\": \"%T\",%n  \"abbreviated_tree\": \"%t\",%n  \"parent\": \"%P\",%n  \"abbreviated_parent\": \"%p\",%n  \"refs\": \"%D\",%n  \"encoding\": \"%e\",%n  \"subject\": \"%s\",%n  \"sanitized_subject_line\": \"%f\",%n  \"body\": \"%B\",%n  \"commit_notes\": \"%N\",%n  \"verification_flag\": \"%G?\",%n  \"signer\": \"%GS\",%n  \"signer_key\": \"%GK\",%n  \"author\": {%n    \"name\": \"%aN\",%n    \"email\": \"%aE\",%n    \"date\": \"%aD\"%n  },%n  \"commiter\": {%n    \"name\": \"%cN\",%n    \"email\": \"%cE\",%n    \"date\": \"%cD\"%n  }%n},'
     duetedit = !${EDITOR:-vim} ~/.git-authors
 	root = !pwd
+	fcommit = !git log --oneline --color=always | fzf --ansi --no-sort --preview 'git show --color=always {1}'
 [web]
     browser = chrome
 [filter "media"]
     clean = git-media-clean %f
     smudge = git-media-smudge %f
-[filter "lfs"]
-    clean = git lfs clean %f
-    smudge = git lfs smudge %f
-    required = true
 [difftool.latex]
     cmd = git-latexdiff \"$LOCAL\" \"$REMOTE\"
 [rerere]
@@ -178,3 +183,14 @@
 	#helper = lastpass -l mael.valais@gmail.com
 [url "https://gitlab.com/"]
 	insteadOf = git@gitlab.com:
+[protocol "file"]
+	allow = always
+[url "https://github.cyberng.com/"]
+	insteadOf = git@github.cyberng.com:
+[lfs]
+	concurrenttransfers = 50
+[filter "lfs"]
+	process = git-lfs filter-process
+	required = true
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
