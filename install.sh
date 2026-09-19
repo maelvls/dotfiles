@@ -32,7 +32,7 @@ if [ "$(uname -m)" = arm64 ] && command -v arch >/dev/null && [ "$(arch)" != arm
 fi
 
 HOME_DOTFILES=$(find "$HOME" -maxdepth 3 ! -type l ! -type d \( \( -name ".*" -o -wholename "./.config/*" \) -a ! -name ".DS_Store" \) | cut -c 3-)
-PWD_DOTFILES=$(find . -maxdepth 3 ! -type l ! -type d \( \( -name ".*" -o -wholename "./.config/*" \) -a ! -name ".DS_Store" \) | cut -c 3-)
+PWD_DOTFILES=$(find . -maxdepth 4 ! -path "./.claude/*" ! -type l ! -type d \( \( -name ".*" -o -wholename "./.config/*" \) -a ! -name ".DS_Store" \) | cut -c 3-)
 
 # Install Vim-plug for Vim 8
 [ -f ~/.vim/autoload/plug.vim ] || curl -sfLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
