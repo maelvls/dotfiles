@@ -5,7 +5,7 @@ window-decoration = true
 # font-size = 11
 
 # iterm2-vivid lives in themes/iterm2-vivid.
-theme = dark:iterm2-vivid, light:Catppuccin Latte
+theme = dark:iterm2-vivid, light:Ayu Light
 
 auto-update-channel = tip
 
